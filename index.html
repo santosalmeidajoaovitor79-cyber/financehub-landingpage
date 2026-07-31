@@ -196,8 +196,9 @@
         details > summary { list-style: none; }
         details > summary::-webkit-details-marker { display: none; }
         
-        /* 3D Perspective corrigida */
+        /* 3D Perspective */
         .perspective-container { perspective: 2000px; }
+        .preserve-3d { transform-style: preserve-3d; }
     </style>
 </head>
 <body class="antialiased selection:bg-brand-500 selection:text-white relative">
@@ -567,7 +568,7 @@
             }
         });
 
-        // 3D Parallax Effect Corrigido para ser SUAVE e sem falhas visuais
+        // 3D Parallax Effect Corrigido para ser SUAVE
         const parallaxWrapper = document.getElementById('parallax-wrapper');
         const notebookFrame = document.getElementById('notebook-frame');
 
