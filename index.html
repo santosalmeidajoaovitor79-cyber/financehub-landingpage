@@ -196,9 +196,8 @@
         details > summary { list-style: none; }
         details > summary::-webkit-details-marker { display: none; }
         
-        /* 3D Perspective */
+        /* 3D Perspective corrigida */
         .perspective-container { perspective: 2000px; }
-        .preserve-3d { transform-style: preserve-3d; }
     </style>
 </head>
 <body class="antialiased selection:bg-brand-500 selection:text-white relative">
@@ -273,15 +272,15 @@
             <p class="text-sm md:text-base text-slate-500 font-medium">Avaliado com 5 estrelas por mais de <span class="text-slate-300">5.400 empreendedores.</span></p>
         </div>
 
-        <div id="parallax-wrapper" class="reveal-scale relative mt-24 w-full max-w-[1100px] mx-auto preserve-3d" style="transition-delay: 500ms;">
+        <div id="parallax-wrapper" class="reveal-scale relative mt-24 w-full max-w-[1100px] mx-auto" style="transition-delay: 500ms;">
             
-            <div class="absolute inset-0 bg-gradient-to-t from-brand-500/40 via-blue-500/20 to-transparent blur-[120px] -z-10 rounded-[3rem] transform translate-y-10"></div>
+            <div class="absolute inset-0 z-0 bg-gradient-to-t from-brand-500/40 via-blue-500/20 to-transparent blur-[120px] rounded-[3rem] transform translate-y-10"></div>
             
-            <div id="notebook-frame" class="relative w-full rounded-[1.5rem] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.9)] overflow-hidden transition-transform duration-200 ease-out border border-white/10 ring-1 ring-black/50">
+            <div id="notebook-frame" class="relative z-10 w-full rounded-[1.5rem] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.9)] overflow-hidden transition-transform duration-200 ease-out border border-white/10 ring-1 ring-black/50 bg-[#020617]">
                 
-                <div class="absolute inset-0 shadow-[inset_0_0_120px_#020617] z-10 pointer-events-none"></div>
+                <div class="absolute inset-0 shadow-[inset_0_0_120px_#020617] z-20 pointer-events-none"></div>
                 
-                <img src="mockup.png" alt="Dashboard FinanceHub PRO" class="w-full h-auto object-cover relative z-0" />
+                <img src="mockup.png" alt="Dashboard FinanceHub PRO" class="w-full h-auto object-cover relative z-10" />
             </div>
         </div>
     </section>
@@ -418,23 +417,9 @@
         </div>
     </section>
 
-    <section class="py-24 max-w-7xl mx-auto px-6 hidden">
-        <h2 class="text-4xl font-bold text-center text-white mb-20 reveal">O que os empreendedores dizem</h2>
-        <div class="grid md:grid-cols-3 gap-8">
-            <div class="glass-card p-8 rounded-3xl reveal">
-                <div class="flex gap-1 text-yellow-500 mb-6"><i data-lucide="star" class="h-5 w-5 fill-current"></i><i data-lucide="star" class="h-5 w-5 fill-current"></i><i data-lucide="star" class="h-5 w-5 fill-current"></i><i data-lucide="star" class="h-5 w-5 fill-current"></i><i data-lucide="star" class="h-5 w-5 fill-current"></i></div>
-                <p class="text-slate-300 mb-8 text-lg leading-relaxed">"Text here"</p>
-                <div class="flex items-center gap-4">
-                    <div class="h-12 w-12 rounded-full bg-slate-800 border border-white/10"></div>
-                    <div><p class="text-white font-bold">Nome</p><p class="text-slate-500 text-sm">Empresa</p></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <section class="py-32 max-w-5xl mx-auto px-6 text-center reveal-scale">
         <div class="relative glass-card rounded-[3rem] p-12 md:p-20 border-brand-500/20 shadow-[0_0_80px_rgba(34,197,94,0.15)] overflow-hidden">
-            <div class="absolute inset-0 bg-gradient-to-b from-brand-500/10 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-brand-500/10 to-transparent z-0"></div>
             
             <div class="relative z-10">
                 <span class="inline-block bg-brand-500/20 text-brand-400 text-sm font-bold px-5 py-2 rounded-full uppercase tracking-widest border border-brand-500/30 mb-8">
@@ -569,14 +554,12 @@
             const nav = document.getElementById('navbar');
             const stickyCta = document.getElementById('sticky-cta');
             
-            // Navbar blur e borda
             if (window.scrollY > 50) {
                 nav.classList.add('border-b', 'border-white/5', 'shadow-2xl', 'bg-surface/80');
             } else {
                 nav.classList.remove('border-b', 'border-white/5', 'shadow-2xl', 'bg-surface/80');
             }
 
-            // Mostra o botão Flutuante "Comprar" ao passar da Hero Section (aprox 700px)
             if (window.scrollY > 700) {
                 stickyCta.classList.remove('translate-y-32', 'opacity-0');
             } else {
@@ -584,25 +567,22 @@
             }
         });
 
-        // 3D Parallax Effect para a Imagem Central (AJUSTADO PARA SER SUPER SUAVE)
+        // 3D Parallax Effect Corrigido para ser SUAVE e sem falhas visuais
         const parallaxWrapper = document.getElementById('parallax-wrapper');
         const notebookFrame = document.getElementById('notebook-frame');
 
         document.addEventListener('mousemove', (e) => {
             if (!parallaxWrapper || !notebookFrame) return;
             
-            // O SEGREDO DA SUTILEZA:
-            // Divisor em 150 garante que a rotação máxima seja de apenas 2 a 3 graus.
+            // O Divisor 150 garante que a rotação seja um "suspiro" elegante de 2 a 3 graus
             const xAxis = (window.innerWidth / 2 - e.pageX) / 150;
             const yAxis = (window.innerHeight / 2 - e.pageY) / 150;
 
-            // Aplica a rotação (apenas em telas não-mobile)
             if(window.innerWidth > 768) {
                 notebookFrame.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
             }
         });
 
-        // Reseta a rotação da imagem se o mouse sair da tela
         document.addEventListener('mouseleave', () => {
             if(window.innerWidth > 768 && notebookFrame) {
                 notebookFrame.style.transform = `rotateY(0deg) rotateX(0deg)`;
