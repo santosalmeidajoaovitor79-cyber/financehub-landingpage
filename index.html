@@ -110,7 +110,8 @@
                     animation: {
                         'float': 'float 6s ease-in-out infinite',
                         'glow-pulse': 'glow-pulse 4s ease-in-out infinite alternate',
-                        'reveal-up': 'reveal-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards'
+                        'reveal-up': 'reveal-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'reveal-scale': 'reveal-scale 1s cubic-bezier(0.16, 1, 0.3, 1) forwards'
                     },
                     keyframes: {
                         float: {
@@ -118,12 +119,16 @@
                             '50%': { transform: 'translateY(-20px)' },
                         },
                         'glow-pulse': {
-                            '0%': { opacity: '0.4', transform: 'scale(1)' },
-                            '100%': { opacity: '0.8', transform: 'scale(1.1)' }
+                            '0%': { opacity: '0.3', transform: 'scale(1)' },
+                            '100%': { opacity: '0.7', transform: 'scale(1.2)' }
                         },
                         'reveal-up': {
-                            '0%': { opacity: '0', transform: 'translateY(40px)' },
+                            '0%': { opacity: '0', transform: 'translateY(50px)' },
                             '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        'reveal-scale': {
+                            '0%': { opacity: '0', transform: 'scale(0.9) translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'scale(1) translateY(0)' }
                         }
                     }
                 }
@@ -134,273 +139,293 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
-        body { background-color: #020617; color: #f8fafc; overflow-x: hidden; }
+        body { 
+            background-color: #020617; 
+            color: #f8fafc; 
+            overflow-x: hidden; 
+            background-image: radial-gradient(circle at top center, rgba(15, 23, 42, 1) 0%, rgba(2, 6, 23, 1) 100%);
+        }
         
-        /* Premium Glassmorphism */
-        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .glass-card { background: linear-gradient(145deg, rgba(30,41,59,0.4) 0%, rgba(2,6,23,0.4) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.4s ease; }
-        .glass-card:hover { border-color: rgba(34, 197, 94, 0.3); transform: translateY(-5px); box-shadow: 0 20px 40px -15px rgba(34, 197, 94, 0.15); }
+        /* Premium Glassmorphism (Vidro Verdadeiro) */
+        .glass { 
+            background: rgba(255, 255, 255, 0.02); 
+            backdrop-filter: blur(16px); 
+            -webkit-backdrop-filter: blur(16px); 
+            border: 1px solid rgba(255, 255, 255, 0.05); 
+        }
+        .glass-card { 
+            background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+            backdrop-filter: blur(24px); 
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3), inset 0 1px 0 0 rgba(255,255,255,0.1);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); 
+        }
+        .glass-card:hover { 
+            border-color: rgba(34, 197, 94, 0.4); 
+            transform: translateY(-8px) scale(1.01); 
+            box-shadow: 0 20px 40px -15px rgba(34, 197, 94, 0.2), inset 0 1px 0 0 rgba(255,255,255,0.2); 
+        }
         
         /* Gradients & Text */
         .text-gradient { background: linear-gradient(to right, #f8fafc, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .text-gradient-brand { background: linear-gradient(to right, #4ade80, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
         /* Buttons */
-        .btn-glow { position: relative; }
-        .btn-glow::before { content: ''; position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px; background: linear-gradient(45deg, #22c55e, #3b82f6, #22c55e); z-index: -1; filter: blur(10px); opacity: 0; transition: opacity 0.3s ease; border-radius: inherit; }
+        .btn-glow { position: relative; z-index: 1; }
+        .btn-glow::before { 
+            content: ''; position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px; 
+            background: linear-gradient(45deg, #22c55e, #3b82f6, #22c55e); 
+            z-index: -1; filter: blur(12px); opacity: 0; transition: opacity 0.4s ease; border-radius: inherit; 
+        }
         .btn-glow:hover::before { opacity: 0.8; }
         
-        /* Scroll Reveal (JS Hook) */
-        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        /* Scroll Reveal Hooks */
+        .reveal { opacity: 0; transform: translateY(50px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
+        .reveal-scale { opacity: 0; transform: scale(0.9) translateY(30px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal-scale.active { opacity: 1; transform: scale(1) translateY(0); }
         
         /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar { width: 10px; }
         ::-webkit-scrollbar-track { background: #020617; }
-        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 5px; border: 2px solid #020617; }
         ::-webkit-scrollbar-thumb:hover { background: #334155; }
 
         /* FAQ Animation */
         details > summary { list-style: none; }
         details > summary::-webkit-details-marker { display: none; }
+        
+        /* 3D Perspective for Notebook */
+        .perspective-container { perspective: 2000px; }
+        .preserve-3d { transform-style: preserve-3d; }
     </style>
 </head>
 <body class="antialiased selection:bg-brand-500 selection:text-white relative">
 
+    <div id="sticky-cta" class="fixed bottom-8 right-8 z-[100] translate-y-32 opacity-0 transition-all duration-700 ease-out pointer-events-none">
+        <a href="https://pay.kiwify.com.br/2nyKjEr" class="pointer-events-auto btn-glow bg-brand-500 text-surfaceLight font-bold px-8 py-4 rounded-full shadow-2xl shadow-brand-500/20 flex items-center gap-3 transform hover:scale-105 transition-transform">
+            <i data-lucide="zap" class="h-5 w-5"></i>
+            Quero Acesso Agora
+        </a>
+    </div>
+
     <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
-        <div class="absolute top-[-10%] left-[-10%] w-[40vw] h-[40vw] bg-brand-500/10 rounded-full blur-[120px] animate-glow-pulse"></div>
-        <div class="absolute bottom-[-10%] right-[-10%] w-[30vw] h-[30vw] bg-blue-500/10 rounded-full blur-[120px] animate-glow-pulse" style="animation-delay: 2s;"></div>
+        <div class="absolute top-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-brand-500/10 rounded-full blur-[150px] animate-glow-pulse"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] bg-blue-500/10 rounded-full blur-[150px] animate-glow-pulse" style="animation-delay: 2s;"></div>
     </div>
 
     <nav class="fixed top-0 w-full z-50 glass border-b-0 transition-all duration-300" id="navbar">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <div class="flex items-center gap-2 cursor-pointer">
+        <div class="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer">
                 <i data-lucide="bar-chart-3" class="text-brand-500 h-8 w-8"></i>
-                <span class="font-bold text-xl tracking-tight text-white">FinanceHub <span class="text-brand-500">PRO</span></span>
+                <span class="font-bold text-2xl tracking-tight text-white">FinanceHub <span class="text-brand-500">PRO</span></span>
             </div>
-            <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
+            <div class="hidden md:flex items-center gap-10 text-sm font-medium text-slate-300">
                 <a href="#beneficios" class="hover:text-white transition-colors">Benefícios</a>
-                <a href="#funcionalidades" class="hover:text-white transition-colors">Funcionalidades</a>
+                <a href="#dashboard" class="hover:text-white transition-colors">A Plataforma</a>
                 <a href="#comparacao" class="hover:text-white transition-colors">Comparação</a>
                 <a href="#faq" class="hover:text-white transition-colors">FAQ</a>
             </div>
-            <a href="https://pay.kiwify.com.br/2nyKjEr" class="glass px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-white/10 transition-all border border-white/10 flex items-center gap-2">
+            <a href="https://pay.kiwify.com.br/2nyKjEr" class="glass px-6 py-3 rounded-full text-sm font-semibold hover:bg-white/10 transition-all border border-white/10 flex items-center gap-2">
                 Garantir Acesso <i data-lucide="arrow-right" class="h-4 w-4"></i>
             </a>
         </div>
     </nav>
 
-    <section class="relative pt-40 pb-20 md:pt-48 md:pb-32 px-6 overflow-hidden flex flex-col items-center text-center">
-        <div class="reveal inline-flex items-center gap-2 px-3 py-1 rounded-full glass border-brand-500/30 text-brand-400 text-xs font-semibold uppercase tracking-widest mb-8">
+    <section class="relative pt-48 pb-32 px-6 overflow-hidden flex flex-col items-center text-center perspective-container">
+        
+        <div class="reveal inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass border-brand-500/30 text-brand-400 text-xs font-semibold uppercase tracking-widest mb-10 shadow-[0_0_20px_rgba(34,197,94,0.1)]">
             <span class="relative flex h-2 w-2">
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
               <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-500"></span>
             </span>
-            Versão 3.0 Lançada • Licença Vitalícia
+            Nova Versão 3.0 • Licença Vitalícia
         </div>
 
-        <h1 class="reveal text-5xl md:text-7xl font-extrabold text-white tracking-tight leading-[1.1] max-w-5xl mb-6" style="transition-delay: 100ms;">
-            O poder de um software <span class="text-gradient-brand">Premium</span>, <br class="hidden md:block"> a simplicidade do Excel.
+        <h1 class="reveal text-5xl md:text-[5.5rem] font-extrabold text-white tracking-tight leading-[1.05] max-w-6xl mb-8" style="transition-delay: 100ms;">
+            O poder de um software <span class="text-gradient-brand">Premium</span>. <br class="hidden md:block"> A simplicidade do Excel.
         </h1>
         
-        <p class="reveal text-lg md:text-xl text-slate-400 max-w-2xl mb-10 leading-relaxed font-light" style="transition-delay: 200ms;">
-            Assuma o controle financeiro total do seu negócio. Fluxo de caixa inteligente, gestão de estoque e DRE automática sem pagar mensalidades.
+        <p class="reveal text-xl md:text-2xl text-slate-400 max-w-3xl mb-12 leading-relaxed font-light" style="transition-delay: 200ms;">
+            Esqueça planilhas amadoras. Assuma o controle financeiro total com um ERP blindado. Fluxo de caixa inteligente, gestão de estoque e DRE automática sem mensalidades.
         </p>
 
-        <div class="reveal flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto" style="transition-delay: 300ms;">
-            <a href="https://pay.kiwify.com.br/2nyKjEr" class="btn-glow w-full sm:w-auto bg-brand-500 hover:bg-brand-400 text-surfaceLight font-bold px-8 py-4 rounded-xl flex items-center justify-center gap-2 transition-all transform hover:scale-[1.02]">
-                <i data-lucide="zap" class="h-5 w-5"></i>
+        <div class="reveal flex flex-col sm:flex-row items-center gap-5 w-full sm:w-auto z-20" style="transition-delay: 300ms;">
+            <a href="https://pay.kiwify.com.br/2nyKjEr" class="btn-glow w-full sm:w-auto bg-brand-500 text-surfaceLight font-extrabold text-lg px-10 py-5 rounded-2xl flex items-center justify-center gap-3 transition-transform transform hover:scale-[1.03]">
+                <i data-lucide="zap" class="h-6 w-6"></i>
                 Comprar FinanceHub PRO
             </a>
-            <a href="#demonstracao" class="w-full sm:w-auto glass hover:bg-white/5 text-white font-medium px-8 py-4 rounded-xl flex items-center justify-center gap-2 transition-all">
-                <i data-lucide="play-circle" class="h-5 w-5"></i>
-                Ver Demonstração
+            <a href="#dashboard" class="w-full sm:w-auto glass hover:bg-white/5 text-white font-semibold text-lg px-10 py-5 rounded-2xl flex items-center justify-center gap-3 transition-all">
+                <i data-lucide="monitor-play" class="h-6 w-6"></i>
+                Ver Plataforma
             </a>
         </div>
 
-        <div class="reveal mt-10 flex flex-col items-center gap-2" style="transition-delay: 400ms;">
+        <div class="reveal mt-12 flex flex-col items-center gap-3 z-20" style="transition-delay: 400ms;">
             <div class="flex gap-1 text-yellow-500">
-                <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                <i data-lucide="star" class="h-4 w-4 fill-current"></i>
+                <i data-lucide="star" class="h-5 w-5 fill-current"></i>
+                <i data-lucide="star" class="h-5 w-5 fill-current"></i>
+                <i data-lucide="star" class="h-5 w-5 fill-current"></i>
+                <i data-lucide="star" class="h-5 w-5 fill-current"></i>
+                <i data-lucide="star" class="h-5 w-5 fill-current"></i>
             </div>
-            <p class="text-sm text-slate-500 font-medium">Avaliado com 5 estrelas por mais de 5.400 empreendedores.</p>
+            <p class="text-sm md:text-base text-slate-500 font-medium">Avaliado com 5 estrelas por mais de <span class="text-slate-300">5.400 empreendedores.</span></p>
         </div>
 
-        <div class="reveal relative mt-20 w-full max-w-6xl mx-auto perspective-1000 animate-float" style="transition-delay: 500ms;">
-            <div class="absolute inset-0 bg-gradient-to-r from-brand-500/20 via-blue-500/20 to-brand-500/20 blur-3xl -z-10 rounded-[3rem]"></div>
+        <div id="parallax-wrapper" class="reveal-scale relative mt-24 w-full max-w-[1200px] mx-auto preserve-3d" style="transition-delay: 500ms;">
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-500/30 via-blue-500/10 to-transparent blur-[100px] -z-10 rounded-[3rem] transform translate-y-20"></div>
             
-            <div class="relative w-full aspect-video glass-card rounded-2xl md:rounded-[2rem] border-white/10 shadow-2xl flex items-center justify-center overflow-hidden border">
-                <div class="absolute top-0 w-full h-8 bg-surfaceLight/80 backdrop-blur border-b border-white/5 flex items-center px-4 gap-2">
-                    <div class="h-3 w-3 rounded-full bg-red-500/80"></div>
-                    <div class="h-3 w-3 rounded-full bg-yellow-500/80"></div>
-                    <div class="h-3 w-3 rounded-full bg-green-500/80"></div>
+            <div id="notebook-frame" class="relative w-full aspect-[16/10] bg-surfaceLight border-[12px] md:border-[24px] border-surfaceLight rounded-[2rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)] overflow-hidden transition-transform duration-200 ease-out flex flex-col">
+                <div class="w-full h-8 md:h-12 bg-slate-800/80 backdrop-blur border-b border-white/5 flex items-center px-4 md:px-6 gap-2 flex-shrink-0">
+                    <div class="h-3 w-3 md:h-4 md:w-4 rounded-full bg-red-500"></div>
+                    <div class="h-3 w-3 md:h-4 md:w-4 rounded-full bg-yellow-500"></div>
+                    <div class="h-3 w-3 md:h-4 md:w-4 rounded-full bg-green-500"></div>
+                    <div class="mx-auto flex items-center gap-2 px-4 py-1.5 rounded-md bg-slate-900/50 text-slate-400 text-xs md:text-sm font-medium border border-white/5">
+                        <i data-lucide="lock" class="h-3 w-3"></i> financehubpro.online
+                    </div>
                 </div>
-                <div class="w-full h-full pt-8 flex flex-col items-center justify-center text-slate-600 bg-surface">
-                    <i data-lucide="image" class="h-16 w-16 mb-4 opacity-50"></i>
-                    <p class="text-sm">Insira a imagem do Dashboard (Mockup Notebook) aqui</p>
-                    <p class="text-xs mt-2 opacity-50">&lt;img src="..." class="w-full h-full object-cover" /&gt;</p>
+                
+                <div class="w-full h-full relative bg-surface flex flex-col items-center justify-center text-slate-600">
+                    <div class="absolute inset-0 bg-gradient-to-br from-brand-500/5 to-transparent"></div>
+                    <i data-lucide="monitor" class="h-20 w-20 mb-6 opacity-50"></i>
+                    <p class="text-lg font-medium text-slate-400">Mockup do Dashboard (Adicione sua imagem)</p>
+                    <p class="text-sm mt-3 opacity-50 font-mono">&lt;img src="print-dashboard.png" class="absolute inset-0 w-full h-full object-cover" /&gt;</p>
                 </div>
             </div>
+
+            <div class="w-[110%] ml-[-5%] h-4 md:h-6 bg-gradient-to-b from-slate-600 to-slate-900 rounded-b-[2rem] shadow-2xl relative z-20 mt-[-2px]">
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-1/4 h-2 bg-slate-700 rounded-b-md"></div>
+            </div>
+            
+            <div class="w-full aspect-[16/10] bg-surfaceLight border-[12px] md:border-[24px] border-surfaceLight rounded-[2rem] opacity-20 transform scale-y-[-1] translate-y-[-10%] blur-sm pointer-events-none" style="mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 40%); -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 40%);"></div>
         </div>
     </section>
 
-    <section class="py-10 border-y border-white/5 bg-surfaceLight/30">
+    <section class="py-12 border-y border-white/5 bg-surfaceLight/20">
         <div class="max-w-7xl mx-auto px-6 text-center">
-            <p class="text-sm text-slate-500 uppercase tracking-widest font-semibold mb-6">A tecnologia baseada no software mais poderoso do mundo</p>
-            <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
-                <div class="flex items-center gap-2 font-bold text-xl"><i data-lucide="file-spreadsheet" class="h-6 w-6 text-green-600"></i> Microsoft Excel</div>
-                <div class="flex items-center gap-2 font-bold text-xl"><i data-lucide="building-2" class="h-6 w-6"></i> MEIs</div>
-                <div class="flex items-center gap-2 font-bold text-xl"><i data-lucide="store" class="h-6 w-6"></i> Pequenas Empresas</div>
-                <div class="flex items-center gap-2 font-bold text-xl"><i data-lucide="briefcase" class="h-6 w-6"></i> Autônomos</div>
+            <p class="text-sm text-slate-500 uppercase tracking-widest font-semibold mb-8">Poder corporativo adaptado para a realidade de:</p>
+            <div class="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-60 grayscale hover:grayscale-0 transition-all duration-700">
+                <div class="flex items-center gap-3 font-bold text-2xl text-white"><i data-lucide="building-2" class="h-8 w-8"></i> MEIs</div>
+                <div class="flex items-center gap-3 font-bold text-2xl text-white"><i data-lucide="store" class="h-8 w-8"></i> Pequenas Empresas</div>
+                <div class="flex items-center gap-3 font-bold text-2xl text-white"><i data-lucide="briefcase" class="h-8 w-8"></i> Profissionais Autônomos</div>
+                <div class="flex items-center gap-3 font-bold text-2xl text-white"><i data-lucide="file-spreadsheet" class="h-8 w-8 text-green-500"></i> Excel Nativo</div>
             </div>
         </div>
     </section>
 
-    <section id="beneficios" class="py-24 md:py-32 relative max-w-7xl mx-auto px-6">
-        <div class="text-center mb-16 reveal">
-            <h2 class="text-3xl md:text-5xl font-bold text-white mb-6 tracking-tight">Tudo o que sua empresa <br/>precisa para crescer organizada</h2>
-            <p class="text-slate-400 max-w-2xl mx-auto text-lg">Uma estrutura de gestão financeira desenvolvida para entregar máxima clareza visual com mínimo esforço de preenchimento.</p>
+    <section id="beneficios" class="py-32 relative max-w-7xl mx-auto px-6">
+        <div class="text-center mb-24 reveal">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-6 tracking-tight">Arquitetura de dados invisível. <br/>Resultados cristalinos.</h2>
+            <p class="text-slate-400 max-w-2xl mx-auto text-lg md:text-xl">O FinanceHub atua nos bastidores. Você apenas digita os dados essenciais e o nosso motor calcula estoques, margens e relatórios instantaneamente.</p>
         </div>
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div class="glass-card p-8 rounded-2xl reveal">
-                <div class="h-12 w-12 rounded-xl bg-brand-500/10 flex items-center justify-center border border-brand-500/20 mb-6">
-                    <i data-lucide="package" class="h-6 w-6 text-brand-400"></i>
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="glass-card p-10 rounded-3xl reveal group">
+                <div class="h-16 w-16 rounded-2xl bg-brand-500/10 flex items-center justify-center border border-brand-500/20 mb-8 transition-transform group-hover:scale-110 group-hover:bg-brand-500/20">
+                    <i data-lucide="package" class="h-8 w-8 text-brand-400"></i>
                 </div>
-                <h3 class="text-xl font-semibold text-white mb-3">Estoque Inteligente</h3>
-                <p class="text-slate-400 leading-relaxed">Baixa automática a cada venda, cálculo de custo médio e alertas visuais quando o estoque atinge o nível mínimo crítico.</p>
+                <h3 class="text-2xl font-bold text-white mb-4">Estoque Inteligente</h3>
+                <p class="text-slate-400 text-lg leading-relaxed">Baixa automática a cada venda, cálculo contínuo de custo médio e alertas visuais assim que um produto atingir o nível mínimo crítico.</p>
             </div>
 
-            <div class="glass-card p-8 rounded-2xl reveal" style="transition-delay: 100ms;">
-                <div class="h-12 w-12 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20 mb-6">
-                    <i data-lucide="pie-chart" class="h-6 w-6 text-blue-400"></i>
+            <div class="glass-card p-10 rounded-3xl reveal group" style="transition-delay: 100ms;">
+                <div class="h-16 w-16 rounded-2xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20 mb-8 transition-transform group-hover:scale-110 group-hover:bg-blue-500/20">
+                    <i data-lucide="pie-chart" class="h-8 w-8 text-blue-400"></i>
                 </div>
-                <h3 class="text-xl font-semibold text-white mb-3">Fluxo de Caixa e DRE</h3>
-                <p class="text-slate-400 leading-relaxed">Demonstrativo de Resultado exato. Descubra seu CMV e saiba para onde está indo cada centavo da sua empresa.</p>
+                <h3 class="text-2xl font-bold text-white mb-4">Fluxo de Caixa e DRE</h3>
+                <p class="text-slate-400 text-lg leading-relaxed">Demonstrativo de Resultado exato. Descubra seu Lucro Real (CMV) e saiba exatamente para onde está indo cada centavo da sua empresa mensalmente.</p>
             </div>
 
-            <div class="glass-card p-8 rounded-2xl reveal" style="transition-delay: 200ms;">
-                <div class="h-12 w-12 rounded-xl bg-purple-500/10 flex items-center justify-center border border-purple-500/20 mb-6">
-                    <i data-lucide="shield-check" class="h-6 w-6 text-purple-400"></i>
+            <div class="glass-card p-10 rounded-3xl reveal group" style="transition-delay: 200ms;">
+                <div class="h-16 w-16 rounded-2xl bg-purple-500/10 flex items-center justify-center border border-purple-500/20 mb-8 transition-transform group-hover:scale-110 group-hover:bg-purple-500/20">
+                    <i data-lucide="shield-check" class="h-8 w-8 text-purple-400"></i>
                 </div>
-                <h3 class="text-xl font-semibold text-white mb-3">100% Protegido</h3>
-                <p class="text-slate-400 leading-relaxed">Esqueça fórmulas quebrando. O sistema diferencia células de digitação livre das automáticas, garantindo total segurança estrutural.</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="demonstracao" class="py-24 bg-surfaceLight/50 border-y border-white/5">
-        <div class="max-w-7xl mx-auto px-6 flex flex-col lg:flex-row items-center gap-16">
-            <div class="w-full lg:w-1/2 reveal">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full glass text-blue-400 text-xs font-bold uppercase tracking-wider mb-6">
-                    Fluxo Intuitivo
-                </div>
-                <h2 class="text-3xl md:text-4xl font-bold text-white mb-6 leading-tight">Sem curva de aprendizado. <br/>Pronto para operar hoje.</h2>
-                <div class="space-y-6 mt-8">
-                    <div class="flex gap-4">
-                        <div class="flex-shrink-0 h-10 w-10 rounded-full glass border-brand-500/30 flex items-center justify-center text-brand-400 font-bold">1</div>
-                        <div>
-                            <h4 class="text-lg font-semibold text-white">Cadastre</h4>
-                            <p class="text-slate-400 text-sm mt-1">Insira seus produtos, clientes e fornecedores no painel base.</p>
-                        </div>
-                    </div>
-                    <div class="flex gap-4">
-                        <div class="flex-shrink-0 h-10 w-10 rounded-full glass border-brand-500/30 flex items-center justify-center text-brand-400 font-bold">2</div>
-                        <div>
-                            <h4 class="text-lg font-semibold text-white">Opere</h4>
-                            <p class="text-slate-400 text-sm mt-1">Lance compras no estoque e realize vendas. O sistema faz os cálculos de margem.</p>
-                        </div>
-                    </div>
-                    <div class="flex gap-4">
-                        <div class="flex-shrink-0 h-10 w-10 rounded-full glass border-brand-500/30 flex items-center justify-center text-brand-400 font-bold">3</div>
-                        <div>
-                            <h4 class="text-lg font-semibold text-white">Analise</h4>
-                            <p class="text-slate-400 text-sm mt-1">Abra o Dashboard Executivo e veja seus gráficos de lucro atualizados em tempo real.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="w-full lg:w-1/2 reveal" style="transition-delay: 200ms;">
-                <div class="relative w-full aspect-[4/3] glass-card rounded-2xl border-white/10 shadow-xl overflow-hidden flex items-center justify-center">
-                     <div class="text-center text-slate-500">
-                        <i data-lucide="video" class="h-12 w-12 mx-auto mb-3 opacity-50"></i>
-                        <p class="text-sm">GIF/Vídeo de Demonstração</p>
-                    </div>
-                </div>
+                <h3 class="text-2xl font-bold text-white mb-4">Estrutura 100% Protegida</h3>
+                <p class="text-slate-400 text-lg leading-relaxed">Adeus fórmulas quebradas. O sistema diferencia visualmente células de digitação livre das automáticas, impedindo edições acidentais.</p>
             </div>
         </div>
     </section>
 
-    <section id="funcionalidades" class="py-24 md:py-32 max-w-7xl mx-auto px-6">
-        <h2 class="text-3xl md:text-4xl font-bold text-center text-white mb-16 reveal tracking-tight">Arquitetura Completa de Módulos</h2>
+    <section id="dashboard" class="py-32 bg-surfaceLight/30 border-y border-white/5 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-brand-500/5 to-transparent"></div>
         
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div class="glass p-6 rounded-xl text-center hover:bg-white/5 transition-colors border border-white/5 reveal">
-                <i data-lucide="layout-dashboard" class="h-8 w-8 mx-auto mb-3 text-slate-300"></i>
-                <h4 class="text-sm font-semibold text-white">Dashboard Escuro</h4>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="text-center mb-20 reveal">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-brand-400 text-xs font-bold uppercase tracking-wider mb-6">
+                    A Vitrine do Sistema
+                </div>
+                <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-6 leading-tight">Veja tudo funcionando.</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto text-lg md:text-xl">Explore a interface projetada minuciosamente para oferecer a melhor experiência de usuário dentro do Excel.</p>
             </div>
-            <div class="glass p-6 rounded-xl text-center hover:bg-white/5 transition-colors border border-white/5 reveal" style="transition-delay: 50ms;">
-                <i data-lucide="arrow-left-right" class="h-8 w-8 mx-auto mb-3 text-slate-300"></i>
-                <h4 class="text-sm font-semibold text-white">Fluxo de Caixa</h4>
-            </div>
-            <div class="glass p-6 rounded-xl text-center hover:bg-white/5 transition-colors border border-white/5 reveal" style="transition-delay: 100ms;">
-                <i data-lucide="users" class="h-8 w-8 mx-auto mb-3 text-slate-300"></i>
-                <h4 class="text-sm font-semibold text-white">CRM Clientes</h4>
-            </div>
-            <div class="glass p-6 rounded-xl text-center hover:bg-white/5 transition-colors border border-white/5 reveal" style="transition-delay: 150ms;">
-                <i data-lucide="truck" class="h-8 w-8 mx-auto mb-3 text-slate-300"></i>
-                <h4 class="text-sm font-semibold text-white">Fornecedores</h4>
-            </div>
-            <div class="glass p-6 rounded-xl text-center hover:bg-white/5 transition-colors border border-white/5 reveal" style="transition-delay: 200ms;">
-                <i data-lucide="shopping-cart" class="h-8 w-8 mx-auto mb-3 text-slate-300"></i>
-                <h4 class="text-sm font-semibold text-white">Vendas & Pedidos</h4>
-            </div>
-            <div class="glass p-6 rounded-xl text-center hover:bg-white/5 transition-colors border border-white/5 reveal" style="transition-delay: 250ms;">
-                <i data-lucide="calculator" class="h-8 w-8 mx-auto mb-3 text-slate-300"></i>
-                <h4 class="text-sm font-semibold text-white">Cálculo de CMV</h4>
-            </div>
-            <div class="glass p-6 rounded-xl text-center hover:bg-white/5 transition-colors border border-white/5 reveal" style="transition-delay: 300ms;">
-                <i data-lucide="file-bar-chart" class="h-8 w-8 mx-auto mb-3 text-slate-300"></i>
-                <h4 class="text-sm font-semibold text-white">DRE Executivo</h4>
-            </div>
-            <div class="glass p-6 rounded-xl text-center hover:bg-white/5 transition-colors border border-white/5 reveal border-brand-500/30 bg-brand-500/5" style="transition-delay: 350ms;">
-                <i data-lucide="bot" class="h-8 w-8 mx-auto mb-3 text-brand-400"></i>
-                <h4 class="text-sm font-semibold text-brand-400">IA Assistente</h4>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+                <div class="glass-card rounded-[2rem] p-4 reveal flex flex-col items-center">
+                    <div class="w-full aspect-[4/3] bg-surfaceLight/80 rounded-2xl border border-white/5 mb-6 flex items-center justify-center relative overflow-hidden">
+                        <i data-lucide="layout-dashboard" class="h-16 w-16 text-slate-600 opacity-50"></i>
+                        <p class="absolute bottom-4 text-xs font-mono text-slate-500">Insert Print Dashboard Here</p>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2 text-center">Dashboard Executivo</h3>
+                    <p class="text-slate-400 text-center px-4 pb-4">Indicadores em tempo real, Gráficos Premium em Dark Mode e alertas de IA.</p>
+                </div>
+                
+                <div class="glass-card rounded-[2rem] p-4 reveal" style="transition-delay: 100ms;">
+                    <div class="w-full aspect-[4/3] bg-surfaceLight/80 rounded-2xl border border-white/5 mb-6 flex items-center justify-center relative overflow-hidden">
+                        <i data-lucide="shopping-cart" class="h-16 w-16 text-slate-600 opacity-50"></i>
+                        <p class="absolute bottom-4 text-xs font-mono text-slate-500">Insert Print Vendas Here</p>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2 text-center">Gestão de Vendas</h3>
+                    <p class="text-slate-400 text-center px-4 pb-4">Registro inteligente que debita o estoque e calcula margens de lucro no ato da venda.</p>
+                </div>
+
+                <div class="glass-card rounded-[2rem] p-4 reveal">
+                    <div class="w-full aspect-[4/3] bg-surfaceLight/80 rounded-2xl border border-white/5 mb-6 flex items-center justify-center relative overflow-hidden">
+                        <i data-lucide="arrow-left-right" class="h-16 w-16 text-slate-600 opacity-50"></i>
+                        <p class="absolute bottom-4 text-xs font-mono text-slate-500">Insert Print Caixa Here</p>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2 text-center">Fluxo de Caixa</h3>
+                    <p class="text-slate-400 text-center px-4 pb-4">Categorização de despesas e contas a pagar/receber com status visuais coloridos.</p>
+                </div>
+
+                <div class="glass-card rounded-[2rem] p-4 reveal" style="transition-delay: 100ms;">
+                    <div class="w-full aspect-[4/3] bg-surfaceLight/80 rounded-2xl border border-white/5 mb-6 flex items-center justify-center relative overflow-hidden">
+                        <i data-lucide="file-bar-chart" class="h-16 w-16 text-slate-600 opacity-50"></i>
+                        <p class="absolute bottom-4 text-xs font-mono text-slate-500">Insert Print DRE Here</p>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2 text-center">DRE Profissional</h3>
+                    <p class="text-slate-400 text-center px-4 pb-4">O relatório contábil exigido por contadores, formatado e pronto para imprimir (Ctrl+P).</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <section id="comparacao" class="py-24 bg-surfaceLight border-y border-white/5">
+    <section id="comparacao" class="py-32 relative">
         <div class="max-w-5xl mx-auto px-6 reveal">
-            <h2 class="text-3xl md:text-4xl font-bold text-center text-white mb-16 tracking-tight">O fim das planilhas amadoras</h2>
+            <h2 class="text-4xl md:text-5xl font-bold text-center text-white mb-20 tracking-tight">O Fim das Planilhas Amadoras</h2>
             
-            <div class="grid md:grid-cols-2 gap-8 relative">
-                <div class="hidden md:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-12 w-12 bg-surface rounded-full border border-white/10 items-center justify-center font-bold text-slate-400 z-10">VS</div>
+            <div class="grid md:grid-cols-2 gap-10 relative">
+                <div class="hidden md:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-16 w-16 bg-surface rounded-full border border-white/10 items-center justify-center font-bold text-slate-400 z-20 shadow-xl">VS</div>
 
-                <div class="p-8 rounded-2xl border border-red-500/20 bg-red-500/5 opacity-80">
-                    <h3 class="text-xl font-bold text-slate-300 mb-6">Planilha da Internet</h3>
-                    <ul class="space-y-4">
-                        <li class="flex items-start gap-3 text-slate-400"><i data-lucide="x" class="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5"></i> Fórmulas que quebram facilmente</li>
-                        <li class="flex items-start gap-3 text-slate-400"><i data-lucide="x" class="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5"></i> Design visualmente cansativo (branco/verde padrão)</li>
-                        <li class="flex items-start gap-3 text-slate-400"><i data-lucide="x" class="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5"></i> Dados não integrados (você digita tudo duas vezes)</li>
-                        <li class="flex items-start gap-3 text-slate-400"><i data-lucide="x" class="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5"></i> Sem alertas de estoque baixo</li>
+                <div class="p-10 rounded-3xl border border-red-500/20 bg-red-500/5 opacity-70">
+                    <h3 class="text-2xl font-bold text-slate-300 mb-8">Planilhas da Internet</h3>
+                    <ul class="space-y-6">
+                        <li class="flex items-start gap-4 text-slate-400 text-lg"><i data-lucide="x" class="h-6 w-6 text-red-500 flex-shrink-0 mt-0.5"></i> Fórmulas expostas que quebram facilmente</li>
+                        <li class="flex items-start gap-4 text-slate-400 text-lg"><i data-lucide="x" class="h-6 w-6 text-red-500 flex-shrink-0 mt-0.5"></i> Design visualmente cansativo (branco/verde)</li>
+                        <li class="flex items-start gap-4 text-slate-400 text-lg"><i data-lucide="x" class="h-6 w-6 text-red-500 flex-shrink-0 mt-0.5"></i> Dados isolados (você digita tudo duas vezes)</li>
+                        <li class="flex items-start gap-4 text-slate-400 text-lg"><i data-lucide="x" class="h-6 w-6 text-red-500 flex-shrink-0 mt-0.5"></i> Sem alertas de estoque ou inadimplência</li>
                     </ul>
                 </div>
 
-                <div class="p-8 rounded-2xl border border-brand-500/40 glass-card relative overflow-hidden transform md:scale-105 shadow-2xl">
+                <div class="p-10 rounded-3xl border border-brand-500/40 glass-card relative overflow-hidden transform md:scale-110 shadow-2xl z-10">
                     <div class="absolute inset-0 bg-gradient-to-br from-brand-500/10 to-transparent pointer-events-none"></div>
-                    <div class="absolute top-0 right-0 bg-brand-500 text-surface text-xs font-bold px-3 py-1 rounded-bl-lg">O PADRÃO PRO</div>
+                    <div class="absolute top-0 right-0 bg-brand-500 text-surface text-sm font-bold px-4 py-2 rounded-bl-xl shadow-lg">O PADRÃO PRO</div>
                     
-                    <h3 class="text-2xl font-bold text-white mb-6">FinanceHub PRO</h3>
-                    <ul class="space-y-4 relative z-10">
-                        <li class="flex items-start gap-3 text-slate-200"><i data-lucide="check-circle-2" class="h-5 w-5 text-brand-400 flex-shrink-0 mt-0.5"></i> Arquitetura blindada contra erros de digitação</li>
-                        <li class="flex items-start gap-3 text-slate-200"><i data-lucide="check-circle-2" class="h-5 w-5 text-brand-400 flex-shrink-0 mt-0.5"></i> Design Dark Mode de software SaaS profissional</li>
-                        <li class="flex items-start gap-3 text-slate-200"><i data-lucide="check-circle-2" class="h-5 w-5 text-brand-400 flex-shrink-0 mt-0.5"></i> Motor relacional: Estoque, Vendas e Caixa conversam</li>
-                        <li class="flex items-start gap-3 text-slate-200"><i data-lucide="check-circle-2" class="h-5 w-5 text-brand-400 flex-shrink-0 mt-0.5"></i> Assistente inteligente e alertas automáticos na tela</li>
+                    <h3 class="text-3xl font-bold text-white mb-8">FinanceHub PRO</h3>
+                    <ul class="space-y-6 relative z-10">
+                        <li class="flex items-start gap-4 text-slate-200 text-lg"><i data-lucide="check-circle-2" class="h-6 w-6 text-brand-400 flex-shrink-0 mt-0.5"></i> Arquitetura blindada e protegida contra erros</li>
+                        <li class="flex items-start gap-4 text-slate-200 text-lg"><i data-lucide="check-circle-2" class="h-6 w-6 text-brand-400 flex-shrink-0 mt-0.5"></i> Design Dark Mode UI/UX de software SaaS</li>
+                        <li class="flex items-start gap-4 text-slate-200 text-lg"><i data-lucide="check-circle-2" class="h-6 w-6 text-brand-400 flex-shrink-0 mt-0.5"></i> Motor Relacional (Estoque, Vendas e Caixa conversam)</li>
+                        <li class="flex items-start gap-4 text-slate-200 text-lg"><i data-lucide="check-circle-2" class="h-6 w-6 text-brand-400 flex-shrink-0 mt-0.5"></i> Assistente IA com alertas visuais no painel</li>
                     </ul>
                 </div>
             </div>
@@ -408,127 +433,127 @@
     </section>
 
     <section class="py-24 max-w-7xl mx-auto px-6 hidden">
-        <h2 class="text-3xl font-bold text-center text-white mb-16 reveal">O que os empreendedores dizem</h2>
-        <div class="grid md:grid-cols-3 gap-6">
-            <div class="glass-card p-6 rounded-2xl reveal">
-                <div class="flex gap-1 text-yellow-500 mb-4"><i data-lucide="star" class="h-4 w-4 fill-current"></i><i data-lucide="star" class="h-4 w-4 fill-current"></i><i data-lucide="star" class="h-4 w-4 fill-current"></i><i data-lucide="star" class="h-4 w-4 fill-current"></i><i data-lucide="star" class="h-4 w-4 fill-current"></i></div>
-                <p class="text-slate-300 mb-4 text-sm leading-relaxed">"Text here"</p>
-                <div class="flex items-center gap-3">
-                    <div class="h-10 w-10 rounded-full bg-slate-800"></div>
-                    <div><p class="text-white text-sm font-bold">Nome</p><p class="text-slate-500 text-xs">Empresa</p></div>
+        <h2 class="text-4xl font-bold text-center text-white mb-20 reveal">O que os empreendedores dizem</h2>
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="glass-card p-8 rounded-3xl reveal">
+                <div class="flex gap-1 text-yellow-500 mb-6"><i data-lucide="star" class="h-5 w-5 fill-current"></i><i data-lucide="star" class="h-5 w-5 fill-current"></i><i data-lucide="star" class="h-5 w-5 fill-current"></i><i data-lucide="star" class="h-5 w-5 fill-current"></i><i data-lucide="star" class="h-5 w-5 fill-current"></i></div>
+                <p class="text-slate-300 mb-8 text-lg leading-relaxed">"Text here"</p>
+                <div class="flex items-center gap-4">
+                    <div class="h-12 w-12 rounded-full bg-slate-800 border border-white/10"></div>
+                    <div><p class="text-white font-bold">Nome</p><p class="text-slate-500 text-sm">Empresa</p></div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="py-24 md:py-32 max-w-4xl mx-auto px-6 text-center reveal">
-        <div class="relative glass-card rounded-[2.5rem] p-10 md:p-16 border-white/10 shadow-2xl overflow-hidden">
+    <section class="py-32 max-w-5xl mx-auto px-6 text-center reveal-scale">
+        <div class="relative glass-card rounded-[3rem] p-12 md:p-20 border-brand-500/20 shadow-[0_0_80px_rgba(34,197,94,0.15)] overflow-hidden">
             <div class="absolute inset-0 bg-gradient-to-b from-brand-500/10 to-transparent"></div>
             
             <div class="relative z-10">
-                <span class="inline-block bg-brand-500/20 text-brand-400 text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider border border-brand-500/30 mb-6">
+                <span class="inline-block bg-brand-500/20 text-brand-400 text-sm font-bold px-5 py-2 rounded-full uppercase tracking-widest border border-brand-500/30 mb-8">
                     Oferta Exclusiva de Lançamento
                 </span>
-                <h2 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-4">FinanceHub PRO Essential</h2>
-                <p class="text-slate-400 text-lg mb-8">Acesso Vitalício + Atualizações Gratuitas • Sem Mensalidades</p>
+                <h2 class="text-4xl md:text-6xl font-extrabold text-white tracking-tight mb-6">FinanceHub PRO Essential</h2>
+                <p class="text-slate-400 text-xl mb-12">Acesso Vitalício + Atualizações Gratuitas • Sistema sem Mensalidades</p>
                 
-                <div class="mb-10 flex flex-col items-center justify-center">
-                    <span class="text-slate-500 text-xl line-through decoration-red-500/50">De R$ 147,00</span>
-                    <div class="flex items-baseline gap-2 text-brand-400 my-2">
-                        <span class="text-3xl font-bold">12x</span>
-                        <span class="text-6xl md:text-7xl font-extrabold tracking-tighter">R$ 10,03</span>
+                <div class="mb-14 flex flex-col items-center justify-center">
+                    <span class="text-slate-500 text-2xl line-through decoration-red-500/50 mb-2">De R$ 147,00</span>
+                    <div class="flex items-baseline gap-3 text-brand-400 my-2">
+                        <span class="text-4xl font-bold">12x</span>
+                        <span class="text-7xl md:text-[6rem] font-extrabold tracking-tighter">R$ 10,03</span>
                     </div>
-                    <span class="text-slate-300 font-medium">ou R$ 97,00 à vista (Pix ou Cartão)</span>
+                    <span class="text-slate-300 text-lg font-medium mt-4">ou R$ 97,00 à vista (Pix ou Cartão de Crédito)</span>
                 </div>
 
-                <a href="https://pay.kiwify.com.br/2nyKjEr" class="btn-glow inline-block w-full max-w-md bg-brand-500 text-surfaceLight font-bold text-xl py-5 rounded-xl transition-all transform hover:scale-105 mb-6">
+                <a href="https://pay.kiwify.com.br/2nyKjEr" class="btn-glow inline-flex items-center justify-center w-full max-w-xl bg-brand-500 text-surfaceLight font-extrabold text-2xl py-6 rounded-2xl transition-all transform hover:scale-[1.03] mb-8 shadow-2xl">
                     QUERO ORGANIZAR MEU FINANCEIRO →
                 </a>
                 
-                <div class="flex flex-wrap justify-center gap-6 text-sm text-slate-400 font-medium">
-                    <div class="flex items-center gap-2"><i data-lucide="check" class="h-4 w-4 text-brand-400"></i> Acesso Imediato</div>
-                    <div class="flex items-center gap-2"><i data-lucide="check" class="h-4 w-4 text-brand-400"></i> Excel (Win/Mac)</div>
-                    <div class="flex items-center gap-2"><i data-lucide="check" class="h-4 w-4 text-brand-400"></i> Garantia 7 dias</div>
+                <div class="flex flex-wrap justify-center gap-8 text-base text-slate-400 font-medium">
+                    <div class="flex items-center gap-2"><i data-lucide="check-circle-2" class="h-5 w-5 text-brand-400"></i> Download Imediato</div>
+                    <div class="flex items-center gap-2"><i data-lucide="check-circle-2" class="h-5 w-5 text-brand-400"></i> Excel Nativo (Win/Mac)</div>
+                    <div class="flex items-center gap-2"><i data-lucide="shield-check" class="h-5 w-5 text-brand-400"></i> Garantia de 7 dias</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="faq" class="py-24 border-t border-white/5 bg-surfaceLight/30">
-        <div class="max-w-3xl mx-auto px-6 reveal">
-            <h2 class="text-3xl font-bold text-center text-white mb-12 tracking-tight">Perguntas Frequentes</h2>
+    <section id="faq" class="py-32 border-t border-white/5 bg-surfaceLight/20">
+        <div class="max-w-4xl mx-auto px-6 reveal">
+            <h2 class="text-4xl font-bold text-center text-white mb-16 tracking-tight">Perguntas Frequentes</h2>
             
-            <div class="space-y-4">
-                <details class="group glass-card rounded-xl border border-white/5 overflow-hidden transition-all duration-300">
-                    <summary class="flex justify-between items-center font-semibold cursor-pointer list-none p-6 text-white hover:text-brand-400 transition-colors">
+            <div class="space-y-6">
+                <details class="group glass-card rounded-2xl border border-white/5 overflow-hidden transition-all duration-300">
+                    <summary class="flex justify-between items-center font-semibold text-lg cursor-pointer list-none p-8 text-white hover:text-brand-400 transition-colors">
                         Preciso pagar mensalidade?
-                        <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="h-5 w-5"></i></span>
+                        <span class="transition-transform duration-300 group-open:rotate-180"><i data-lucide="chevron-down" class="h-6 w-6"></i></span>
                     </summary>
-                    <div class="text-slate-400 text-sm p-6 pt-0 leading-relaxed transition-all duration-300">
+                    <div class="text-slate-400 text-base p-8 pt-0 leading-relaxed">
                         Não. O acesso ao FinanceHub PRO Essential é de pagamento único. Você compra uma vez e tem acesso vitalício ao arquivo atual sem nenhuma cobrança recorrente.
                     </div>
                 </details>
                 
-                <details class="group glass-card rounded-xl border border-white/5 overflow-hidden transition-all duration-300">
-                    <summary class="flex justify-between items-center font-semibold cursor-pointer list-none p-6 text-white hover:text-brand-400 transition-colors">
-                        Em quais versões do Excel a planilha funciona?
-                        <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="h-5 w-5"></i></span>
+                <details class="group glass-card rounded-2xl border border-white/5 overflow-hidden transition-all duration-300">
+                    <summary class="flex justify-between items-center font-semibold text-lg cursor-pointer list-none p-8 text-white hover:text-brand-400 transition-colors">
+                        Em quais versões do Excel o sistema funciona?
+                        <span class="transition-transform duration-300 group-open:rotate-180"><i data-lucide="chevron-down" class="h-6 w-6"></i></span>
                     </summary>
-                    <div class="text-slate-400 text-sm p-6 pt-0 leading-relaxed transition-all duration-300">
-                        O sistema foi otimizado para o Microsoft Excel 2019, 2021, 2024 e Microsoft 365. Funciona nativamente tanto no sistema Windows quanto no Mac OS. Não recomendamos o uso no Google Sheets.
+                    <div class="text-slate-400 text-base p-8 pt-0 leading-relaxed">
+                        O sistema foi arquitetado com fórmulas modernas e otimizado para o Microsoft Excel 2019, 2021, 2024 e Microsoft 365. Funciona nativamente tanto no Windows quanto no Mac OS. <em>Nota: Não é compatível com Google Sheets devido à complexidade da engenharia visual.</em>
                     </div>
                 </details>
 
-                <details class="group glass-card rounded-xl border border-white/5 overflow-hidden transition-all duration-300">
-                    <summary class="flex justify-between items-center font-semibold cursor-pointer list-none p-6 text-white hover:text-brand-400 transition-colors">
+                <details class="group glass-card rounded-2xl border border-white/5 overflow-hidden transition-all duration-300">
+                    <summary class="flex justify-between items-center font-semibold text-lg cursor-pointer list-none p-8 text-white hover:text-brand-400 transition-colors">
                         Como recebo o acesso após a compra?
-                        <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="h-5 w-5"></i></span>
+                        <span class="transition-transform duration-300 group-open:rotate-180"><i data-lucide="chevron-down" class="h-6 w-6"></i></span>
                     </summary>
-                    <div class="text-slate-400 text-sm p-6 pt-0 leading-relaxed transition-all duration-300">
-                        O envio é processado imediatamente pela plataforma Kiwify. Assim que o pagamento for confirmado, você receberá um e-mail com o link direto para download do sistema e do guia rápido.
+                    <div class="text-slate-400 text-base p-8 pt-0 leading-relaxed">
+                        A liberação é automática pelo gateway da Kiwify. Assim que o pagamento via Pix ou Cartão for confirmado, você receberá um e-mail instantâneo com o link para baixar a plataforma e o guia de uso.
                     </div>
                 </details>
             </div>
         </div>
     </section>
 
-    <footer class="border-t border-white/10 bg-surface pt-16 pb-8">
+    <footer class="border-t border-white/10 bg-surface pt-24 pb-12">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-start gap-12 mb-12">
-                <div class="max-w-xs">
-                    <div class="flex items-center gap-2 mb-4">
-                        <i data-lucide="bar-chart-3" class="text-brand-500 h-6 w-6"></i>
-                        <span class="font-bold text-lg text-white">FinanceHub <span class="text-brand-500">PRO</span></span>
+            <div class="flex flex-col md:flex-row justify-between items-start gap-16 mb-16">
+                <div class="max-w-md">
+                    <div class="flex items-center gap-3 mb-6">
+                        <i data-lucide="bar-chart-3" class="text-brand-500 h-8 w-8"></i>
+                        <span class="font-bold text-2xl text-white">FinanceHub <span class="text-brand-500">PRO</span></span>
                     </div>
-                    <p class="text-sm text-slate-500 leading-relaxed">
-                        Transformando a maneira como pequenos negócios dominam suas finanças através de engenharia avançada em planilhas.
+                    <p class="text-base text-slate-500 leading-relaxed">
+                        Desenhando o futuro da gestão para pequenos negócios. Engenharia de ponta entregue através da ferramenta mais universal do mundo.
                     </p>
                 </div>
                 
-                <div class="flex gap-16">
+                <div class="flex gap-20">
                     <div>
-                        <h4 class="text-white font-semibold mb-4">Produto</h4>
-                        <ul class="space-y-2 text-sm text-slate-500">
+                        <h4 class="text-white font-semibold text-lg mb-6">Produto</h4>
+                        <ul class="space-y-4 text-base text-slate-500">
                             <li><a href="#beneficios" class="hover:text-brand-400 transition">Benefícios</a></li>
-                            <li><a href="#funcionalidades" class="hover:text-brand-400 transition">Módulos</a></li>
-                            <li><a href="#comparacao" class="hover:text-brand-400 transition">Comparação</a></li>
-                            <li><a href="#faq" class="hover:text-brand-400 transition">Perguntas Frequentes</a></li>
+                            <li><a href="#dashboard" class="hover:text-brand-400 transition">Plataforma</a></li>
+                            <li><a href="#comparacao" class="hover:text-brand-400 transition">Por que escolher?</a></li>
+                            <li><a href="#faq" class="hover:text-brand-400 transition">Dúvidas</a></li>
                         </ul>
                     </div>
                     <div>
-                        <h4 class="text-white font-semibold mb-4">Legal</h4>
-                        <ul class="space-y-2 text-sm text-slate-500">
+                        <h4 class="text-white font-semibold text-lg mb-6">Suporte & Legal</h4>
+                        <ul class="space-y-4 text-base text-slate-500">
                             <li><a href="#" class="hover:text-white transition">Termos de Uso</a></li>
-                            <li><a href="#" class="hover:text-white transition">Privacidade</a></li>
+                            <li><a href="#" class="hover:text-white transition">Política de Privacidade</a></li>
                             <li><a href="#" class="hover:text-white transition">Contato</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
             
-            <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-600">
+            <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-600">
                 <p>© 2026 FinanceHub PRO. Todos os direitos reservados.</p>
-                <p>Sistema em arquivo (.xlsx) nativo. Requer Microsoft Excel desktop.</p>
+                <p>Sistema Operacional encapsulado em .xlsx • Requer MS Excel.</p>
             </div>
         </div>
     </footer>
@@ -537,40 +562,65 @@
         // Inicializa Ícones Lucide
         lucide.createIcons();
 
-        // Lógica de Scroll Reveal
+        // Scroll Reveal Avançado
         document.addEventListener('DOMContentLoaded', () => {
-            const observerOptions = {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.15
-            };
+            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
 
             const observer = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('active');
-                        // Opcional: parar de observar após revelar (para animar só uma vez)
                         observer.unobserve(entry.target);
                     }
                 });
             }, observerOptions);
 
-            const revealElements = document.querySelectorAll('.reveal');
-            revealElements.forEach(el => observer.observe(el));
+            document.querySelectorAll('.reveal, .reveal-scale').forEach(el => observer.observe(el));
         });
 
-        // Navbar Glass effect on Scroll
+        // Navbar & Sticky CTA Lógica de Scroll
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
-            if (window.scrollY > 20) {
-                nav.classList.add('border-b', 'border-white/5', 'shadow-lg');
+            const stickyCta = document.getElementById('sticky-cta');
+            
+            // Navbar blur e borda
+            if (window.scrollY > 50) {
+                nav.classList.add('border-b', 'border-white/5', 'shadow-2xl', 'bg-surface/80');
             } else {
-                nav.classList.remove('border-b', 'border-white/5', 'shadow-lg');
+                nav.classList.remove('border-b', 'border-white/5', 'shadow-2xl', 'bg-surface/80');
+            }
+
+            // Mostra o botão Flutuante "Comprar" ao passar da Hero Section (aprox 700px)
+            if (window.scrollY > 700) {
+                stickyCta.classList.remove('translate-y-32', 'opacity-0');
+            } else {
+                stickyCta.classList.add('translate-y-32', 'opacity-0');
             }
         });
 
-        // Melhoria no Accordion (FAQ) para não fechar abruptamente se for possível com CSS
-        // O HTML <details> puro já cuida do principal de forma nativa e acessível.
+        // 3D Parallax Effect para o Notebook da Hero
+        const parallaxWrapper = document.getElementById('parallax-wrapper');
+        const notebookFrame = document.getElementById('notebook-frame');
+
+        document.addEventListener('mousemove', (e) => {
+            if (!parallaxWrapper || !notebookFrame) return;
+            
+            // Pega o centro da tela
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 40;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 40;
+
+            // Aplica a rotação (apenas em telas não-mobile)
+            if(window.innerWidth > 768) {
+                notebookFrame.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+            }
+        });
+
+        // Reseta a rotação do notebook se o mouse sair da tela
+        document.addEventListener('mouseleave', () => {
+            if(window.innerWidth > 768 && notebookFrame) {
+                notebookFrame.style.transform = `rotateY(0deg) rotateX(0deg)`;
+            }
+        });
     </script>
 </body>
 </html>
