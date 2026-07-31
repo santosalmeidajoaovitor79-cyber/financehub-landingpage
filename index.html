@@ -274,13 +274,10 @@
         </div>
 
         <div id="parallax-wrapper" class="reveal-scale relative mt-24 w-full max-w-[1100px] mx-auto" style="transition-delay: 500ms;">
-            
             <div class="absolute inset-0 z-0 bg-gradient-to-t from-brand-500/40 via-blue-500/20 to-transparent blur-[120px] rounded-[3rem] transform translate-y-10"></div>
             
             <div id="notebook-frame" class="relative z-10 w-full rounded-[1.5rem] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.9)] overflow-hidden transition-transform duration-200 ease-out border border-white/10 ring-1 ring-black/50 bg-[#020617]">
-                
                 <div class="absolute inset-0 shadow-[inset_0_0_120px_#020617] z-20 pointer-events-none"></div>
-                
                 <img src="mockup.png" alt="Dashboard FinanceHub PRO" class="w-full h-auto object-cover relative z-10" />
             </div>
         </div>
@@ -502,7 +499,7 @@
                     </p>
                 </div>
                 
-                <div class="flex gap-20">
+                <div class="flex flex-wrap md:flex-nowrap gap-12 md:gap-20">
                     <div>
                         <h4 class="text-white font-semibold text-lg mb-6">Produto</h4>
                         <ul class="space-y-4 text-base text-slate-500">
@@ -515,9 +512,15 @@
                     <div>
                         <h4 class="text-white font-semibold text-lg mb-6">Suporte & Legal</h4>
                         <ul class="space-y-4 text-base text-slate-500">
-                            <li><a href="#" class="hover:text-white transition">Termos de Uso</a></li>
-                            <li><a href="#" class="hover:text-white transition">Política de Privacidade</a></li>
-                            <li><a href="#" class="hover:text-white transition">Contato</a></li>
+                            <li><button onclick="openModal('modal-termos')" class="hover:text-white transition text-left">Termos de Uso</button></li>
+                            <li><button onclick="openModal('modal-privacidade')" class="hover:text-white transition text-left">Política de Privacidade</button></li>
+                            
+                            <li>
+                                <a href="https://instagram.com/finance_pro_brasil" target="_blank" rel="noopener noreferrer" class="hover:text-brand-400 transition flex items-center gap-2 font-medium">
+                                    <i data-lucide="instagram" class="h-5 w-5"></i> 
+                                    @finance_pro_brasil
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -530,9 +533,86 @@
         </div>
     </footer>
 
+    <div id="modal-termos" class="fixed inset-0 z-[200] hidden items-center justify-center p-4 sm:p-6 opacity-0 transition-opacity duration-300">
+        <div class="absolute inset-0 bg-surface/80 backdrop-blur-sm" onclick="closeModal('modal-termos')"></div>
+        
+        <div class="relative w-full max-w-3xl max-h-[85vh] overflow-y-auto glass-card rounded-3xl p-8 sm:p-12 shadow-2xl transform scale-95 transition-transform duration-300" id="modal-termos-content">
+            <button onclick="closeModal('modal-termos')" class="absolute top-6 right-6 text-slate-400 hover:text-white transition">
+                <i data-lucide="x" class="h-6 w-6"></i>
+            </button>
+            <h2 class="text-3xl font-bold text-white mb-6">Termos de Uso</h2>
+            <div class="prose prose-invert prose-slate max-w-none text-slate-400">
+                <p>Última atualização: Julho de 2026</p>
+                <p>Ao adquirir e utilizar o FinanceHub PRO Essential, você concorda com os termos aqui descritos. Este produto é um arquivo digital (.xlsx) formatado para uso no Microsoft Excel.</p>
+                <h3 class="text-white font-semibold mt-6 mb-2">1. Licença de Uso</h3>
+                <p>A compra garante uma licença de uso individual e intransferível. É expressamente proibida a revenda, distribuição, modificação para fins comerciais ou pirataria deste material.</p>
+                <h3 class="text-white font-semibold mt-6 mb-2">2. Compatibilidade</h3>
+                <p>O cliente está ciente de que o produto requer instalação prévia do Microsoft Excel (versões 2019, 2021, 2024 ou 365) em ambiente Windows ou Mac OS. O funcionamento em softwares de terceiros (como Google Sheets ou Apple Numbers) não é suportado nem garantido.</p>
+                <h3 class="text-white font-semibold mt-6 mb-2">3. Garantia e Reembolso</h3>
+                <p>Oferecemos 7 dias de garantia incondicional conforme o Art. 49 do Código de Defesa do Consumidor. Caso o produto não atenda às expectativas, o reembolso pode ser solicitado diretamente pela plataforma Kiwify dentro deste prazo.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-privacidade" class="fixed inset-0 z-[200] hidden items-center justify-center p-4 sm:p-6 opacity-0 transition-opacity duration-300">
+        <div class="absolute inset-0 bg-surface/80 backdrop-blur-sm" onclick="closeModal('modal-privacidade')"></div>
+        
+        <div class="relative w-full max-w-3xl max-h-[85vh] overflow-y-auto glass-card rounded-3xl p-8 sm:p-12 shadow-2xl transform scale-95 transition-transform duration-300" id="modal-privacidade-content">
+            <button onclick="closeModal('modal-privacidade')" class="absolute top-6 right-6 text-slate-400 hover:text-white transition">
+                <i data-lucide="x" class="h-6 w-6"></i>
+            </button>
+            <h2 class="text-3xl font-bold text-white mb-6">Política de Privacidade</h2>
+            <div class="prose prose-invert prose-slate max-w-none text-slate-400">
+                <p>Sua privacidade é prioridade para o FinanceHub PRO.</p>
+                <h3 class="text-white font-semibold mt-6 mb-2">1. Dados do Sistema (Offline)</h3>
+                <p>O FinanceHub PRO é uma ferramenta offline. Nenhum dado financeiro, cadastro de cliente ou informação lançada na planilha é enviada para nossos servidores. Todas as suas informações permanecem 100% locais no seu computador.</p>
+                <h3 class="text-white font-semibold mt-6 mb-2">2. Dados de Compra</h3>
+                <p>Para processar sua compra, utilizamos a plataforma Kiwify, que coleta dados estritamente necessários para cobrança e emissão fiscal (Nome, CPF/CNPJ, E-mail e Dados de Pagamento). Nós temos acesso apenas aos seus dados de contato para suporte e envio do produto.</p>
+                <h3 class="text-white font-semibold mt-6 mb-2">3. Uso de Cookies (Site)</h3>
+                <p>Nosso site utiliza cookies básicos (como o Google Analytics e Pixel) apenas para fins estatísticos de tráfego e melhoria da experiência de navegação, sem identificar os usuários individualmente de forma invasiva.</p>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Inicializa Ícones Lucide
         lucide.createIcons();
+
+        // Lógica dos Modais de Termos e Privacidade
+        function openModal(id) {
+            const modal = document.getElementById(id);
+            const content = document.getElementById(id + '-content');
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // Pequeno delay para a transição do Tailwind funcionar
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+            }, 10);
+            
+            // Trava o scroll da página de fundo
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            const content = document.getElementById(id + '-content');
+            
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300); // Tempo igual a duration-300 do Tailwind
+            
+            // Libera o scroll da página
+            document.body.style.overflow = 'auto';
+        }
 
         // Scroll Reveal Avançado
         document.addEventListener('DOMContentLoaded', () => {
@@ -556,9 +636,9 @@
             const stickyCta = document.getElementById('sticky-cta');
             
             if (window.scrollY > 50) {
-                nav.classList.add('border-b', 'border-white/5', 'shadow-2xl', 'bg-surface/80');
+                nav.classList.add('border-b', 'border-white/5', 'shadow-2xl', 'bg-surface/80', 'backdrop-blur-md');
             } else {
-                nav.classList.remove('border-b', 'border-white/5', 'shadow-2xl', 'bg-surface/80');
+                nav.classList.remove('border-b', 'border-white/5', 'shadow-2xl', 'bg-surface/80', 'backdrop-blur-md');
             }
 
             if (window.scrollY > 700) {
