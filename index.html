@@ -196,7 +196,7 @@
         details > summary { list-style: none; }
         details > summary::-webkit-details-marker { display: none; }
         
-        /* 3D Perspective for Notebook */
+        /* 3D Perspective */
         .perspective-container { perspective: 2000px; }
         .preserve-3d { transform-style: preserve-3d; }
     </style>
@@ -274,10 +274,14 @@
         </div>
 
         <div id="parallax-wrapper" class="reveal-scale relative mt-24 w-full max-w-[1100px] mx-auto preserve-3d" style="transition-delay: 500ms;">
+            
             <div class="absolute inset-0 bg-gradient-to-t from-brand-500/40 via-blue-500/20 to-transparent blur-[120px] -z-10 rounded-[3rem] transform translate-y-10"></div>
             
             <div id="notebook-frame" class="relative w-full rounded-[1.5rem] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.9)] overflow-hidden transition-transform duration-200 ease-out border border-white/10 ring-1 ring-black/50">
-                <img src="mockup.png" alt="Dashboard FinanceHub PRO" class="w-full h-auto object-cover" />
+                
+                <div class="absolute inset-0 shadow-[inset_0_0_120px_#020617] z-10 pointer-events-none"></div>
+                
+                <img src="mockup.png" alt="Dashboard FinanceHub PRO" class="w-full h-auto object-cover relative z-0" />
             </div>
         </div>
     </section>
@@ -409,6 +413,20 @@
                         <li class="flex items-start gap-4 text-slate-200 text-lg"><i data-lucide="check-circle-2" class="h-6 w-6 text-brand-400 flex-shrink-0 mt-0.5"></i> Motor Relacional (Estoque, Vendas e Caixa conversam)</li>
                         <li class="flex items-start gap-4 text-slate-200 text-lg"><i data-lucide="check-circle-2" class="h-6 w-6 text-brand-400 flex-shrink-0 mt-0.5"></i> Assistente IA com alertas visuais no painel</li>
                     </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 max-w-7xl mx-auto px-6 hidden">
+        <h2 class="text-4xl font-bold text-center text-white mb-20 reveal">O que os empreendedores dizem</h2>
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="glass-card p-8 rounded-3xl reveal">
+                <div class="flex gap-1 text-yellow-500 mb-6"><i data-lucide="star" class="h-5 w-5 fill-current"></i><i data-lucide="star" class="h-5 w-5 fill-current"></i><i data-lucide="star" class="h-5 w-5 fill-current"></i><i data-lucide="star" class="h-5 w-5 fill-current"></i><i data-lucide="star" class="h-5 w-5 fill-current"></i></div>
+                <p class="text-slate-300 mb-8 text-lg leading-relaxed">"Text here"</p>
+                <div class="flex items-center gap-4">
+                    <div class="h-12 w-12 rounded-full bg-slate-800 border border-white/10"></div>
+                    <div><p class="text-white font-bold">Nome</p><p class="text-slate-500 text-sm">Empresa</p></div>
                 </div>
             </div>
         </div>
@@ -566,16 +584,17 @@
             }
         });
 
-        // 3D Parallax Effect para a Imagem Central
+        // 3D Parallax Effect para a Imagem Central (AJUSTADO PARA SER SUPER SUAVE)
         const parallaxWrapper = document.getElementById('parallax-wrapper');
         const notebookFrame = document.getElementById('notebook-frame');
 
         document.addEventListener('mousemove', (e) => {
             if (!parallaxWrapper || !notebookFrame) return;
             
-            // Pega o centro da tela
-            const xAxis = (window.innerWidth / 2 - e.pageX) / 45;
-            const yAxis = (window.innerHeight / 2 - e.pageY) / 45;
+            // O SEGREDO DA SUTILEZA:
+            // Divisor em 150 garante que a rotação máxima seja de apenas 2 a 3 graus.
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 150;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 150;
 
             // Aplica a rotação (apenas em telas não-mobile)
             if(window.innerWidth > 768) {
