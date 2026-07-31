@@ -146,7 +146,7 @@
             background-image: radial-gradient(circle at top center, rgba(15, 23, 42, 1) 0%, rgba(2, 6, 23, 1) 100%);
         }
         
-        /* Premium Glassmorphism (Vidro Verdadeiro) */
+        /* Premium Glassmorphism */
         .glass { 
             background: rgba(255, 255, 255, 0.02); 
             backdrop-filter: blur(16px); 
@@ -223,7 +223,7 @@
             </div>
             <div class="hidden md:flex items-center gap-10 text-sm font-medium text-slate-300">
                 <a href="#beneficios" class="hover:text-white transition-colors">Benefícios</a>
-                <a href="#dashboard" class="hover:text-white transition-colors">A Plataforma</a>
+                <a href="#plataforma" class="hover:text-white transition-colors">A Plataforma</a>
                 <a href="#comparacao" class="hover:text-white transition-colors">Comparação</a>
                 <a href="#faq" class="hover:text-white transition-colors">FAQ</a>
             </div>
@@ -256,7 +256,7 @@
                 <i data-lucide="zap" class="h-6 w-6"></i>
                 Comprar FinanceHub PRO
             </a>
-            <a href="#dashboard" class="w-full sm:w-auto glass hover:bg-white/5 text-white font-semibold text-lg px-10 py-5 rounded-2xl flex items-center justify-center gap-3 transition-all">
+            <a href="#plataforma" class="w-full sm:w-auto glass hover:bg-white/5 text-white font-semibold text-lg px-10 py-5 rounded-2xl flex items-center justify-center gap-3 transition-all">
                 <i data-lucide="monitor-play" class="h-6 w-6"></i>
                 Ver Plataforma
             </a>
@@ -273,32 +273,12 @@
             <p class="text-sm md:text-base text-slate-500 font-medium">Avaliado com 5 estrelas por mais de <span class="text-slate-300">5.400 empreendedores.</span></p>
         </div>
 
-        <div id="parallax-wrapper" class="reveal-scale relative mt-24 w-full max-w-[1200px] mx-auto preserve-3d" style="transition-delay: 500ms;">
-            <div class="absolute inset-0 bg-gradient-to-t from-brand-500/30 via-blue-500/10 to-transparent blur-[100px] -z-10 rounded-[3rem] transform translate-y-20"></div>
+        <div id="parallax-wrapper" class="reveal-scale relative mt-24 w-full max-w-[1100px] mx-auto preserve-3d" style="transition-delay: 500ms;">
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-500/40 via-blue-500/20 to-transparent blur-[120px] -z-10 rounded-[3rem] transform translate-y-10"></div>
             
-            <div id="notebook-frame" class="relative w-full aspect-[16/10] bg-surfaceLight border-[12px] md:border-[24px] border-surfaceLight rounded-[2rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)] overflow-hidden transition-transform duration-200 ease-out flex flex-col">
-                <div class="w-full h-8 md:h-12 bg-slate-800/80 backdrop-blur border-b border-white/5 flex items-center px-4 md:px-6 gap-2 flex-shrink-0">
-                    <div class="h-3 w-3 md:h-4 md:w-4 rounded-full bg-red-500"></div>
-                    <div class="h-3 w-3 md:h-4 md:w-4 rounded-full bg-yellow-500"></div>
-                    <div class="h-3 w-3 md:h-4 md:w-4 rounded-full bg-green-500"></div>
-                    <div class="mx-auto flex items-center gap-2 px-4 py-1.5 rounded-md bg-slate-900/50 text-slate-400 text-xs md:text-sm font-medium border border-white/5">
-                        <i data-lucide="lock" class="h-3 w-3"></i> financehubpro.online
-                    </div>
-                </div>
-                
-                <div class="w-full h-full relative bg-surface flex flex-col items-center justify-center text-slate-600">
-                    <div class="absolute inset-0 bg-gradient-to-br from-brand-500/5 to-transparent"></div>
-                    <i data-lucide="monitor" class="h-20 w-20 mb-6 opacity-50"></i>
-                    <p class="text-lg font-medium text-slate-400">Mockup do Dashboard (Adicione sua imagem)</p>
-                    <p class="text-sm mt-3 opacity-50 font-mono">&lt;img src="print-dashboard.png" class="absolute inset-0 w-full h-full object-cover" /&gt;</p>
-                </div>
+            <div id="notebook-frame" class="relative w-full rounded-[1.5rem] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.9)] overflow-hidden transition-transform duration-200 ease-out border border-white/10 ring-1 ring-black/50">
+                <img src="mockup.png" alt="Dashboard FinanceHub PRO" class="w-full h-auto object-cover" />
             </div>
-
-            <div class="w-[110%] ml-[-5%] h-4 md:h-6 bg-gradient-to-b from-slate-600 to-slate-900 rounded-b-[2rem] shadow-2xl relative z-20 mt-[-2px]">
-                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-1/4 h-2 bg-slate-700 rounded-b-md"></div>
-            </div>
-            
-            <div class="w-full aspect-[16/10] bg-surfaceLight border-[12px] md:border-[24px] border-surfaceLight rounded-[2rem] opacity-20 transform scale-y-[-1] translate-y-[-10%] blur-sm pointer-events-none" style="mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 40%); -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 40%);"></div>
         </div>
     </section>
 
@@ -347,53 +327,55 @@
         </div>
     </section>
 
-    <section id="dashboard" class="py-32 bg-surfaceLight/30 border-y border-white/5 relative overflow-hidden">
+    <section id="plataforma" class="py-32 bg-surfaceLight/30 border-y border-white/5 relative overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-b from-transparent via-brand-500/5 to-transparent"></div>
         
         <div class="max-w-7xl mx-auto px-6 relative z-10">
             <div class="text-center mb-20 reveal">
                 <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-brand-400 text-xs font-bold uppercase tracking-wider mb-6">
-                    A Vitrine do Sistema
+                    Módulos da Plataforma
                 </div>
-                <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-6 leading-tight">Veja tudo funcionando.</h2>
-                <p class="text-slate-400 max-w-2xl mx-auto text-lg md:text-xl">Explore a interface projetada minuciosamente para oferecer a melhor experiência de usuário dentro do Excel.</p>
+                <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-6 leading-tight">Visão 360° do seu negócio.</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto text-lg md:text-xl">Cada módulo foi minuciosamente desenhado para eliminar a digitação dupla e focar no que importa: os seus lucros.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
-                <div class="glass-card rounded-[2rem] p-4 reveal flex flex-col items-center">
-                    <div class="w-full aspect-[4/3] bg-surfaceLight/80 rounded-2xl border border-white/5 mb-6 flex items-center justify-center relative overflow-hidden">
-                        <i data-lucide="layout-dashboard" class="h-16 w-16 text-slate-600 opacity-50"></i>
-                        <p class="absolute bottom-4 text-xs font-mono text-slate-500">Insert Print Dashboard Here</p>
+                <div class="glass-card rounded-[2rem] p-10 reveal flex flex-col items-center group">
+                    <div class="h-20 w-20 bg-brand-500/10 rounded-2xl flex items-center justify-center border border-brand-500/20 mb-8 transition-transform group-hover:scale-110 group-hover:bg-brand-500/20">
+                        <i data-lucide="layout-dashboard" class="h-10 w-10 text-brand-400"></i>
                     </div>
-                    <h3 class="text-2xl font-bold text-white mb-2 text-center">Dashboard Executivo</h3>
-                    <p class="text-slate-400 text-center px-4 pb-4">Indicadores em tempo real, Gráficos Premium em Dark Mode e alertas de IA.</p>
+                    <h3 class="text-2xl font-bold text-white mb-4 text-center">Dashboard Executivo</h3>
+                    <p class="text-slate-400 text-center text-lg leading-relaxed">Indicadores em tempo real, Gráficos Premium com design Dark Mode e assistente IA que te avisa sobre pendências.</p>
                 </div>
                 
-                <div class="glass-card rounded-[2rem] p-4 reveal" style="transition-delay: 100ms;">
-                    <div class="w-full aspect-[4/3] bg-surfaceLight/80 rounded-2xl border border-white/5 mb-6 flex items-center justify-center relative overflow-hidden">
-                        <i data-lucide="shopping-cart" class="h-16 w-16 text-slate-600 opacity-50"></i>
-                        <p class="absolute bottom-4 text-xs font-mono text-slate-500">Insert Print Vendas Here</p>
+                <div class="glass-card rounded-[2rem] p-10 reveal group" style="transition-delay: 100ms;">
+                    <div class="flex flex-col items-center">
+                        <div class="h-20 w-20 bg-blue-500/10 rounded-2xl flex items-center justify-center border border-blue-500/20 mb-8 transition-transform group-hover:scale-110 group-hover:bg-blue-500/20">
+                            <i data-lucide="shopping-cart" class="h-10 w-10 text-blue-400"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4 text-center">Gestão de Vendas Inteligente</h3>
+                        <p class="text-slate-400 text-center text-lg leading-relaxed">Registro inteligente que debita o estoque automaticamente e calcula as suas margens de lucro no ato da venda.</p>
                     </div>
-                    <h3 class="text-2xl font-bold text-white mb-2 text-center">Gestão de Vendas</h3>
-                    <p class="text-slate-400 text-center px-4 pb-4">Registro inteligente que debita o estoque e calcula margens de lucro no ato da venda.</p>
                 </div>
 
-                <div class="glass-card rounded-[2rem] p-4 reveal">
-                    <div class="w-full aspect-[4/3] bg-surfaceLight/80 rounded-2xl border border-white/5 mb-6 flex items-center justify-center relative overflow-hidden">
-                        <i data-lucide="arrow-left-right" class="h-16 w-16 text-slate-600 opacity-50"></i>
-                        <p class="absolute bottom-4 text-xs font-mono text-slate-500">Insert Print Caixa Here</p>
+                <div class="glass-card rounded-[2rem] p-10 reveal group">
+                    <div class="flex flex-col items-center">
+                        <div class="h-20 w-20 bg-purple-500/10 rounded-2xl flex items-center justify-center border border-purple-500/20 mb-8 transition-transform group-hover:scale-110 group-hover:bg-purple-500/20">
+                            <i data-lucide="arrow-left-right" class="h-10 w-10 text-purple-400"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4 text-center">Fluxo de Caixa Colorido</h3>
+                        <p class="text-slate-400 text-center text-lg leading-relaxed">Categorização precisa de despesas e controle de contas a pagar e receber através de status visuais codificados por cores.</p>
                     </div>
-                    <h3 class="text-2xl font-bold text-white mb-2 text-center">Fluxo de Caixa</h3>
-                    <p class="text-slate-400 text-center px-4 pb-4">Categorização de despesas e contas a pagar/receber com status visuais coloridos.</p>
                 </div>
 
-                <div class="glass-card rounded-[2rem] p-4 reveal" style="transition-delay: 100ms;">
-                    <div class="w-full aspect-[4/3] bg-surfaceLight/80 rounded-2xl border border-white/5 mb-6 flex items-center justify-center relative overflow-hidden">
-                        <i data-lucide="file-bar-chart" class="h-16 w-16 text-slate-600 opacity-50"></i>
-                        <p class="absolute bottom-4 text-xs font-mono text-slate-500">Insert Print DRE Here</p>
+                <div class="glass-card rounded-[2rem] p-10 reveal group" style="transition-delay: 100ms;">
+                    <div class="flex flex-col items-center">
+                        <div class="h-20 w-20 bg-orange-500/10 rounded-2xl flex items-center justify-center border border-orange-500/20 mb-8 transition-transform group-hover:scale-110 group-hover:bg-orange-500/20">
+                            <i data-lucide="file-bar-chart" class="h-10 w-10 text-orange-400"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4 text-center">DRE Profissional</h3>
+                        <p class="text-slate-400 text-center text-lg leading-relaxed">O relatório contábil exigido por contadores já calculado. Pronto para exportar em PDF com um clique (Ctrl+P).</p>
                     </div>
-                    <h3 class="text-2xl font-bold text-white mb-2 text-center">DRE Profissional</h3>
-                    <p class="text-slate-400 text-center px-4 pb-4">O relatório contábil exigido por contadores, formatado e pronto para imprimir (Ctrl+P).</p>
                 </div>
             </div>
         </div>
@@ -427,20 +409,6 @@
                         <li class="flex items-start gap-4 text-slate-200 text-lg"><i data-lucide="check-circle-2" class="h-6 w-6 text-brand-400 flex-shrink-0 mt-0.5"></i> Motor Relacional (Estoque, Vendas e Caixa conversam)</li>
                         <li class="flex items-start gap-4 text-slate-200 text-lg"><i data-lucide="check-circle-2" class="h-6 w-6 text-brand-400 flex-shrink-0 mt-0.5"></i> Assistente IA com alertas visuais no painel</li>
                     </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-24 max-w-7xl mx-auto px-6 hidden">
-        <h2 class="text-4xl font-bold text-center text-white mb-20 reveal">O que os empreendedores dizem</h2>
-        <div class="grid md:grid-cols-3 gap-8">
-            <div class="glass-card p-8 rounded-3xl reveal">
-                <div class="flex gap-1 text-yellow-500 mb-6"><i data-lucide="star" class="h-5 w-5 fill-current"></i><i data-lucide="star" class="h-5 w-5 fill-current"></i><i data-lucide="star" class="h-5 w-5 fill-current"></i><i data-lucide="star" class="h-5 w-5 fill-current"></i><i data-lucide="star" class="h-5 w-5 fill-current"></i></div>
-                <p class="text-slate-300 mb-8 text-lg leading-relaxed">"Text here"</p>
-                <div class="flex items-center gap-4">
-                    <div class="h-12 w-12 rounded-full bg-slate-800 border border-white/10"></div>
-                    <div><p class="text-white font-bold">Nome</p><p class="text-slate-500 text-sm">Empresa</p></div>
                 </div>
             </div>
         </div>
@@ -535,7 +503,7 @@
                         <h4 class="text-white font-semibold text-lg mb-6">Produto</h4>
                         <ul class="space-y-4 text-base text-slate-500">
                             <li><a href="#beneficios" class="hover:text-brand-400 transition">Benefícios</a></li>
-                            <li><a href="#dashboard" class="hover:text-brand-400 transition">Plataforma</a></li>
+                            <li><a href="#plataforma" class="hover:text-brand-400 transition">Plataforma</a></li>
                             <li><a href="#comparacao" class="hover:text-brand-400 transition">Por que escolher?</a></li>
                             <li><a href="#faq" class="hover:text-brand-400 transition">Dúvidas</a></li>
                         </ul>
@@ -598,7 +566,7 @@
             }
         });
 
-        // 3D Parallax Effect para o Notebook da Hero
+        // 3D Parallax Effect para a Imagem Central
         const parallaxWrapper = document.getElementById('parallax-wrapper');
         const notebookFrame = document.getElementById('notebook-frame');
 
@@ -606,8 +574,8 @@
             if (!parallaxWrapper || !notebookFrame) return;
             
             // Pega o centro da tela
-            const xAxis = (window.innerWidth / 2 - e.pageX) / 40;
-            const yAxis = (window.innerHeight / 2 - e.pageY) / 40;
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 45;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 45;
 
             // Aplica a rotação (apenas em telas não-mobile)
             if(window.innerWidth > 768) {
@@ -615,7 +583,7 @@
             }
         });
 
-        // Reseta a rotação do notebook se o mouse sair da tela
+        // Reseta a rotação da imagem se o mouse sair da tela
         document.addEventListener('mouseleave', () => {
             if(window.innerWidth > 768 && notebookFrame) {
                 notebookFrame.style.transform = `rotateY(0deg) rotateX(0deg)`;
