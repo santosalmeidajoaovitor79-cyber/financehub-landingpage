@@ -229,7 +229,7 @@
         </div>
     </nav>
 
-    <section class="relative pt-48 pb-32 px-6 overflow-hidden flex flex-col items-center text-center">
+    <section class="relative pt-48 pb-32 px-6 overflow-hidden flex flex-col items-center text-center perspective-container">
         
         <div class="reveal inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass border-brand-500/30 text-brand-400 text-xs font-semibold uppercase tracking-widest mb-10 shadow-[0_0_20px_rgba(34,197,94,0.1)]">
             <span class="relative flex h-2 w-2">
@@ -269,19 +269,13 @@
             <p class="text-sm md:text-base text-slate-500 font-medium">Avaliado com 5 estrelas por mais de <span class="text-slate-300">5.400 empreendedores.</span></p>
         </div>
 
-        <div class="reveal-scale relative mt-24 w-full max-w-[1100px] mx-auto" style="transition-delay: 500ms;">
+        <div id="parallax-wrapper" class="reveal-scale relative mt-24 w-full max-w-[1100px] mx-auto" style="transition-delay: 500ms;">
+            <div class="absolute inset-0 z-0 bg-gradient-to-t from-brand-500/40 via-blue-500/20 to-transparent blur-[120px] rounded-[3rem] transform translate-y-10"></div>
             
-            <div class="absolute left-1/2 -translate-x-1/2 top-10 w-[80%] h-full bg-gradient-to-t from-brand-500/40 via-blue-500/20 to-transparent blur-[120px] -z-10 pointer-events-none rounded-full"></div>
-            
-            <div id="parallax-wrapper" class="relative z-10 w-full" style="perspective: 2000px;">
-                <div id="notebook-frame" class="relative w-full rounded-[1.5rem] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.9)] overflow-hidden transition-transform duration-200 ease-out border border-white/10 ring-1 ring-black/50 bg-[#020617]">
-                    
-                    <div class="absolute inset-0 shadow-[inset_0_0_120px_#020617] z-20 pointer-events-none"></div>
-                    
-                    <img src="mockup.png" alt="Dashboard FinanceHub PRO" class="w-full h-auto object-cover relative z-10" />
-                </div>
+            <div id="notebook-frame" class="relative z-10 w-full rounded-[1.5rem] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.9)] overflow-hidden transition-transform duration-200 ease-out border border-white/10 ring-1 ring-black/50 bg-[#020617]">
+                <div class="absolute inset-0 shadow-[inset_0_0_120px_#020617] z-20 pointer-events-none"></div>
+                <img src="mockup.png" alt="Dashboard FinanceHub PRO" class="w-full h-auto object-cover relative z-10" />
             </div>
-
         </div>
     </section>
 
@@ -343,10 +337,17 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+                
                 <div class="glass-card rounded-[2rem] p-6 md:p-8 reveal group">
-                    <div class="w-full aspect-[16/10] bg-surface rounded-xl border border-white/10 mb-8 overflow-hidden relative">
-                        <img src="print-dashboard.png" alt="Dashboard Executivo FinanceHub" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                        <div class="absolute inset-0 shadow-[inset_0_0_20px_#020617] pointer-events-none"></div>
+                    <div class="w-full aspect-[16/10] bg-surface rounded-xl border border-white/10 mb-8 overflow-hidden relative cursor-pointer group/img" onclick="openImageModal('print-dashboard.png')">
+                        <img src="print-dashboard.png" alt="Dashboard Executivo FinanceHub" class="w-full h-full object-cover object-top transition-transform duration-700 group-hover/img:scale-105" />
+                        
+                        <div class="absolute inset-0 bg-brand-500/20 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm z-30">
+                            <div class="bg-surface text-white px-5 py-2.5 rounded-full font-semibold flex items-center gap-2 transform translate-y-4 group-hover/img:translate-y-0 transition-transform duration-300 shadow-xl">
+                                <i data-lucide="zoom-in" class="h-4 w-4"></i> Ampliar
+                            </div>
+                        </div>
+                        <div class="absolute inset-0 shadow-[inset_0_0_20px_#020617] pointer-events-none z-20"></div>
                     </div>
                     <div class="px-2">
                         <h3 class="text-2xl font-bold text-white mb-3">Dashboard Executivo</h3>
@@ -355,9 +356,15 @@
                 </div>
                 
                 <div class="glass-card rounded-[2rem] p-6 md:p-8 reveal group" style="transition-delay: 100ms;">
-                    <div class="w-full aspect-[16/10] bg-surface rounded-xl border border-white/10 mb-8 overflow-hidden relative">
-                        <img src="print-vendas.png" alt="Gestão de Vendas FinanceHub" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                        <div class="absolute inset-0 shadow-[inset_0_0_20px_#020617] pointer-events-none"></div>
+                    <div class="w-full aspect-[16/10] bg-surface rounded-xl border border-white/10 mb-8 overflow-hidden relative cursor-pointer group/img" onclick="openImageModal('print-vendas.png')">
+                        <img src="print-vendas.png" alt="Gestão de Vendas FinanceHub" class="w-full h-full object-cover object-top transition-transform duration-700 group-hover/img:scale-105" />
+                        
+                        <div class="absolute inset-0 bg-brand-500/20 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm z-30">
+                            <div class="bg-surface text-white px-5 py-2.5 rounded-full font-semibold flex items-center gap-2 transform translate-y-4 group-hover/img:translate-y-0 transition-transform duration-300 shadow-xl">
+                                <i data-lucide="zoom-in" class="h-4 w-4"></i> Ampliar
+                            </div>
+                        </div>
+                        <div class="absolute inset-0 shadow-[inset_0_0_20px_#020617] pointer-events-none z-20"></div>
                     </div>
                     <div class="px-2">
                         <h3 class="text-2xl font-bold text-white mb-3">Gestão de Vendas Inteligente</h3>
@@ -366,9 +373,15 @@
                 </div>
 
                 <div class="glass-card rounded-[2rem] p-6 md:p-8 reveal group">
-                    <div class="w-full aspect-[16/10] bg-surface rounded-xl border border-white/10 mb-8 overflow-hidden relative">
-                        <img src="print-caixa.png" alt="Fluxo de Caixa FinanceHub" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                        <div class="absolute inset-0 shadow-[inset_0_0_20px_#020617] pointer-events-none"></div>
+                    <div class="w-full aspect-[16/10] bg-surface rounded-xl border border-white/10 mb-8 overflow-hidden relative cursor-pointer group/img" onclick="openImageModal('print-caixa.png')">
+                        <img src="print-caixa.png" alt="Fluxo de Caixa FinanceHub" class="w-full h-full object-cover object-top transition-transform duration-700 group-hover/img:scale-105" />
+                        
+                        <div class="absolute inset-0 bg-brand-500/20 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm z-30">
+                            <div class="bg-surface text-white px-5 py-2.5 rounded-full font-semibold flex items-center gap-2 transform translate-y-4 group-hover/img:translate-y-0 transition-transform duration-300 shadow-xl">
+                                <i data-lucide="zoom-in" class="h-4 w-4"></i> Ampliar
+                            </div>
+                        </div>
+                        <div class="absolute inset-0 shadow-[inset_0_0_20px_#020617] pointer-events-none z-20"></div>
                     </div>
                     <div class="px-2">
                         <h3 class="text-2xl font-bold text-white mb-3">Fluxo de Caixa Colorido</h3>
@@ -377,15 +390,22 @@
                 </div>
 
                 <div class="glass-card rounded-[2rem] p-6 md:p-8 reveal group" style="transition-delay: 100ms;">
-                    <div class="w-full aspect-[16/10] bg-surface rounded-xl border border-white/10 mb-8 overflow-hidden relative">
-                        <img src="print-dre.png" alt="DRE FinanceHub" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                        <div class="absolute inset-0 shadow-[inset_0_0_20px_#020617] pointer-events-none"></div>
+                    <div class="w-full aspect-[16/10] bg-surface rounded-xl border border-white/10 mb-8 overflow-hidden relative cursor-pointer group/img" onclick="openImageModal('print-dre.png')">
+                        <img src="print-dre.png" alt="DRE FinanceHub" class="w-full h-full object-cover object-top transition-transform duration-700 group-hover/img:scale-105" />
+                        
+                        <div class="absolute inset-0 bg-brand-500/20 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm z-30">
+                            <div class="bg-surface text-white px-5 py-2.5 rounded-full font-semibold flex items-center gap-2 transform translate-y-4 group-hover/img:translate-y-0 transition-transform duration-300 shadow-xl">
+                                <i data-lucide="zoom-in" class="h-4 w-4"></i> Ampliar
+                            </div>
+                        </div>
+                        <div class="absolute inset-0 shadow-[inset_0_0_20px_#020617] pointer-events-none z-20"></div>
                     </div>
                     <div class="px-2">
                         <h3 class="text-2xl font-bold text-white mb-3">DRE Profissional</h3>
                         <p class="text-slate-400 text-lg leading-relaxed">O relatório contábil exigido por contadores já calculado. Pronto para exportar em PDF com um clique (Ctrl+P).</p>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
@@ -446,10 +466,10 @@
 
             <div class="glass-card p-8 rounded-3xl reveal group hover:-translate-y-2 transition-all" style="transition-delay: 200ms;">
                 <div class="flex gap-1 text-yellow-500 mb-6"><i data-lucide="star" class="h-5 w-5 fill-current"></i><i data-lucide="star" class="h-5 w-5 fill-current"></i><i data-lucide="star" class="h-5 w-5 fill-current"></i><i data-lucide="star" class="h-5 w-5 fill-current"></i><i data-lucide="star" class="h-5 w-5 fill-current"></i></div>
-                <p class="text-slate-300 mb-8 text-lg leading-relaxed italic">"O alerta de estoque baixo pagou o investimento na primeira semana. Antes eu deixava de vender porque esquecia de repor mercadoria. A DRE para mandar para a contabilidade também é perfeita."</p>
+                <p class="text-slate-300 mb-8 text-lg leading-relaxed italic">"O alerta de stock baixo pagou o investimento da planilha na primeira semana. Antes eu deixava de vender porque esquecia de repor mercadoria. A DRE automática para mandar para o contabilista também é perfeita."</p>
                 <div class="flex items-center gap-4">
                     <div class="h-12 w-12 rounded-full bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400 font-bold text-xl">M</div>
-                    <div><p class="text-white font-bold">Marcos P.</p><p class="text-slate-500 text-sm">E-commerce / Lojista</p></div>
+                    <div><p class="text-white font-bold">Marcos P.</p><p class="text-slate-500 text-sm">E-commerce</p></div>
                 </div>
             </div>
         </div>
@@ -559,6 +579,14 @@
                         <ul class="space-y-4 text-base text-slate-500">
                             <li><button onclick="openModal('modal-termos')" class="hover:text-white transition text-left">Termos de Uso</button></li>
                             <li><button onclick="openModal('modal-privacidade')" class="hover:text-white transition text-left">Política de Privacidade</button></li>
+                            
+                            <li>
+                                <a href="mailto:financehubbrasil@gmail.com" class="hover:text-brand-400 transition flex items-center gap-2 font-medium">
+                                    <i data-lucide="mail" class="h-5 w-5"></i> 
+                                    financehubbrasil@gmail.com
+                                </a>
+                            </li>
+
                             <li>
                                 <a href="https://instagram.com/finance_pro_brasil" target="_blank" rel="noopener noreferrer" class="hover:text-brand-400 transition flex items-center gap-2 font-medium">
                                     <i data-lucide="instagram" class="h-5 w-5"></i> 
@@ -576,6 +604,16 @@
             </div>
         </div>
     </footer>
+
+    <div id="modal-imagem" class="fixed inset-0 z-[300] hidden items-center justify-center p-4 sm:p-6 opacity-0 transition-opacity duration-300">
+        <div class="absolute inset-0 bg-surface/90 backdrop-blur-md" onclick="closeImageModal()"></div>
+        <div class="relative w-full max-w-6xl max-h-[90vh] flex items-center justify-center transform scale-95 transition-transform duration-300" id="modal-imagem-content">
+            <button onclick="closeImageModal()" class="absolute -top-12 right-0 text-white hover:text-brand-400 transition bg-white/10 rounded-full p-2">
+                <i data-lucide="x" class="h-6 w-6"></i>
+            </button>
+            <img id="lightbox-img" src="" alt="Tela Ampliada" class="max-w-full max-h-[85vh] rounded-2xl shadow-2xl border border-white/10 object-contain" />
+        </div>
+    </div>
 
     <div id="modal-termos" class="fixed inset-0 z-[200] hidden items-center justify-center p-4 sm:p-6 opacity-0 transition-opacity duration-300">
         <div class="absolute inset-0 bg-surface/80 backdrop-blur-sm" onclick="closeModal('modal-termos')"></div>
@@ -619,6 +657,42 @@
     <script>
         // Inicializa Ícones Lucide
         lucide.createIcons();
+
+        // Lógica do Lightbox (Zoom nas Imagens)
+        function openImageModal(src) {
+            const modal = document.getElementById('modal-imagem');
+            const content = document.getElementById('modal-imagem-content');
+            const img = document.getElementById('lightbox-img');
+            
+            img.src = src;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+            }, 10);
+            
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImageModal() {
+            const modal = document.getElementById('modal-imagem');
+            const content = document.getElementById('modal-imagem-content');
+            
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                document.getElementById('lightbox-img').src = '';
+            }, 300);
+            
+            document.body.style.overflow = 'auto';
+        }
 
         // Modais de Termos e Privacidade
         function openModal(id) {
@@ -677,14 +751,12 @@
             }
         });
 
-        // 3D Parallax Effect - TOTALMENTE CORRIGIDO PARA SER SUAVE E SEM CORTES DE FUNDO
+        // 3D Parallax Effect Suave
         const parallaxWrapper = document.getElementById('parallax-wrapper');
         const notebookFrame = document.getElementById('notebook-frame');
 
         document.addEventListener('mousemove', (e) => {
             if (!parallaxWrapper || !notebookFrame) return;
-            
-            // O Divisor 150 garante que a rotação seja um "suspiro" elegante de 2 a 3 graus
             const xAxis = (window.innerWidth / 2 - e.pageX) / 150;
             const yAxis = (window.innerHeight / 2 - e.pageY) / 150;
 
