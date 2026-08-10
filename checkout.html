@@ -15,6 +15,15 @@
                         brand: { 400: '#34d399', 500: '#22c55e', 600: '#16a34a' },
                         surface: '#020617', 
                         surfaceLight: '#0f172a'
+                    },
+                    animation: {
+                        'reveal-up': 'reveal-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards'
+                    },
+                    keyframes: {
+                        'reveal-up': {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
                     }
                 }
             }
@@ -28,6 +37,9 @@
         .input-field:focus { border-color: #22c55e; outline: none; box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2); }
         .tab-active { border-color: #22c55e; background: rgba(34,197,94,0.1); color: #4ade80; }
         .tab-inactive { border-color: rgba(255,255,255,0.1); color: #94a3b8; }
+        .btn-glow { position: relative; z-index: 1; }
+        .btn-glow::before { content: ''; position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px; background: linear-gradient(45deg, #22c55e, #3b82f6, #22c55e); z-index: -1; filter: blur(12px); opacity: 0; transition: opacity 0.4s ease; border-radius: inherit; }
+        .btn-glow:hover::before { opacity: 0.8; }
     </style>
 </head>
 <body class="antialiased flex items-center justify-center p-4 md:p-8">
@@ -72,7 +84,7 @@
 
                 <div class="bg-surface/50 rounded-xl p-4 border border-white/5 flex gap-3 text-sm text-slate-400 mb-2">
                     <i data-lucide="shield-check" class="h-5 w-5 text-brand-500 flex-shrink-0"></i>
-                    <p>Pagamento 100% seguro. Criptografia de ponta a ponta (SSL).</p>
+                    <p>Pagamento 100% seguro. Processado diretamente via API oficial.</p>
                 </div>
             </div>
             
@@ -85,91 +97,93 @@
         <div class="lg:col-span-7 glass-card p-6 md:p-10 rounded-3xl">
             <h3 class="text-2xl font-bold text-white mb-6">Finalizar Compra</h3>
             
-            <form id="checkout-form" class="space-y-6">
-                <!-- Criação de Conta -->
-                <div>
-                    <h4 class="text-brand-400 text-sm font-bold uppercase tracking-wider mb-4 flex items-center gap-2">
-                        <i data-lucide="user" class="h-4 w-4"></i> 1. Crie sua conta
-                    </h4>
-                    <div class="grid md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm text-slate-400 mb-1">Nome Completo</label>
-                            <input type="text" required class="input-field w-full px-4 py-3 rounded-xl" placeholder="Ex: João Silva">
-                        </div>
-                        <div>
-                            <label class="block text-sm text-slate-400 mb-1">CPF ou CNPJ</label>
-                            <input type="text" required class="input-field w-full px-4 py-3 rounded-xl" placeholder="000.000.000-00">
-                        </div>
-                        <div class="md:col-span-2">
-                            <label class="block text-sm text-slate-400 mb-1">E-mail (Onde você receberá a planilha)</label>
-                            <input type="email" required class="input-field w-full px-4 py-3 rounded-xl" placeholder="joao@email.com">
-                        </div>
-                        <div class="md:col-span-2">
-                            <label class="block text-sm text-slate-400 mb-1">Crie uma Senha (Para acessar futuras atualizações)</label>
-                            <input type="password" required class="input-field w-full px-4 py-3 rounded-xl" placeholder="••••••••">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Pagamento -->
-                <div class="pt-6 border-t border-white/10">
-                    <h4 class="text-brand-400 text-sm font-bold uppercase tracking-wider mb-4 flex items-center gap-2">
-                        <i data-lucide="credit-card" class="h-4 w-4"></i> 2. Forma de Pagamento
-                    </h4>
-                    
-                    <!-- Tabs -->
-                    <div class="grid grid-cols-2 gap-3 mb-6">
-                        <button type="button" id="tab-pix" class="tab-active border-2 py-3 rounded-xl font-semibold flex flex-col items-center gap-1 transition-all">
-                            <i data-lucide="qr-code" class="h-5 w-5"></i> PIX (Aprovação na hora)
-                        </button>
-                        <button type="button" id="tab-card" class="tab-inactive border-2 py-3 rounded-xl font-semibold flex flex-col items-center gap-1 transition-all">
-                            <i data-lucide="credit-card" class="h-5 w-5"></i> Cartão de Crédito
-                        </button>
-                    </div>
-
-                    <!-- Conteúdo PIX -->
-                    <div id="content-pix" class="bg-brand-500/5 border border-brand-500/20 p-5 rounded-xl text-center mb-6 block">
-                        <p class="text-slate-300 text-sm mb-2">Após clicar no botão abaixo, o QR Code será gerado.</p>
-                        <p class="text-brand-400 font-bold">A liberação do sistema é instantânea!</p>
-                    </div>
-
-                    <!-- Conteúdo Cartão (Oculto por padrão) -->
-                    <div id="content-card" class="space-y-4 mb-6 hidden">
-                        <div>
-                            <label class="block text-sm text-slate-400 mb-1">Número do Cartão</label>
-                            <input type="text" class="input-field w-full px-4 py-3 rounded-xl" placeholder="0000 0000 0000 0000">
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
+            <!-- CONTAINER DO FORMULÁRIO (Será substituído pelo QR Code após pagar) -->
+            <div id="checkout-form">
+                <div class="space-y-6">
+                    <!-- Criação de Conta -->
+                    <div>
+                        <h4 class="text-brand-400 text-sm font-bold uppercase tracking-wider mb-4 flex items-center gap-2">
+                            <i data-lucide="user" class="h-4 w-4"></i> 1. Crie sua conta
+                        </h4>
+                        <div class="grid md:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm text-slate-400 mb-1">Validade</label>
-                                <input type="text" class="input-field w-full px-4 py-3 rounded-xl" placeholder="MM/AA">
+                                <label class="block text-sm text-slate-400 mb-1">Nome Completo</label>
+                                <input type="text" id="nome" required class="input-field w-full px-4 py-3 rounded-xl" placeholder="Ex: João Silva">
                             </div>
                             <div>
-                                <label class="block text-sm text-slate-400 mb-1">CVV</label>
-                                <input type="text" class="input-field w-full px-4 py-3 rounded-xl" placeholder="123">
+                                <label class="block text-sm text-slate-400 mb-1">CPF ou CNPJ</label>
+                                <input type="text" id="cpf" required class="input-field w-full px-4 py-3 rounded-xl" placeholder="000.000.000-00">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm text-slate-400 mb-1">E-mail (Para acessar o sistema)</label>
+                                <input type="email" id="email" required class="input-field w-full px-4 py-3 rounded-xl" placeholder="joao@email.com">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm text-slate-400 mb-1">Crie uma Senha (Para login futuro)</label>
+                                <input type="password" id="senha" required class="input-field w-full px-4 py-3 rounded-xl" placeholder="••••••••">
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Botão Comprar -->
-                <button type="button" onclick="simularPagamento()" class="w-full bg-brand-500 text-surfaceLight font-extrabold text-xl py-4 rounded-xl shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-transform transform hover:scale-[1.02]">
-                    GERAR PIX DE R$ 19,90
-                </button>
-            </form>
+                    <!-- Pagamento -->
+                    <div class="pt-6 border-t border-white/10">
+                        <h4 class="text-brand-400 text-sm font-bold uppercase tracking-wider mb-4 flex items-center gap-2">
+                            <i data-lucide="credit-card" class="h-4 w-4"></i> 2. Forma de Pagamento
+                        </h4>
+                        
+                        <!-- Tabs -->
+                        <div class="grid grid-cols-2 gap-3 mb-6">
+                            <button type="button" id="tab-pix" class="tab-active border-2 py-3 rounded-xl font-semibold flex flex-col items-center gap-1 transition-all">
+                                <i data-lucide="qr-code" class="h-5 w-5"></i> PIX (Aprovação na hora)
+                            </button>
+                            <button type="button" id="tab-card" class="tab-inactive border-2 py-3 rounded-xl font-semibold flex flex-col items-center gap-1 transition-all">
+                                <i data-lucide="credit-card" class="h-5 w-5"></i> Cartão de Crédito
+                            </button>
+                        </div>
+
+                        <!-- Conteúdo PIX -->
+                        <div id="content-pix" class="bg-brand-500/5 border border-brand-500/20 p-5 rounded-xl text-center mb-6 block">
+                            <p class="text-slate-300 text-sm mb-2">Após clicar no botão abaixo, o QR Code será gerado.</p>
+                            <p class="text-brand-400 font-bold">A liberação do sistema é instantânea!</p>
+                        </div>
+
+                        <!-- Conteúdo Cartão (Oculto por padrão) -->
+                        <div id="content-card" class="space-y-4 mb-6 hidden">
+                            <div>
+                                <label class="block text-sm text-slate-400 mb-1">Número do Cartão</label>
+                                <input type="text" class="input-field w-full px-4 py-3 rounded-xl" placeholder="0000 0000 0000 0000">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm text-slate-400 mb-1">Validade</label>
+                                    <input type="text" class="input-field w-full px-4 py-3 rounded-xl" placeholder="MM/AA">
+                                </div>
+                                <div>
+                                    <label class="block text-sm text-slate-400 mb-1">CVV</label>
+                                    <input type="text" class="input-field w-full px-4 py-3 rounded-xl" placeholder="123">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botão Comprar -->
+                    <button type="button" id="btn-submit" onclick="processarPagamento()" class="w-full bg-brand-500 text-surfaceLight font-extrabold text-xl py-4 rounded-xl shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-transform transform hover:scale-[1.02]">
+                        GERAR PIX DE R$ 19,90
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Scripts de Interface -->
+    <!-- Scripts de Interface e API -->
     <script>
         lucide.createIcons();
 
-        // Lógica simples para alternar as abas de pagamento
         const tabPix = document.getElementById('tab-pix');
         const tabCard = document.getElementById('tab-card');
         const contentPix = document.getElementById('content-pix');
         const contentCard = document.getElementById('content-card');
-        const btnSubmit = document.querySelector('button[onclick="simularPagamento()"]');
+        const btnSubmit = document.getElementById('btn-submit');
 
         tabPix.addEventListener('click', () => {
             tabPix.className = 'tab-active border-2 py-3 rounded-xl font-semibold flex flex-col items-center gap-1 transition-all';
@@ -187,12 +201,88 @@
             btnSubmit.innerText = 'PAGAR R$ 19,90 COM CARTÃO';
         });
 
-        // Simulação do Fluxo
-        function simularPagamento() {
-            // Aqui entra a comunicação com o Mercado Pago ou Firebase no futuro!
-            alert("Aqui o seu backend geraria o QR Code do Mercado Pago ou processaria o Cartão!");
-            // Exemplo de redirecionamento para a área de membros após pagar:
-            // window.location.href = "meus-produtos.html";
+        async function processarPagamento() {
+            const nome = document.getElementById('nome').value;
+            const cpf = document.getElementById('cpf').value;
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('senha').value;
+
+            if(!nome || !cpf || !email || !senha) {
+                alert("⚠️ Por favor, preencha todos os campos da conta.");
+                return;
+            }
+
+            if(!contentPix.classList.contains('hidden')) {
+                const originalText = btnSubmit.innerText;
+                btnSubmit.innerText = "⏳ GERANDO PIX SEGURO...";
+                btnSubmit.disabled = true;
+                btnSubmit.classList.add('opacity-75', 'cursor-not-allowed');
+
+                try {
+                    // Como o site e a API estão juntos na Vercel, o caminho '/api/gerar-pix' acha o backend sozinho!
+                    const response = await fetch('/api/gerar-pix', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ nome, email, cpf })
+                    });
+
+                    const data = await response.json();
+
+                    if(response.ok) {
+                        mostrarTelaPix(data.qr_code_base64, data.copia_e_cola);
+                    } else {
+                        alert("❌ Erro: " + (data.erro || 'Falha ao processar o PIX'));
+                        restaurarBotao(originalText);
+                    }
+                } catch(error) {
+                    alert("❌ Erro de conexão. Verifique sua internet ou tente novamente.");
+                    restaurarBotao(originalText);
+                }
+            } else {
+                alert("Pagamento por cartão será ativado em breve. Por favor, use o PIX.");
+            }
+        }
+
+        function restaurarBotao(texto) {
+            btnSubmit.innerText = texto;
+            btnSubmit.disabled = false;
+            btnSubmit.classList.remove('opacity-75', 'cursor-not-allowed');
+        }
+
+        // Esta função substitui o formulário pelo QR Code lindamente desenhado!
+        function mostrarTelaPix(qrBase64, copiaCola) {
+            const formContainer = document.getElementById('checkout-form');
+            formContainer.innerHTML = `
+                <div class="text-center p-8 bg-brand-500/5 border border-brand-500/30 rounded-2xl animate-reveal-up">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-brand-500/20 mb-4">
+                        <i data-lucide="check" class="h-8 w-8 text-brand-400"></i>
+                    </div>
+                    <h4 class="text-2xl font-bold text-white mb-2">Conta Criada com Sucesso!</h4>
+                    <p class="text-slate-400 mb-6">Escaneie o QR Code abaixo no app do seu banco para processar o pagamento:</p>
+                    
+                    <div class="bg-white p-4 rounded-xl inline-block mx-auto mb-6">
+                        <img src="data:image/jpeg;base64,${qrBase64}" alt="QR Code PIX" class="w-48 h-48">
+                    </div>
+                    
+                    <p class="text-sm text-slate-400 mb-2">Ou use o PIX Copia e Cola:</p>
+                    <div class="flex items-center gap-2 bg-surfaceLight p-2 rounded-xl border border-white/10 mb-8">
+                        <input type="text" readonly value="${copiaCola}" id="codigo-pix" class="bg-transparent text-slate-300 text-xs w-full px-2 outline-none">
+                        <button onclick="copiarPix()" class="bg-brand-500 text-surfaceLight px-4 py-2 rounded-lg font-bold text-sm hover:scale-105 transition-transform shrink-0">Copiar</button>
+                    </div>
+
+                    <a href="meus-produtos.html" class="btn-glow block w-full bg-brand-500 text-surfaceLight text-center font-extrabold py-4 rounded-xl transition-transform hover:scale-[1.02]">
+                        JÁ PAGUEI! ACESSAR MINHA PLANILHA ➔
+                    </a>
+                </div>
+            `;
+            lucide.createIcons(); 
+        }
+
+        function copiarPix() {
+            const input = document.getElementById('codigo-pix');
+            input.select();
+            document.execCommand('copy');
+            alert("✅ Código PIX copiado com sucesso!");
         }
     </script>
 </body>
