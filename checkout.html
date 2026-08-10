@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout Seguro | FinanceHub PRO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: { 400: '#34d399', 500: '#22c55e', 600: '#16a34a' },
+                        surface: '#020617', 
+                        surfaceLight: '#0f172a'
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { background-color: #020617; color: #f8fafc; background-image: radial-gradient(circle at top right, rgba(15, 23, 42, 1) 0%, rgba(2, 6, 23, 1) 100%); min-height: 100vh;}
+        .glass-card { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+        .input-field { background: rgba(2, 6, 23, 0.5); border: 1px solid rgba(255,255,255,0.1); color: white; transition: all 0.3s ease; }
+        .input-field:focus { border-color: #22c55e; outline: none; box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2); }
+        .tab-active { border-color: #22c55e; background: rgba(34,197,94,0.1); color: #4ade80; }
+        .tab-inactive { border-color: rgba(255,255,255,0.1); color: #94a3b8; }
+    </style>
+</head>
+<body class="antialiased flex items-center justify-center p-4 md:p-8">
+
+    <div class="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-12 gap-8 relative z-10">
+        
+        <!-- ================= LADO ESQUERDO (RESUMO DO PRODUTO) ================= -->
+        <div class="lg:col-span-5 flex flex-col gap-6">
+            
+            <a href="index.html" class="flex items-center gap-2 text-slate-400 hover:text-white transition w-fit mb-4">
+                <i data-lucide="arrow-left" class="h-4 w-4"></i> Voltar
+            </a>
+
+            <div class="flex items-center gap-3 mb-2">
+                <i data-lucide="bar-chart-3" class="text-brand-500 h-8 w-8"></i>
+                <span class="font-bold text-2xl tracking-tight text-white">FinanceHub <span class="text-brand-500">PRO</span></span>
+            </div>
+
+            <div class="glass-card p-6 rounded-3xl">
+                <div class="flex items-center gap-4 mb-6 pb-6 border-b border-white/10">
+                    <img src="print-dashboard.png" alt="Produto" class="w-24 h-16 object-cover rounded-lg border border-white/10">
+                    <div>
+                        <h2 class="text-lg font-bold text-white">FinanceHub PRO Essential</h2>
+                        <p class="text-sm text-brand-400 font-medium">Acesso Vitalício</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4 mb-6">
+                    <div class="flex justify-between text-slate-300 text-sm">
+                        <span>Valor Original</span>
+                        <span class="line-through decoration-red-500/50">R$ 97,00</span>
+                    </div>
+                    <div class="flex justify-between text-slate-300 text-sm">
+                        <span>Desconto Especial</span>
+                        <span class="text-brand-400">- R$ 77,10</span>
+                    </div>
+                    <div class="flex justify-between items-center text-white font-bold text-xl pt-4 border-t border-white/10">
+                        <span>Total a pagar</span>
+                        <span class="text-3xl">R$ 19,90</span>
+                    </div>
+                </div>
+
+                <div class="bg-surface/50 rounded-xl p-4 border border-white/5 flex gap-3 text-sm text-slate-400 mb-2">
+                    <i data-lucide="shield-check" class="h-5 w-5 text-brand-500 flex-shrink-0"></i>
+                    <p>Pagamento 100% seguro. Criptografia de ponta a ponta (SSL).</p>
+                </div>
+            </div>
+            
+            <div class="text-xs text-center text-slate-500 mt-4">
+                <p>Ao finalizar a compra, você concorda com nossos Termos de Uso.</p>
+            </div>
+        </div>
+
+        <!-- ================= LADO DIREITO (DADOS E PAGAMENTO) ================= -->
+        <div class="lg:col-span-7 glass-card p-6 md:p-10 rounded-3xl">
+            <h3 class="text-2xl font-bold text-white mb-6">Finalizar Compra</h3>
+            
+            <form id="checkout-form" class="space-y-6">
+                <!-- Criação de Conta -->
+                <div>
+                    <h4 class="text-brand-400 text-sm font-bold uppercase tracking-wider mb-4 flex items-center gap-2">
+                        <i data-lucide="user" class="h-4 w-4"></i> 1. Crie sua conta
+                    </h4>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm text-slate-400 mb-1">Nome Completo</label>
+                            <input type="text" required class="input-field w-full px-4 py-3 rounded-xl" placeholder="Ex: João Silva">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-slate-400 mb-1">CPF ou CNPJ</label>
+                            <input type="text" required class="input-field w-full px-4 py-3 rounded-xl" placeholder="000.000.000-00">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm text-slate-400 mb-1">E-mail (Onde você receberá a planilha)</label>
+                            <input type="email" required class="input-field w-full px-4 py-3 rounded-xl" placeholder="joao@email.com">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm text-slate-400 mb-1">Crie uma Senha (Para acessar futuras atualizações)</label>
+                            <input type="password" required class="input-field w-full px-4 py-3 rounded-xl" placeholder="••••••••">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagamento -->
+                <div class="pt-6 border-t border-white/10">
+                    <h4 class="text-brand-400 text-sm font-bold uppercase tracking-wider mb-4 flex items-center gap-2">
+                        <i data-lucide="credit-card" class="h-4 w-4"></i> 2. Forma de Pagamento
+                    </h4>
+                    
+                    <!-- Tabs -->
+                    <div class="grid grid-cols-2 gap-3 mb-6">
+                        <button type="button" id="tab-pix" class="tab-active border-2 py-3 rounded-xl font-semibold flex flex-col items-center gap-1 transition-all">
+                            <i data-lucide="qr-code" class="h-5 w-5"></i> PIX (Aprovação na hora)
+                        </button>
+                        <button type="button" id="tab-card" class="tab-inactive border-2 py-3 rounded-xl font-semibold flex flex-col items-center gap-1 transition-all">
+                            <i data-lucide="credit-card" class="h-5 w-5"></i> Cartão de Crédito
+                        </button>
+                    </div>
+
+                    <!-- Conteúdo PIX -->
+                    <div id="content-pix" class="bg-brand-500/5 border border-brand-500/20 p-5 rounded-xl text-center mb-6 block">
+                        <p class="text-slate-300 text-sm mb-2">Após clicar no botão abaixo, o QR Code será gerado.</p>
+                        <p class="text-brand-400 font-bold">A liberação do sistema é instantânea!</p>
+                    </div>
+
+                    <!-- Conteúdo Cartão (Oculto por padrão) -->
+                    <div id="content-card" class="space-y-4 mb-6 hidden">
+                        <div>
+                            <label class="block text-sm text-slate-400 mb-1">Número do Cartão</label>
+                            <input type="text" class="input-field w-full px-4 py-3 rounded-xl" placeholder="0000 0000 0000 0000">
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm text-slate-400 mb-1">Validade</label>
+                                <input type="text" class="input-field w-full px-4 py-3 rounded-xl" placeholder="MM/AA">
+                            </div>
+                            <div>
+                                <label class="block text-sm text-slate-400 mb-1">CVV</label>
+                                <input type="text" class="input-field w-full px-4 py-3 rounded-xl" placeholder="123">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botão Comprar -->
+                <button type="button" onclick="simularPagamento()" class="w-full bg-brand-500 text-surfaceLight font-extrabold text-xl py-4 rounded-xl shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-transform transform hover:scale-[1.02]">
+                    GERAR PIX DE R$ 19,90
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts de Interface -->
+    <script>
+        lucide.createIcons();
+
+        // Lógica simples para alternar as abas de pagamento
+        const tabPix = document.getElementById('tab-pix');
+        const tabCard = document.getElementById('tab-card');
+        const contentPix = document.getElementById('content-pix');
+        const contentCard = document.getElementById('content-card');
+        const btnSubmit = document.querySelector('button[onclick="simularPagamento()"]');
+
+        tabPix.addEventListener('click', () => {
+            tabPix.className = 'tab-active border-2 py-3 rounded-xl font-semibold flex flex-col items-center gap-1 transition-all';
+            tabCard.className = 'tab-inactive border-2 py-3 rounded-xl font-semibold flex flex-col items-center gap-1 transition-all';
+            contentPix.classList.remove('hidden');
+            contentCard.classList.add('hidden');
+            btnSubmit.innerText = 'GERAR PIX DE R$ 19,90';
+        });
+
+        tabCard.addEventListener('click', () => {
+            tabCard.className = 'tab-active border-2 py-3 rounded-xl font-semibold flex flex-col items-center gap-1 transition-all';
+            tabPix.className = 'tab-inactive border-2 py-3 rounded-xl font-semibold flex flex-col items-center gap-1 transition-all';
+            contentCard.classList.remove('hidden');
+            contentPix.classList.add('hidden');
+            btnSubmit.innerText = 'PAGAR R$ 19,90 COM CARTÃO';
+        });
+
+        // Simulação do Fluxo
+        function simularPagamento() {
+            // Aqui entra a comunicação com o Mercado Pago ou Firebase no futuro!
+            alert("Aqui o seu backend geraria o QR Code do Mercado Pago ou processaria o Cartão!");
+            // Exemplo de redirecionamento para a área de membros após pagar:
+            // window.location.href = "meus-produtos.html";
+        }
+    </script>
+</body>
+</html>
