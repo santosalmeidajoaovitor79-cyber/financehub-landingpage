@@ -94,45 +94,44 @@
         </div>
     </div>
 
-    <script type="module">
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
-        
-        // ⚠️ ATENÇÃO: COLOQUE SUAS CHAVES DO SUPABASE AQUI
-        const supabase = createClient('SUA_URL_SUPABASE_AQUI', 'SUA_CHAVE_SUPABASE_AQUI');
-
+    <script>
         lucide.createIcons();
 
         document.getElementById('checkout-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn-submit');
             
-            btn.innerHTML = `<i data-lucide="loader-2" class="h-6 w-6 animate-spin"></i> Criando conta...`;
+            btn.innerHTML = `<i data-lucide="loader-2" class="h-6 w-6 animate-spin"></i> Processando...`;
             btn.disabled = true;
-            lucide.createIcons();
 
+            // Pega os dados do formulário visual
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const nome = document.getElementById('nome').value;
             const cpf = document.getElementById('cpf').value;
 
             try {
-                // 1. Cria a conta do cliente silenciosamente
-                const { data, error } = await supabase.auth.signUp({
-                    email: email,
-                    password: password,
-                    options: { data: { full_name: nome, cpf: cpf } }
+                // Requisição segura para a SUA API na Vercel (Nada de chaves no HTML)
+                const response = await fetch('/api/criar-conta', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password, nome, cpf })
                 });
 
-                if (error) throw error;
+                const result = await response.json();
 
-                // 2. Transição mágica de tela (Esconde checkout, mostra PIX)
+                if (!response.ok || !result.success) {
+                    throw new Error(result.error || "Erro ao processar checkout");
+                }
+
+                // DEU CERTO NA VERCEL! Transição de tela para mostrar o PIX
                 document.getElementById('checkout-view').classList.add('hidden');
                 document.getElementById('success-view').classList.remove('hidden');
                 document.getElementById('success-view').classList.add('flex');
-
-                // Obs: Aqui você chamaria a sua VERCEL API para gerar o PIX real
-                // const pix = await fetch('/api/gerar-pix', ...);
                 
+                // NOTA: Se você já quiser unir as coisas, a sua api/criar-conta.js 
+                // pode retornar o "Copia e Cola" do PIX, e você só injeta ele aqui na tela!
+
             } catch (err) {
                 alert("Erro: " + err.message);
                 btn.innerHTML = `GERAR PIX DE R$ 19,90`;
