@@ -9,20 +9,23 @@
         tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { 400: '#34d399', 500: '#22c55e' }, surface: '#020617' } } } }
     </script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- SDK do Mercado Pago: necessário para tokenizar o cartão no navegador -->
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
     <style>
         body { background-color: #020617; color: white; background-image: radial-gradient(circle at top right, rgba(15, 23, 42, 1) 0%, rgba(2, 6, 23, 1) 100%); min-height: 100vh;}
         .glass-card { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
         .input-field { background: rgba(2, 6, 23, 0.5); border: 1px solid rgba(255,255,255,0.1); color: white; transition: all 0.3s ease; }
         .input-field:focus { border-color: #22c55e; outline: none; box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2); }
         .tab-active { border-color: #22c55e; background-color: rgba(34, 197, 94, 0.1); color: #34d399; }
-        .tab-inactive { border-color: rgba(255, 255, 255, 0.1); color: #94a3b8; opacity: 0.5; cursor: not-allowed; }
+        .tab-inactive { border-color: rgba(255, 255, 255, 0.1); color: #94a3b8; }
+        .tab-inactive:hover { border-color: rgba(255, 255, 255, 0.2); color: white; }
     </style>
 </head>
 <body class="antialiased flex items-center justify-center p-4 md:p-8">
 
     <div class="max-w-6xl w-full relative z-10" id="main-container">
-        
-        <!-- ================= ESTADO 1: FORMULÁRIO ================= -->
+
+        <!-- ================= ESTADO 1: FORMULÁRIO DE CHECKOUT ================= -->
         <div id="checkout-view" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
             <div class="lg:col-span-5 flex flex-col gap-6">
                 <a href="index.html" class="flex items-center gap-2 text-slate-400 hover:text-white transition w-fit mb-4">
@@ -53,66 +56,100 @@
                     <i data-lucide="info" class="h-4 w-4 text-brand-400"></i>
                     Estas informações criarão a sua conta automaticamente para acessar o sistema.
                 </p>
-                
-                <form id="checkout-form" class="space-y-6">
-                    <div class="grid md:grid-cols-2 gap-4">
-                        <div><label class="block text-sm text-slate-400 mb-1">Nome Completo</label><input type="text" id="nome" required class="input-field w-full px-4 py-3 rounded-xl"></div>
-                        <div><label class="block text-sm text-slate-400 mb-1">CPF ou CNPJ</label><input type="text" id="cpf" required class="input-field w-full px-4 py-3 rounded-xl"></div>
-                        <div class="md:col-span-2"><label class="block text-sm text-slate-400 mb-1">E-mail (Seu futuro login)</label><input type="email" id="email" required class="input-field w-full px-4 py-3 rounded-xl"></div>
-                        <div class="md:col-span-2"><label class="block text-sm text-slate-400 mb-1">Crie uma Senha Segura</label><input type="password" id="password" required minlength="6" class="input-field w-full px-4 py-3 rounded-xl"></div>
-                    </div>
 
-                    <div class="pt-6 border-t border-white/10">
-                        <label class="block text-sm text-slate-400 mb-3 uppercase tracking-wider font-bold">Forma de Pagamento</label>
-                        <div class="grid grid-cols-2 gap-3 mb-6">
-                            <button type="button" class="tab-active border-2 py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all">
-                                <i data-lucide="qr-code" class="h-5 w-5"></i> PIX (Aprovação na hora)
-                            </button>
-                            <button type="button" disabled class="tab-inactive border-2 py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all" title="Em breve">
-                                <i data-lucide="credit-card" class="h-5 w-5"></i> Cartão
-                            </button>
+                <form id="checkout-form" class="space-y-6">
+                    <!-- 1. DADOS PESSOAIS -->
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="nome" class="block text-sm text-slate-400 mb-1">Nome Completo</label>
+                            <input type="text" id="nome" name="nome" autocomplete="name" required class="input-field w-full px-4 py-3 rounded-xl">
+                        </div>
+                        <div>
+                            <label for="cpf" class="block text-sm text-slate-400 mb-1">CPF ou CNPJ</label>
+                            <input type="text" id="cpf" name="cpf" inputmode="numeric" autocomplete="off" maxlength="18" required class="input-field w-full px-4 py-3 rounded-xl" placeholder="000.000.000-00">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label for="email" class="block text-sm text-slate-400 mb-1">E-mail (Seu futuro login)</label>
+                            <input type="email" id="email" name="email" autocomplete="email" required class="input-field w-full px-4 py-3 rounded-xl">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label for="password" class="block text-sm text-slate-400 mb-1">Crie uma Senha Segura</label>
+                            <input type="password" id="password" name="password" autocomplete="new-password" required minlength="8" class="input-field w-full px-4 py-3 rounded-xl">
+                            <p class="text-xs text-slate-500 mt-1">Mínimo de 8 caracteres.</p>
                         </div>
                     </div>
 
-                    <button type="submit" id="btn-submit" class="w-full bg-brand-500 text-black font-extrabold text-xl py-4 rounded-xl shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-transform hover:scale-[1.02] flex justify-center items-center gap-2">
-                        GERAR PIX DE R$ 19,90
-                    </button>
+                    <!-- 2. FORMA DE PAGAMENTO -->
+                    <div class="pt-6 border-t border-white/10">
+                        <label class="block text-sm text-slate-400 mb-3 uppercase tracking-wider font-bold">Forma de Pagamento</label>
+
+                        <div class="grid grid-cols-2 gap-3 mb-6">
+                            <button type="button" id="tab-pix" class="tab-active border-2 py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all">
+                                <i data-lucide="qr-code" class="h-5 w-5"></i> PIX
+                            </button>
+                            <button type="button" id="tab-card" class="tab-inactive border-2 py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all">
+                                <i data-lucide="credit-card" class="h-5 w-5"></i> Cartão
+                            </button>
+                        </div>
+
+                        <!-- Conteúdo da Aba PIX -->
+                        <div id="content-pix" class="text-center py-4 block">
+                            <p class="text-slate-300 text-sm mb-2">Pagamento via PIX. A liberação é instantânea!</p>
+
+                            <div class="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4 mt-4 text-sm text-blue-200 flex items-start gap-3 text-left w-full">
+                                <i data-lucide="shield-check" class="h-6 w-6 text-blue-400 flex-shrink-0"></i>
+                                <p><strong>Aviso de Segurança:</strong> O pagamento é processado pelo Mercado Pago e o recebedor aparecerá como <strong>"João Vitor Santos Almeida"</strong>. Este é o desenvolvedor oficial do sistema.</p>
+                            </div>
+                        </div>
+
+                        <!-- Conteúdo da Aba CARTÃO: o Brick do Mercado Pago é renderizado aqui dentro.
+                             Nenhum campo de número/validade/CVC é criado por nós — o próprio Brick
+                             cuida disso e tokeniza o cartão sem esses dados passarem pelo nosso servidor. -->
+                        <div id="content-card" class="hidden">
+                            <div id="cardPaymentBrick_container"></div>
+                        </div>
+                    </div>
+
+                    <!-- BOTÃO SUBMIT (usado apenas no fluxo PIX; o cartão usa o botão do próprio Brick) -->
+                    <div class="pt-4" id="pix-submit-wrapper">
+                        <button type="submit" id="btn-submit" class="w-full bg-brand-500 text-black font-extrabold text-xl py-4 rounded-xl shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-transform hover:scale-[1.02] flex justify-center items-center gap-2">
+                            GERAR PIX DE R$ 19,90
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
 
-        <!-- ================= ESTADO 2: AGUARDANDO PIX ================= -->
+        <!-- ================= ESTADO 2: TELA DE SUCESSO PIX ================= -->
         <div id="success-view-pix" class="hidden max-w-2xl mx-auto glass-card p-8 md:p-10 rounded-3xl text-center flex-col items-center">
             <h2 class="text-3xl font-bold text-white mb-2">Conta Criada! Falta pouco.</h2>
             <p class="text-slate-400 mb-6">Abra o app do seu banco e escaneie o QR Code ou use o Copia e Cola.</p>
-            
-            <!-- AVISO DE TRANSPARÊNCIA IMPORTANTE -->
-            <div class="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4 mb-8 text-sm text-blue-200 flex items-start gap-3 text-left w-full">
-                <i data-lucide="shield-check" class="h-6 w-6 text-blue-400 flex-shrink-0"></i>
-                <p><strong>Aviso de Segurança:</strong> O pagamento é processado pelo Mercado Pago e o recebedor aparecerá como <strong>"João Vitor Santos Almeida"</strong>. Fique tranquilo, este é o desenvolvedor oficial do sistema. Não é golpe ou erro.</p>
-            </div>
-            
-            <!-- QR CODE DINÂMICO -->
+
             <div class="bg-white p-4 rounded-2xl mb-6 shadow-xl border-4 border-white">
                 <img id="qr-code-img" src="" alt="QR Code PIX" class="w-48 h-48 object-contain">
             </div>
 
-            <!-- COPIA E COLA -->
             <div class="w-full relative mb-8 group">
-                <label class="block text-sm text-slate-400 mb-2 font-bold uppercase tracking-wider text-left">PIX Copia e Cola</label>
+                <label for="pix-copia-cola" class="block text-sm text-slate-400 mb-2 font-bold uppercase tracking-wider text-left">PIX Copia e Cola</label>
                 <input type="text" id="pix-copia-cola" readonly class="w-full bg-surface border border-white/10 text-slate-300 px-4 py-4 rounded-xl font-mono text-xs pr-12 focus:outline-none focus:border-brand-500">
-                <button onclick="copiarPix()" class="absolute right-2 top-9 h-10 w-10 bg-brand-500/20 text-brand-400 hover:bg-brand-500 hover:text-black rounded-lg flex items-center justify-center transition-colors">
+                <button type="button" onclick="copiarPix()" class="absolute right-2 top-9 h-10 w-10 bg-brand-500/20 text-brand-400 hover:bg-brand-500 hover:text-black rounded-lg flex items-center justify-center transition-colors">
                     <i data-lucide="copy" class="h-5 w-5"></i>
                 </button>
             </div>
 
-            <div class="flex items-center gap-3 text-brand-400 font-semibold animate-pulse mb-4">
+            <div id="pix-aguardando" class="flex items-center gap-3 text-brand-400 font-semibold animate-pulse mb-2">
                 <i data-lucide="loader-2" class="h-5 w-5 animate-spin"></i>
-                Aguardando confirmação do pagamento...
+                <span>Aguardando confirmação do pagamento...</span>
+            </div>
+            <p class="text-slate-500 text-xs" id="pix-timer">Este código expira em 15:00</p>
+
+            <div id="pix-expirado" class="hidden flex-col items-center gap-3 mt-2">
+                <p class="text-red-400 font-semibold">Este PIX expirou.</p>
+                <button type="button" onclick="location.reload()" class="bg-brand-500 text-black font-bold px-6 py-2 rounded-xl">Gerar novo PIX</button>
             </div>
         </div>
-        
-        <!-- ================= ESTADO 3: PAGAMENTO APROVADO ================= -->
+
+        <!-- ================= ESTADO 3: TELA DE SUCESSO (CARTÃO / PIX APROVADO) ================= -->
         <div id="success-view-approved" class="hidden max-w-xl mx-auto glass-card p-10 rounded-3xl text-center flex-col items-center">
             <div class="w-24 h-24 bg-brand-500 text-white rounded-full flex items-center justify-center mb-6 shadow-[0_0_40px_rgba(34,197,94,0.5)]">
                 <i data-lucide="check" class="h-12 w-12 stroke-[3]"></i>
@@ -124,99 +161,241 @@
                 ACESSAR SISTEMA AGORA <i data-lucide="arrow-right" class="h-6 w-6"></i>
             </a>
         </div>
-
     </div>
 
     <script>
         lucide.createIcons();
 
-        // Função para copiar o código PIX
+        // ATENÇÃO: troque pela sua Public Key real do Mercado Pago (painel > credenciais).
+        // Diferente do Access Token, a Public Key é feita para ficar exposta no front-end —
+        // não é segredo. Nunca coloque o Access Token aqui.
+        const MP_PUBLIC_KEY = 'SUA_PUBLIC_KEY_AQUI';
+        const mp = new MercadoPago(MP_PUBLIC_KEY, { locale: 'pt-BR' });
+
         function copiarPix() {
             const copyText = document.getElementById("pix-copia-cola");
-            copyText.select();
-            copyText.setSelectionRange(0, 99999); 
-            navigator.clipboard.writeText(copyText.value);
-            alert("Código PIX copiado com sucesso!");
+            navigator.clipboard.writeText(copyText.value)
+                .then(() => alert("Código PIX copiado com sucesso!"))
+                .catch(() => {
+                    // Fallback pra navegadores/contextos sem Clipboard API
+                    copyText.select();
+                    document.execCommand('copy');
+                    alert("Código PIX copiado!");
+                });
         }
 
-        let intervalID; // Variável para controlar o loop de verificação
+        // Máscara simples de CPF/CNPJ
+        const cpfInput = document.getElementById('cpf');
+        cpfInput.addEventListener('input', () => {
+            let v = cpfInput.value.replace(/\D/g, '').slice(0, 14);
+            if (v.length <= 11) {
+                v = v.replace(/(\d{3})(\d)/, '$1.$2')
+                     .replace(/(\d{3})(\d)/, '$1.$2')
+                     .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+            } else {
+                v = v.replace(/(\d{2})(\d)/, '$1.$2')
+                     .replace(/(\d{3})(\d)/, '$1.$2')
+                     .replace(/(\d{3})(\d)/, '$1/$2')
+                     .replace(/(\d{4})(\d{1,2})$/, '$1-$2');
+            }
+            cpfInput.value = v;
+        });
+
+        let metodoPagamento = 'pix';
+        let intervalID;
+        let pixTimeoutID;
+        let cardBrickController;
+        let cardBrickCarregado = false;
+
+        const tabPix = document.getElementById('tab-pix');
+        const tabCard = document.getElementById('tab-card');
+        const contentPix = document.getElementById('content-pix');
+        const contentCard = document.getElementById('content-card');
+        const pixSubmitWrapper = document.getElementById('pix-submit-wrapper');
+        const btnSubmit = document.getElementById('btn-submit');
+
+        function getDadosComprador() {
+            return {
+                nome: document.getElementById('nome').value.trim(),
+                cpf: document.getElementById('cpf').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                password: document.getElementById('password').value
+            };
+        }
+
+        function validarDadosComprador(dados) {
+            if (!dados.nome || !dados.cpf || !dados.email || !dados.password) {
+                alert('Preencha nome, CPF, e-mail e senha antes de pagar.');
+                return false;
+            }
+            if (dados.password.length < 8) {
+                alert('A senha precisa ter pelo menos 8 caracteres.');
+                return false;
+            }
+            return true;
+        }
+
+        async function criarConta(dados, metodo) {
+            const resp = await fetch('/api/criar-conta', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ...dados, metodo })
+            });
+            const result = await resp.json();
+            if (!resp.ok || !result.success) {
+                throw new Error(result.error || 'Erro ao criar conta. Tente novamente.');
+            }
+            return result.userId;
+        }
+
+        tabPix.addEventListener('click', () => {
+            metodoPagamento = 'pix';
+            tabPix.classList.add('tab-active'); tabPix.classList.remove('tab-inactive');
+            tabCard.classList.remove('tab-active'); tabCard.classList.add('tab-inactive');
+            contentPix.classList.remove('hidden');
+            contentCard.classList.add('hidden');
+            pixSubmitWrapper.classList.remove('hidden');
+        });
+
+        tabCard.addEventListener('click', async () => {
+            metodoPagamento = 'card';
+            tabCard.classList.add('tab-active'); tabCard.classList.remove('tab-inactive');
+            tabPix.classList.remove('tab-active'); tabPix.classList.add('tab-inactive');
+            contentCard.classList.remove('hidden');
+            contentPix.classList.add('hidden');
+            // O Brick tem seu próprio botão de pagar — escondemos o botão genérico do form.
+            pixSubmitWrapper.classList.add('hidden');
+
+            if (!cardBrickCarregado) {
+                cardBrickCarregado = true;
+                cardBrickController = await mp.bricks().create('cardPayment', 'cardPaymentBrick_container', {
+                    initialization: { amount: 19.90 },
+                    callbacks: {
+                        onReady: () => {},
+                        onError: (error) => console.error('Erro no Card Brick:', error),
+                        onSubmit: (cardFormData) => {
+                            return new Promise((resolve, reject) => {
+                                processarCartao(cardFormData).then(resolve).catch((err) => {
+                                    alert('Erro: ' + err.message);
+                                    reject();
+                                });
+                            });
+                        }
+                    }
+                });
+            }
+        });
+
+        async function processarCartao(cardFormData) {
+            const dados = getDadosComprador();
+            if (!validarDadosComprador(dados)) {
+                throw new Error('Preencha seus dados antes de pagar.');
+            }
+
+            const userId = await criarConta(dados, 'card');
+
+            const resp = await fetch('/api/gerar-cartao', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    token: cardFormData.token,
+                    issuer_id: cardFormData.issuer_id,
+                    payment_method_id: cardFormData.payment_method_id,
+                    installments: cardFormData.installments,
+                    email: dados.email,
+                    cpf: dados.cpf,
+                    userId
+                })
+            });
+            const result = await resp.json();
+            if (!resp.ok || !result.aprovado) {
+                throw new Error('Pagamento recusado. Verifique os dados do cartão ou tente outro cartão.');
+            }
+
+            document.getElementById('checkout-view').classList.add('hidden');
+            document.getElementById('success-view-approved').classList.remove('hidden');
+            document.getElementById('success-view-approved').classList.add('flex');
+            setTimeout(() => { window.location.href = 'meus-produtos.html'; }, 3000);
+        }
+
+        function iniciarExpiracaoPix(minutos) {
+            let segundosRestantes = minutos * 60;
+            const timerEl = document.getElementById('pix-timer');
+            const aguardandoEl = document.getElementById('pix-aguardando');
+            const expiradoEl = document.getElementById('pix-expirado');
+
+            pixTimeoutID = setInterval(() => {
+                segundosRestantes--;
+                const min = Math.floor(segundosRestantes / 60);
+                const seg = String(segundosRestantes % 60).padStart(2, '0');
+                timerEl.textContent = `Este código expira em ${min}:${seg}`;
+
+                if (segundosRestantes <= 0) {
+                    clearInterval(pixTimeoutID);
+                    clearInterval(intervalID);
+                    aguardandoEl.classList.add('hidden');
+                    timerEl.classList.add('hidden');
+                    expiradoEl.classList.remove('hidden');
+                    expiradoEl.classList.add('flex');
+                }
+            }, 1000);
+        }
 
         document.getElementById('checkout-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const btn = document.getElementById('btn-submit');
-            
-            btn.innerHTML = `<i data-lucide="loader-2" class="h-6 w-6 animate-spin"></i> Criando conta...`;
-            btn.disabled = true;
+            if (metodoPagamento !== 'pix') return; // fluxo de cartão é tratado pelo Brick
 
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const nome = document.getElementById('nome').value;
-            const cpf = document.getElementById('cpf').value;
+            const dados = getDadosComprador();
+            if (!validarDadosComprador(dados)) return;
+
+            btnSubmit.innerHTML = `<i data-lucide="loader-2" class="h-6 w-6 animate-spin"></i> Criando conta...`;
+            btnSubmit.disabled = true;
 
             try {
-                // 1. Cria a Conta no Supabase via Vercel (Seu backend)
-                const contaResponse = await fetch('/api/criar-conta', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password, nome, cpf })
-                });
-                const contaResult = await contaResponse.json();
-                
-                if (!contaResponse.ok || !contaResult.success) throw new Error("Erro ao criar conta. Tente novamente.");
+                const userId = await criarConta(dados, 'pix');
 
-                // 2. Chama a sua API do Mercado Pago para Gerar o PIX
-                btn.innerHTML = `<i data-lucide="loader-2" class="h-6 w-6 animate-spin"></i> Gerando PIX...`;
+                btnSubmit.innerHTML = `<i data-lucide="loader-2" class="h-6 w-6 animate-spin"></i> Gerando PIX...`;
                 const pixResponse = await fetch('/api/gerar-pix', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ nome, email, cpf })
+                    body: JSON.stringify({ nome: dados.nome, email: dados.email, cpf: dados.cpf, userId })
                 });
-                
                 const pixResult = await pixResponse.json();
-                
-                if (!pixResponse.ok) throw new Error("Erro ao conectar com Banco Central/Mercado Pago.");
+                if (!pixResponse.ok) throw new Error(pixResult.erro || 'Erro ao conectar com Mercado Pago.');
 
-                // 3. Preenche a Tela do PIX com os dados reais retornados
                 document.getElementById('qr-code-img').src = `data:image/jpeg;base64,${pixResult.qr_code_base64}`;
                 document.getElementById('pix-copia-cola').value = pixResult.copia_e_cola;
 
-                // Esconde Checkout e Mostra Tela PIX
                 document.getElementById('checkout-view').classList.add('hidden');
                 document.getElementById('success-view-pix').classList.remove('hidden');
                 document.getElementById('success-view-pix').classList.add('flex');
-                
-                // 4. Inicia o "Radar" verificando o pagamento a cada 3 segundos
+
+                iniciarExpiracaoPix(15);
+
                 const idPagamento = pixResult.id_pagamento;
-                
                 intervalID = setInterval(async () => {
                     try {
                         const checkResponse = await fetch(`/api/verificar-pagamento?id=${idPagamento}`);
                         const checkResult = await checkResponse.json();
-                        
+
                         if (checkResult.status === 'approved') {
-                            clearInterval(intervalID); // Para de verificar
-                            
-                            // Mostra a Tela de Sucesso Final!
+                            clearInterval(intervalID);
+                            clearInterval(pixTimeoutID);
                             document.getElementById('success-view-pix').classList.remove('flex');
                             document.getElementById('success-view-pix').classList.add('hidden');
-                            
                             document.getElementById('success-view-approved').classList.remove('hidden');
                             document.getElementById('success-view-approved').classList.add('flex');
-                            
-                            // Redireciona automaticamente após 3 segundos
-                            setTimeout(() => {
-                                window.location.href = 'meus-produtos.html';
-                            }, 3000);
+                            setTimeout(() => { window.location.href = 'meus-produtos.html'; }, 3000);
                         }
                     } catch (checkErr) {
-                        console.error("Erro ao verificar pagamento no radar", checkErr);
+                        console.error('Erro radar', checkErr);
                     }
                 }, 3000);
 
             } catch (err) {
-                alert("Erro: " + err.message);
-                btn.innerHTML = `GERAR PIX DE R$ 19,90`;
-                btn.disabled = false;
+                alert('Erro: ' + err.message);
+                btnSubmit.innerHTML = 'GERAR PIX DE R$ 19,90';
+                btnSubmit.disabled = false;
             }
         });
     </script>
