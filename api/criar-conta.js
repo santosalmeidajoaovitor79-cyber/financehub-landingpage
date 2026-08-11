@@ -31,9 +31,14 @@ export default async function handler(req, res) {
         return res.status(400).json({ success: false, error: 'CPF/CNPJ inválido.' });
     }
 
-    const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+    if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+        console.error('Variáveis SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY não configuradas na Vercel.');
+        return res.status(500).json({ success: false, error: 'Erro de configuração do servidor. Tente novamente mais tarde.' });
+    }
 
     try {
+        const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+
         const { data: authData, error: authError } = await supabase.auth.admin.createUser({
             email,
             password,
