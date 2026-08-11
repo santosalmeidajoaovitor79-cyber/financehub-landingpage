@@ -11,6 +11,16 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- SDK do Mercado Pago: necessário para tokenizar o cartão no navegador -->
     <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <script type="module">
+        // Client do Supabase no navegador. Use a MESMA URL e Anon Key que estão em meus-produtos.html.
+        // A Anon Key é feita pra ficar pública (a segurança de verdade é a RLS no banco), então tudo bem
+        // ela estar aqui no código-fonte visível.
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+        window.supabaseClient = createClient(
+            'https://tbcggvrbmoqrjngtyrbb.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRiY2dndnJibW9xcmpuZ3R5cmJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY0ODEyODAsImV4cCI6MjEwMjA1NzI4MH0.y78Q8oAXAxj4afY53R9HO8tsip8KA3DZtj36TPcICCQ'
+        );
+    </script>
     <style>
         body { background-color: #020617; color: white; background-image: radial-gradient(circle at top right, rgba(15, 23, 42, 1) 0%, rgba(2, 6, 23, 1) 100%); min-height: 100vh;}
         .glass-card { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
@@ -312,6 +322,10 @@
                 throw new Error('Pagamento recusado. Verifique os dados do cartão ou tente outro cartão.');
             }
 
+            // Loga o cliente no navegador — sem isso, a meus-produtos.html não encontra sessão
+            // e manda o cliente de volta pro início mesmo já tendo pago.
+            await window.supabaseClient.auth.signInWithPassword({ email: dados.email, password: dados.password });
+
             document.getElementById('checkout-view').classList.add('hidden');
             document.getElementById('success-view-approved').classList.remove('hidden');
             document.getElementById('success-view-approved').classList.add('flex');
@@ -381,6 +395,9 @@
                         if (checkResult.status === 'approved') {
                             clearInterval(intervalID);
                             clearInterval(pixTimeoutID);
+                            // Mesma lógica do cartão: loga o cliente no navegador antes de mandar
+                            // ele pra área de membros, senão o Guardião não acha sessão nenhuma.
+                            await window.supabaseClient.auth.signInWithPassword({ email: dados.email, password: dados.password });
                             document.getElementById('success-view-pix').classList.remove('flex');
                             document.getElementById('success-view-pix').classList.add('hidden');
                             document.getElementById('success-view-approved').classList.remove('hidden');
