@@ -1,1 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Produtos | FinanceHub PRO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: { 400: '#34d399', 500: '#22c55e', 600: '#16a34a' },
+                        surface: '#020617', 
+                        surfaceLight: '#0f172a'
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { background-color: #020617; color: #f8fafc; background-image: radial-gradient(circle at top center, rgba(15, 23, 42, 1) 0%, rgba(2, 6, 23, 1) 100%); min-height: 100vh;}
+        .glass-card { background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); }
+        .btn-glow { position: relative; z-index: 1; }
+        .btn-glow::before { content: ''; position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px; background: linear-gradient(45deg, #22c55e, #3b82f6, #22c55e); z-index: -1; filter: blur(12px); opacity: 0; transition: opacity 0.4s ease; border-radius: inherit; }
+        .btn-glow:hover::before { opacity: 0.8; }
+    </style>
+</head>
+<body class="antialiased">
 
+    <!-- NAVBAR DA ÁREA DE MEMBROS -->
+    <nav class="w-full glass-card border-b-0 border-x-0 border-t-0 border-b border-white/5">
+        <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <i data-lucide="bar-chart-3" class="text-brand-500 h-6 w-6"></i>
+                <span class="font-bold text-xl tracking-tight text-white">FinanceHub <span class="text-brand-500">PRO</span></span>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="h-10 w-10 rounded-full bg-brand-500/20 border border-brand-500/30 flex items-center justify-center text-brand-400 font-bold">
+                    <i data-lucide="user" class="h-5 w-5"></i>
+                </div>
+                <div class="hidden sm:block">
+                    <p class="text-sm font-bold text-white leading-tight">Área do Cliente</p>
+                    <p class="text-xs text-brand-400">Acesso Vitalício Ativo</p>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="max-w-6xl mx-auto px-6 py-12 md:py-20">
+        
+        <header class="mb-12">
+            <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-2">Meus Produtos</h1>
+            <p class="text-slate-400 text-lg">Aqui estão os sistemas e atualizações disponíveis para download.</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- CARD DO PRODUTO -->
+            <div class="lg:col-span-2 glass-card rounded-3xl p-6 md:p-8 flex flex-col md:flex-row gap-8 items-start">
+                <div class="w-full md:w-48 aspect-square rounded-2xl overflow-hidden border border-white/10 shrink-0 relative bg-surface">
+                    <img src="print-dashboard.png" alt="Capa" class="w-full h-full object-cover object-left-top opacity-80" />
+                    <div class="absolute inset-0 shadow-[inset_0_0_20px_#020617]"></div>
+                </div>
+                
+                <div class="w-full">
+                    <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+                        <h2 class="text-2xl font-bold text-white">FinanceHub PRO Essential</h2>
+                        <span class="bg-brand-500/20 text-brand-400 border border-brand-500/30 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+                            Liberado
+                        </span>
+                    </div>
+                    
+                    <p class="text-slate-400 mb-8 text-sm leading-relaxed">Faça o download do seu sistema atualizado. Recomendamos que você baixe e leia o Guia Rápido de Uso antes de começar a preencher seus dados.</p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <!-- Botão Download da Planilha -->
+                        <a href="FinanceHub_PRO_v3.xlsx" download class="btn-glow flex-1 bg-brand-500 text-surfaceLight font-bold py-3 px-6 rounded-xl flex items-center justify-center gap-2 transition-transform hover:scale-[1.02]">
+                            <i data-lucide="download" class="h-5 w-5"></i>
+                            Baixar Planilha (.xlsx)
+                        </a>
+                        
+                        <!-- Botão Download do Manual -->
+                        <a href="Guia_de_Uso.pdf" target="_blank" class="flex-1 bg-surface/50 border border-white/10 text-white hover:bg-white/5 font-bold py-3 px-6 rounded-xl flex items-center justify-center gap-2 transition-all">
+                            <i data-lucide="file-text" class="h-5 w-5 text-slate-400"></i>
+                            Guia de Uso (PDF)
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD DE SUPORTE -->
+            <div class="glass-card rounded-3xl p-6 md:p-8 flex flex-col justify-between">
+                <div>
+                    <div class="w-12 h-12 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 mb-6">
+                        <i data-lucide="life-buoy" class="h-6 w-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Precisa de ajuda?</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-6">Nossa equipe está pronta para te ajudar com qualquer dúvida sobre o funcionamento do sistema.</p>
+                </div>
+                
+                <a href="mailto:financehubbrasil@gmail.com" class="w-full bg-white/5 border border-white/10 hover:bg-white/10 text-white font-medium py-3 rounded-xl flex items-center justify-center gap-2 transition-colors">
+                    <i data-lucide="mail" class="h-4 w-4"></i> Contatar Suporte
+                </a>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
