@@ -49,6 +49,11 @@
                         Acesso Vitalício Ativo
                     </p>
                 </div>
+                
+                <!-- BOTÃO DE SAIR -->
+                <button id="btn-sair" class="ml-2 sm:ml-4 text-sm font-medium text-slate-400 hover:text-white transition flex items-center gap-2">
+                    <i data-lucide="log-out" class="h-4 w-4"></i> Sair
+                </button>
             </div>
         </div>
     </nav>
@@ -93,7 +98,6 @@
                         <i data-lucide="play-circle" class="h-4 w-4 text-brand-400"></i>
                         <span class="text-sm font-semibold text-slate-300">Passo a passo: Como baixar a Planilha</span>
                     </div>
-                    <!-- Substitua o src pelo nome do seu arquivo de vídeo da planilha -->
                     <video controls class="w-full rounded-b-lg aspect-video bg-black object-cover" poster="print-dashboard.png">
                         <source src="2026-08-10 21-30-03.mp4" type="video/mp4">
                         Seu navegador não suporta a tag de vídeo.
@@ -102,7 +106,7 @@
 
                 <!-- BOTÃO DE DOWNLOAD -->
                 <div class="mt-auto pt-2">
-                    <a href="https://docs.google.com/spreadsheets/d/1wfIEOX9p0UYDKj0aQ7GKKuIQvRkgGghb/edit?usp=sharing&ouid=104775891353533905365&rtpof=true&sd=true" target="_blank" rel="noopener noreferrer" class="btn-glow w-full bg-brand-500 text-surfaceLight font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-transform hover:scale-[1.02] shadow-lg shadow-brand-500/20">
+                    <a href="#" id="btn-baixar-planilha" target="_blank" rel="noopener noreferrer" class="btn-glow w-full bg-brand-500 text-surfaceLight font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-transform hover:scale-[1.02] shadow-lg shadow-brand-500/20">
                         <i data-lucide="download" class="h-5 w-5"></i>
                         Baixar Planilha (Google Drive)
                     </a>
@@ -129,7 +133,6 @@
                         <i data-lucide="play-circle" class="h-4 w-4 text-blue-400"></i>
                         <span class="text-sm font-semibold text-slate-300">Passo a passo: Como baixar o Manual</span>
                     </div>
-                    <!-- Substitua o src pelo nome do seu arquivo de vídeo do manual -->
                     <video controls class="w-full rounded-b-lg aspect-video bg-black object-cover">
                         <source src="2026-08-10 21-30-38.mp4" type="video/mp4">
                         Seu navegador não suporta a tag de vídeo.
@@ -138,7 +141,7 @@
 
                 <!-- BOTÃO DE DOWNLOAD -->
                 <div class="mt-auto pt-2">
-                    <a href="https://drive.google.com/file/d/1e0piKxzfkQ6XzkcBpzRn5wyurrAY5SqZ/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="w-full bg-surface/50 border border-white/10 text-white hover:bg-white/5 font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all">
+                    <a href="#" id="btn-baixar-manual" target="_blank" rel="noopener noreferrer" class="w-full bg-surface/50 border border-white/10 text-white hover:bg-white/5 font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all">
                         <i data-lucide="file-text" class="h-5 w-5 text-slate-400"></i>
                         Acessar Manual (Google Drive)
                     </a>
@@ -168,6 +171,53 @@
 
     <script>
         lucide.createIcons();
+    </script>
+
+    <!-- ================= SCRIPT DE PROTEÇÃO (GUARDIÃO SUPABASE) ================= -->
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+        
+        // ⚠️ COLOQUE SUAS CHAVES DO SUPABASE AQUI 
+        const supabaseUrl = 'SUA_URL_SUPABASE_AQUI';
+        const supabaseAnonKey = 'SUA_CHAVE_SUPABASE_AQUI';
+        const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+        const btnPlanilha = document.getElementById('btn-baixar-planilha');
+        const btnManual = document.getElementById('btn-baixar-manual');
+        const btnSair = document.getElementById('btn-sair');
+
+        // VERIFICAÇÃO CONTÍNUA: Protege a página passivamente
+        supabase.auth.onAuthStateChange((event, session) => {
+            if (!session) {
+                // Se não tem login ou fez logout, joga para a página de vendas (index.html)
+                window.location.replace('index.html'); 
+            } else {
+                // SE TEM LOGIN, injeta os links verdadeiros nos botões!
+                if(btnPlanilha) {
+                    btnPlanilha.href = "https://docs.google.com/spreadsheets/d/1wfIEOX9p0UYDKj0aQ7GKKuIQvRkgGghb/edit?usp=sharing&ouid=104775891353533905365&rtpof=true&sd=true";
+                }
+                if(btnManual) {
+                    btnManual.href = "https://drive.google.com/file/d/1e0piKxzfkQ6XzkcBpzRn5wyurrAY5SqZ/view?usp=sharing";
+                }
+            }
+        });
+
+        // Verificação de segurança extra imediata ao carregar a página
+        async function protegerPagina() {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) {
+                window.location.replace('index.html');
+            }
+        }
+        protegerPagina();
+
+        // FUNÇÃO DE DESLOGAR
+        if(btnSair) {
+            btnSair.addEventListener('click', async () => {
+                await supabase.auth.signOut();
+                // O onAuthStateChange ali em cima vai capturar isso e redirecionar sozinho!
+            });
+        }
     </script>
 </body>
 </html>
