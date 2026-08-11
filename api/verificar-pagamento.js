@@ -1,4 +1,5 @@
-const { MercadoPagoConfig, Payment } = require('mercadopago');
+import { MercadoPagoConfig, Payment } from 'mercadopago';
+import { createClient } from '@supabase/supabase-js';
 
 export default async function handler(req, res) {
     if (req.method !== 'GET') return res.status(405).json({ erro: 'Método não permitido' });
@@ -6,17 +7,27 @@ export default async function handler(req, res) {
     try {
         const client = new MercadoPagoConfig({ accessToken: process.env.MERCADOPAGO_TOKEN });
         const payment = new Payment(client);
-        
-        // Pega o ID do pagamento que o site mandou perguntar
+
         const paymentId = req.query.id;
-        
-        // Pergunta ao Mercado Pago o status oficial desse ID
+        if (!paymentId) return res.status(400).json({ erro: 'ID de pagamento não informado.' });
+
         const response = await payment.get({ id: paymentId });
-        
-        // Retorna o status para o seu checkout (ex: "pending", "approved", "rejected")
+
+        // Este era o pedaço que faltava: sem isso, o pagamento aparecia como aprovado
+        // na tela, mas o Supabase nunca sabia que o cliente pagou.
+        if (response.status === 'approved' && response.external_reference) {
+            const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+            await supabase
+                .from('profiles')
+                .update({ pago: true })
+                .eq('id', response.external_reference)
+                .eq('pago', false);
+        }
+
         return res.status(200).json({ status: response.status });
+
     } catch (error) {
-        console.error("Erro ao verificar pagamento:", error);
+        console.error('Erro ao verificar pagamento:', error);
         return res.status(500).json({ erro: 'Falha ao verificar status' });
     }
 }
