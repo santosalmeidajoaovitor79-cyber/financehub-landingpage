@@ -1,43 +1,43 @@
-// Arquivo: api/criar-conta.js
 import { createClient } from '@supabase/supabase-js';
 
 export default async function handler(req, res) {
-    // Bloqueia se não for uma requisição POST
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Método não permitido' });
     }
 
     const { nome, cpf, email, password } = req.body;
 
-    // Puxando as chaves escondidas da Vercel (Environment Variables)
-    // Lembre-se de cadastrar essas variáveis no painel da Vercel!
     const supabaseUrl = process.env.SUPABASE_URL;
     const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-    // Conecta ao Supabase usando a chave secreta de servidor
+    // Conecta usando a chave de servidor (Service Role)
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     try {
-        // Cria o usuário pelo painel de admin do Supabase (Backend)
-        const { data, error } = await supabase.auth.admin.createUser({
+        // 1. Cria o usuário no Auth do Supabase
+        const { data: authData, error: authError } = await supabase.auth.admin.createUser({
             email: email,
             password: password,
-            email_confirm: true, // Já confirma o e-mail automaticamente
-            user_metadata: {
-                full_name: nome,
-                cpf: cpf,
-                pagamento_status: 'pendente' // Salva o status do PIX
-            }
+            email_confirm: true // Confirma o e-mail automaticamente
         });
 
-        if (error) throw error;
+        if (authError) throw authError;
 
-        // Sucesso! Retorna para o HTML avisando que a conta foi criada.
-        // AQUI VOCÊ TAMBÉM PODE CHAMAR A SUA FUNÇÃO DE GERAR O PIX
+        const userId = authData.user.id;
+
+        // 2. Insere os dados complementares na tabela 'profiles'
+        const { error: profileError } = await supabase
+            .from('profiles')
+            .insert([
+                { id: userId, nome: nome, cpf: cpf, email: email, pago: false }
+            ]);
+
+        if (profileError) throw profileError;
+
         return res.status(200).json({ 
             success: true, 
-            message: 'Conta criada com sucesso!',
-            userId: data.user.id
+            message: 'Conta criada e registrada com sucesso!',
+            userId: userId
         });
 
     } catch (error) {
