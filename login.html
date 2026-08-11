@@ -36,7 +36,11 @@
 
     <script type="module">
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
-        const supabase = createClient('SUA_URL_SUPABASE', 'SUA_CHAVE_SUPABASE'); // COLOQUE SUAS CHAVES AQUI
+        // Mesma URL e Anon Key usadas em checkout.html e meus-produtos.html.
+        const supabase = createClient(
+            'https://tbcggvrbmoqrjngtyrbb.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRiY2dndnJibW9xcmpuZ3R5cmJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY0ODEyODAsImV4cCI6MjEwMjA1NzI4MH0.y78Q8oAXAxj4afY53R9HO8tsip8KA3DZtj36TPcICCQ'
+        );
         lucide.createIcons();
 
         document.getElementById('login-form').addEventListener('submit', async (e) => {
