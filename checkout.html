@@ -14,15 +14,16 @@
         .glass-card { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
         .input-field { background: rgba(2, 6, 23, 0.5); border: 1px solid rgba(255,255,255,0.1); color: white; transition: all 0.3s ease; }
         .input-field:focus { border-color: #22c55e; outline: none; box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2); }
+        .tab-active { border-color: #22c55e; background-color: rgba(34, 197, 94, 0.1); color: #34d399; }
+        .tab-inactive { border-color: rgba(255, 255, 255, 0.1); color: #94a3b8; opacity: 0.5; cursor: not-allowed; }
     </style>
 </head>
 <body class="antialiased flex items-center justify-center p-4 md:p-8">
 
     <div class="max-w-6xl w-full relative z-10" id="main-container">
         
-        <!-- ESTADO 1: FORMULÁRIO DE CHECKOUT -->
+        <!-- ================= ESTADO 1: FORMULÁRIO ================= -->
         <div id="checkout-view" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <!-- Resumo do Produto (Esquerda) -->
             <div class="lg:col-span-5 flex flex-col gap-6">
                 <a href="index.html" class="flex items-center gap-2 text-slate-400 hover:text-white transition w-fit mb-4">
                     <i data-lucide="arrow-left" class="h-4 w-4"></i> Voltar
@@ -46,7 +47,6 @@
                 </div>
             </div>
 
-            <!-- Dados e Pagamento (Direita) -->
             <div class="lg:col-span-7 glass-card p-6 md:p-10 rounded-3xl">
                 <h3 class="text-2xl font-bold mb-2">Finalizar Compra</h3>
                 <p class="text-slate-400 text-sm mb-6 flex items-center gap-2">
@@ -62,75 +62,156 @@
                         <div class="md:col-span-2"><label class="block text-sm text-slate-400 mb-1">Crie uma Senha Segura</label><input type="password" id="password" required minlength="6" class="input-field w-full px-4 py-3 rounded-xl"></div>
                     </div>
 
-                    <div class="pt-6 border-t border-white/10 text-center">
-                        <p class="text-slate-300 text-sm mb-2">Pagamento via PIX. A liberação é instantânea!</p>
-                        <button type="submit" id="btn-submit" class="w-full bg-brand-500 text-black font-extrabold text-xl py-4 rounded-xl shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-transform hover:scale-[1.02] flex justify-center items-center gap-2">
-                            GERAR PIX DE R$ 19,90
-                        </button>
+                    <div class="pt-6 border-t border-white/10">
+                        <label class="block text-sm text-slate-400 mb-3 uppercase tracking-wider font-bold">Forma de Pagamento</label>
+                        <div class="grid grid-cols-2 gap-3 mb-6">
+                            <button type="button" class="tab-active border-2 py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all">
+                                <i data-lucide="qr-code" class="h-5 w-5"></i> PIX (Aprovação na hora)
+                            </button>
+                            <button type="button" disabled class="tab-inactive border-2 py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all" title="Em breve">
+                                <i data-lucide="credit-card" class="h-5 w-5"></i> Cartão
+                            </button>
+                        </div>
                     </div>
+
+                    <button type="submit" id="btn-submit" class="w-full bg-brand-500 text-black font-extrabold text-xl py-4 rounded-xl shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-transform hover:scale-[1.02] flex justify-center items-center gap-2">
+                        GERAR PIX DE R$ 19,90
+                    </button>
                 </form>
             </div>
         </div>
 
-        <!-- ESTADO 2: TELA DE SUCESSO / PAGAMENTO (Oculto inicialmente) -->
-        <div id="success-view" class="hidden max-w-2xl mx-auto glass-card p-10 rounded-3xl text-center flex flex-col items-center">
-            <div class="w-20 h-20 bg-brand-500/20 text-brand-400 rounded-full flex items-center justify-center mb-6">
-                <i data-lucide="check-circle" class="h-10 w-10"></i>
-            </div>
-            <h2 class="text-3xl font-bold text-white mb-2">Tudo Certo! Conta Criada.</h2>
-            <p class="text-slate-400 mb-8">Efetue o pagamento do PIX abaixo. Seu sistema já está te esperando.</p>
+        <!-- ================= ESTADO 2: AGUARDANDO PIX ================= -->
+        <div id="success-view-pix" class="hidden max-w-2xl mx-auto glass-card p-8 md:p-10 rounded-3xl text-center flex-col items-center">
+            <h2 class="text-3xl font-bold text-white mb-2">Conta Criada! Falta pouco.</h2>
+            <p class="text-slate-400 mb-6">Abra o app do seu banco e escaneie o QR Code ou use o Copia e Cola.</p>
             
-            <!-- Espaço do QR Code (Simulado) -->
-            <div class="bg-white p-4 rounded-xl mb-6">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=ExemploPIX" alt="QR Code PIX">
+            <!-- AVISO DE TRANSPARÊNCIA IMPORTANTE -->
+            <div class="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4 mb-8 text-sm text-blue-200 flex items-start gap-3 text-left w-full">
+                <i data-lucide="shield-check" class="h-6 w-6 text-blue-400 flex-shrink-0"></i>
+                <p><strong>Aviso de Segurança:</strong> O pagamento é processado pelo Mercado Pago e o recebedor aparecerá como <strong>"João Vitor Santos Almeida"</strong>. Fique tranquilo, este é o desenvolvedor oficial do sistema. Não é golpe ou erro.</p>
             </div>
-            <p class="font-mono text-sm bg-surface p-3 rounded-lg border border-white/10 w-full mb-8 text-slate-300 break-all">
-                00020126580014br.gov.bcb.pix0136FinanceHub1990...
-            </p>
+            
+            <!-- QR CODE DINÂMICO -->
+            <div class="bg-white p-4 rounded-2xl mb-6 shadow-xl border-4 border-white">
+                <img id="qr-code-img" src="" alt="QR Code PIX" class="w-48 h-48 object-contain">
+            </div>
 
-            <a href="meus-produtos.html" class="w-full bg-brand-500 text-black font-bold text-lg py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-brand-400 transition-colors">
-                ACESSAR MEUS PRODUTOS <i data-lucide="arrow-right" class="h-5 w-5"></i>
+            <!-- COPIA E COLA -->
+            <div class="w-full relative mb-8 group">
+                <label class="block text-sm text-slate-400 mb-2 font-bold uppercase tracking-wider text-left">PIX Copia e Cola</label>
+                <input type="text" id="pix-copia-cola" readonly class="w-full bg-surface border border-white/10 text-slate-300 px-4 py-4 rounded-xl font-mono text-xs pr-12 focus:outline-none focus:border-brand-500">
+                <button onclick="copiarPix()" class="absolute right-2 top-9 h-10 w-10 bg-brand-500/20 text-brand-400 hover:bg-brand-500 hover:text-black rounded-lg flex items-center justify-center transition-colors">
+                    <i data-lucide="copy" class="h-5 w-5"></i>
+                </button>
+            </div>
+
+            <div class="flex items-center gap-3 text-brand-400 font-semibold animate-pulse mb-4">
+                <i data-lucide="loader-2" class="h-5 w-5 animate-spin"></i>
+                Aguardando confirmação do pagamento...
+            </div>
+        </div>
+        
+        <!-- ================= ESTADO 3: PAGAMENTO APROVADO ================= -->
+        <div id="success-view-approved" class="hidden max-w-xl mx-auto glass-card p-10 rounded-3xl text-center flex-col items-center">
+            <div class="w-24 h-24 bg-brand-500 text-white rounded-full flex items-center justify-center mb-6 shadow-[0_0_40px_rgba(34,197,94,0.5)]">
+                <i data-lucide="check" class="h-12 w-12 stroke-[3]"></i>
+            </div>
+            <h2 class="text-4xl font-extrabold text-white mb-4">Pagamento Aprovado!</h2>
+            <p class="text-slate-400 text-lg mb-8">Sua conta foi ativada. Você está sendo redirecionado para a Área de Membros...</p>
+
+            <a href="meus-produtos.html" class="w-full bg-brand-500 text-black font-extrabold text-xl py-4 rounded-xl flex items-center justify-center gap-2 hover:scale-[1.02] transition-transform shadow-xl">
+                ACESSAR SISTEMA AGORA <i data-lucide="arrow-right" class="h-6 w-6"></i>
             </a>
         </div>
+
     </div>
 
     <script>
         lucide.createIcons();
 
+        // Função para copiar o código PIX
+        function copiarPix() {
+            const copyText = document.getElementById("pix-copia-cola");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); 
+            navigator.clipboard.writeText(copyText.value);
+            alert("Código PIX copiado com sucesso!");
+        }
+
+        let intervalID; // Variável para controlar o loop de verificação
+
         document.getElementById('checkout-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn-submit');
             
-            btn.innerHTML = `<i data-lucide="loader-2" class="h-6 w-6 animate-spin"></i> Processando...`;
+            btn.innerHTML = `<i data-lucide="loader-2" class="h-6 w-6 animate-spin"></i> Criando conta...`;
             btn.disabled = true;
 
-            // Pega os dados do formulário visual
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const nome = document.getElementById('nome').value;
             const cpf = document.getElementById('cpf').value;
 
             try {
-                // Requisição segura para a SUA API na Vercel (Nada de chaves no HTML)
-                const response = await fetch('/api/criar-conta', {
+                // 1. Cria a Conta no Supabase via Vercel (Seu backend)
+                const contaResponse = await fetch('/api/criar-conta', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password, nome, cpf })
                 });
-
-                const result = await response.json();
-
-                if (!response.ok || !result.success) {
-                    throw new Error(result.error || "Erro ao processar checkout");
-                }
-
-                // DEU CERTO NA VERCEL! Transição de tela para mostrar o PIX
-                document.getElementById('checkout-view').classList.add('hidden');
-                document.getElementById('success-view').classList.remove('hidden');
-                document.getElementById('success-view').classList.add('flex');
+                const contaResult = await contaResponse.json();
                 
-                // NOTA: Se você já quiser unir as coisas, a sua api/criar-conta.js 
-                // pode retornar o "Copia e Cola" do PIX, e você só injeta ele aqui na tela!
+                if (!contaResponse.ok || !contaResult.success) throw new Error("Erro ao criar conta. Tente novamente.");
+
+                // 2. Chama a sua API do Mercado Pago para Gerar o PIX
+                btn.innerHTML = `<i data-lucide="loader-2" class="h-6 w-6 animate-spin"></i> Gerando PIX...`;
+                const pixResponse = await fetch('/api/gerar-pix', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nome, email, cpf })
+                });
+                
+                const pixResult = await pixResponse.json();
+                
+                if (!pixResponse.ok) throw new Error("Erro ao conectar com Banco Central/Mercado Pago.");
+
+                // 3. Preenche a Tela do PIX com os dados reais retornados
+                document.getElementById('qr-code-img').src = `data:image/jpeg;base64,${pixResult.qr_code_base64}`;
+                document.getElementById('pix-copia-cola').value = pixResult.copia_e_cola;
+
+                // Esconde Checkout e Mostra Tela PIX
+                document.getElementById('checkout-view').classList.add('hidden');
+                document.getElementById('success-view-pix').classList.remove('hidden');
+                document.getElementById('success-view-pix').classList.add('flex');
+                
+                // 4. Inicia o "Radar" verificando o pagamento a cada 3 segundos
+                const idPagamento = pixResult.id_pagamento;
+                
+                intervalID = setInterval(async () => {
+                    try {
+                        const checkResponse = await fetch(`/api/verificar-pagamento?id=${idPagamento}`);
+                        const checkResult = await checkResponse.json();
+                        
+                        if (checkResult.status === 'approved') {
+                            clearInterval(intervalID); // Para de verificar
+                            
+                            // Mostra a Tela de Sucesso Final!
+                            document.getElementById('success-view-pix').classList.remove('flex');
+                            document.getElementById('success-view-pix').classList.add('hidden');
+                            
+                            document.getElementById('success-view-approved').classList.remove('hidden');
+                            document.getElementById('success-view-approved').classList.add('flex');
+                            
+                            // Redireciona automaticamente após 3 segundos
+                            setTimeout(() => {
+                                window.location.href = 'meus-produtos.html';
+                            }, 3000);
+                        }
+                    } catch (checkErr) {
+                        console.error("Erro ao verificar pagamento no radar", checkErr);
+                    }
+                }, 3000);
 
             } catch (err) {
                 alert("Erro: " + err.message);
