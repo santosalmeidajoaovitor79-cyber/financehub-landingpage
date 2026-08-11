@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrar | FinanceHub PRO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { 400: '#34d399', 500: '#22c55e' }, surface: '#020617' } } } }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>body { background-color: #020617; color: white; }</style>
+</head>
+<body class="h-screen flex flex-col items-center justify-center relative">
+    
+    <div class="w-full max-w-md p-8 border border-white/10 rounded-3xl bg-surface/50 backdrop-blur-xl shadow-2xl relative z-10">
+        <div class="flex justify-center mb-6">
+            <i data-lucide="bar-chart-3" class="text-brand-500 h-10 w-10"></i>
+        </div>
+        <h2 class="text-2xl font-bold text-center mb-8">Acessar minha conta</h2>
+        
+        <form id="login-form" class="space-y-4">
+            <div>
+                <label class="block text-sm text-slate-400 mb-1">E-mail</label>
+                <input type="email" id="email" required class="w-full px-4 py-3 rounded-xl bg-black/50 border border-white/10 text-white focus:border-brand-500 outline-none">
+            </div>
+            <div>
+                <label class="block text-sm text-slate-400 mb-1">Senha</label>
+                <input type="password" id="password" required class="w-full px-4 py-3 rounded-xl bg-black/50 border border-white/10 text-white focus:border-brand-500 outline-none">
+            </div>
+            <button type="submit" id="btn-login" class="w-full bg-brand-500 text-black font-bold py-3 rounded-xl hover:scale-[1.02] transition-transform">
+                Entrar
+            </button>
+        </form>
+    </div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+        const supabase = createClient('SUA_URL_SUPABASE', 'SUA_CHAVE_SUPABASE'); // COLOQUE SUAS CHAVES AQUI
+        lucide.createIcons();
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const btn = document.getElementById('btn-login');
+            
+            btn.innerHTML = "Autenticando...";
+            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+            
+            if (error) {
+                alert("E-mail ou senha incorretos.");
+                btn.innerHTML = "Entrar";
+            } else {
+                window.location.href = "meus-produtos.html"; // Vai para a área logada
+            }
+        });
+    </script>
+</body>
+</html>
