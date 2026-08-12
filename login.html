@@ -26,7 +26,12 @@
             </div>
             <div>
                 <label class="block text-sm text-slate-400 mb-1">Senha</label>
-                <input type="password" id="password" autocomplete="current-password" required class="w-full px-4 py-3 rounded-xl bg-black/50 border border-white/10 text-white focus:border-brand-500 outline-none">
+                <div class="relative">
+                    <input type="password" id="password" autocomplete="current-password" required class="w-full px-4 py-3 pr-12 rounded-xl bg-black/50 border border-white/10 text-white focus:border-brand-500 outline-none">
+                    <button type="button" id="toggle-password" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors" aria-label="Mostrar senha" tabindex="-1">
+                        <i data-lucide="eye" class="h-5 w-5"></i>
+                    </button>
+                </div>
             </div>
             <button type="submit" id="btn-login" class="w-full bg-brand-500 text-black font-bold py-3 rounded-xl hover:scale-[1.02] transition-transform">
                 Entrar
@@ -42,6 +47,16 @@
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRiY2dndnJibW9xcmpuZ3R5cmJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY0ODEyODAsImV4cCI6MjEwMjA1NzI4MH0.y78Q8oAXAxj4afY53R9HO8tsip8KA3DZtj36TPcICCQ'
         );
         lucide.createIcons();
+
+        const togglePassword = document.getElementById('toggle-password');
+        const passwordInput = document.getElementById('password');
+        togglePassword.addEventListener('click', () => {
+            const mostrando = passwordInput.type === 'text';
+            passwordInput.type = mostrando ? 'password' : 'text';
+            togglePassword.innerHTML = `<i data-lucide="${mostrando ? 'eye' : 'eye-off'}" class="h-5 w-5"></i>`;
+            togglePassword.setAttribute('aria-label', mostrando ? 'Mostrar senha' : 'Ocultar senha');
+            lucide.createIcons();
+        });
 
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();

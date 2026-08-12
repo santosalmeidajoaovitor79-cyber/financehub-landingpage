@@ -84,7 +84,12 @@
                         </div>
                         <div class="md:col-span-2">
                             <label for="password" class="block text-sm text-slate-400 mb-1">Crie uma Senha Segura</label>
-                            <input type="password" id="password" name="password" autocomplete="new-password" required minlength="8" class="input-field w-full px-4 py-3 rounded-xl">
+                            <div class="relative">
+                                <input type="password" id="password" name="password" autocomplete="new-password" required minlength="8" class="input-field w-full px-4 py-3 pr-12 rounded-xl">
+                                <button type="button" id="toggle-password" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors" aria-label="Mostrar senha" tabindex="-1">
+                                    <i data-lucide="eye" class="h-5 w-5"></i>
+                                </button>
+                            </div>
                             <p class="text-xs text-slate-500 mt-1">Mínimo de 8 caracteres.</p>
                         </div>
                     </div>
@@ -175,6 +180,16 @@
 
     <script>
         lucide.createIcons();
+
+        const togglePassword = document.getElementById('toggle-password');
+        const passwordInput = document.getElementById('password');
+        togglePassword.addEventListener('click', () => {
+            const mostrando = passwordInput.type === 'text';
+            passwordInput.type = mostrando ? 'password' : 'text';
+            togglePassword.innerHTML = `<i data-lucide="${mostrando ? 'eye' : 'eye-off'}" class="h-5 w-5"></i>`;
+            togglePassword.setAttribute('aria-label', mostrando ? 'Mostrar senha' : 'Ocultar senha');
+            lucide.createIcons();
+        });
 
         // ATENÇÃO: troque pela sua Public Key real do Mercado Pago (painel > credenciais).
         // Diferente do Access Token, a Public Key é feita para ficar exposta no front-end —
