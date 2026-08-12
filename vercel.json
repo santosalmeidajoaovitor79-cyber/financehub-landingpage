@@ -1,0 +1,15 @@
+{
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "financehubpro.online"
+        }
+      ],
+      "destination": "https://www.financehubpro.online/$1",
+      "permanent": true
+    }
+  ]
+}
