@@ -30,7 +30,7 @@ export default async function handler(req, res) {
 
         const response = await payment.create({
             body: {
-                transaction_amount: 19.90,
+                transaction_amount: 42.35,
                 token,
                 description: 'FinanceHub PRO Essential',
                 installments: Number(installments) || 1,
