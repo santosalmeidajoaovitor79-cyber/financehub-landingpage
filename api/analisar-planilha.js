@@ -2,7 +2,8 @@ import { createClient } from '@supabase/supabase-js';
 
 const ALLOWED_ORIGIN = process.env.SITE_URL || '*';
 const LIMITE_DIARIO = 20;
-const MODELO_GROQ = 'llama-3.3-70b-versatile';
+// llama-3.3-70b-versatile foi descontinuado pela Groq em 17/06/2026 (causava 404 aqui).
+const MODELO_GROQ = 'openai/gpt-oss-120b';
 
 const SYSTEM_PROMPT = `Você analisa a estrutura de planilhas e devolve APENAS um JSON válido (sem markdown, sem texto fora do JSON), no formato:
 {
