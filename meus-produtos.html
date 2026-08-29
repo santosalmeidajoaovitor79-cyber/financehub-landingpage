@@ -291,6 +291,35 @@
         const conteudoLiberado = document.getElementById('conteudo-liberado');
         const pagamentoPendenteView = document.getElementById('pagamento-pendente-view');
 
+        // O link não é fixo nem público: cada clique pede uma signed URL nova
+        // (expira em 5 min) pro backend, que só entrega depois de confirmar
+        // sessão + pagamento no Supabase.
+        if (btnPlanilha) {
+            btnPlanilha.addEventListener('click', async (e) => {
+                e.preventDefault();
+                const textoOriginal = btnPlanilha.innerHTML;
+                btnPlanilha.classList.add('opacity-60', 'pointer-events-none');
+                btnPlanilha.innerHTML = `<i data-lucide="loader-2" class="h-5 w-5 animate-spin"></i> Preparando download...`;
+                lucide.createIcons();
+                try {
+                    const { data: { session } } = await supabase.auth.getSession();
+                    const resp = await fetch('/api/download/financehub', {
+                        headers: { Authorization: `Bearer ${session.access_token}` }
+                    });
+                    const result = await resp.json();
+                    if (!resp.ok || !result.url) throw new Error(result.erro || 'Erro ao gerar link de download.');
+                    window.open(result.url, '_blank', 'noopener');
+                } catch (err) {
+                    console.error('Erro ao baixar planilha:', err);
+                    alert('Não foi possível gerar o link de download agora. Tente novamente em instantes.');
+                } finally {
+                    btnPlanilha.classList.remove('opacity-60', 'pointer-events-none');
+                    btnPlanilha.innerHTML = textoOriginal;
+                    lucide.createIcons();
+                }
+            });
+        }
+
         function mostrar(el) {
             loadingView.classList.add('hidden');
             conteudoLiberado.classList.add('hidden');
@@ -328,9 +357,6 @@
                 return;
             }
 
-            if (btnPlanilha) {
-                btnPlanilha.href = "https://docs.google.com/spreadsheets/d/1Y4Iybxfhz1S8XX8FBCG4aDAyaxgfwAip/edit?usp=sharing&ouid=104775891353533905365&rtpof=true&sd=true";
-            }
             if (btnManual) {
                 btnManual.href = "https://drive.google.com/file/d/1e0piKxzfkQ6XzkcBpzRn5wyurrAY5SqZ/view?usp=sharing";
             }
