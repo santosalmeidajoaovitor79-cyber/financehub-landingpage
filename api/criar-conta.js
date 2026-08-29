@@ -17,7 +17,7 @@ export default async function handler(req, res) {
     const { nome, cpf, email, password, metodo } = req.body || {};
 
     // Validação básica no servidor (o front pode ser burlado, o servidor não pode confiar nele)
-    if (!nome || !cpf || !email || !password) {
+    if (!nome || !email || !password) {
         return res.status(400).json({ success: false, error: 'Preencha todos os campos.' });
     }
     if (!EMAIL_REGEX.test(email)) {
@@ -26,9 +26,19 @@ export default async function handler(req, res) {
     if (String(password).length < 8) {
         return res.status(400).json({ success: false, error: 'A senha precisa ter pelo menos 8 caracteres.' });
     }
-    const cpfLimpo = String(cpf).replace(/\D/g, '');
-    if (cpfLimpo.length !== 11 && cpfLimpo.length !== 14) {
-        return res.status(400).json({ success: false, error: 'CPF/CNPJ inválido.' });
+
+    // CPF/CNPJ só existe pro fluxo brasileiro (Mercado Pago). Clientes internacionais
+    // pagando via Stripe não têm CPF, então esse campo fica nulo pra eles.
+    const ehInternacional = metodo === 'stripe';
+    let cpfLimpo = null;
+    if (!ehInternacional) {
+        if (!cpf) {
+            return res.status(400).json({ success: false, error: 'Preencha todos os campos.' });
+        }
+        cpfLimpo = String(cpf).replace(/\D/g, '');
+        if (cpfLimpo.length !== 11 && cpfLimpo.length !== 14) {
+            return res.status(400).json({ success: false, error: 'CPF/CNPJ inválido.' });
+        }
     }
 
     if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {

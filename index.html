@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- ================= SEO TÉCNICO & META TAGS ================= -->
-    <title>FinanceHub PRO Essential | O ERP Definitivo em Excel</title>
-    <meta name="description" content="Sistema de gestão financeira premium em Excel para MEIs e pequenas empresas. Dashboard inteligente, controle de estoque, fluxo de caixa e DRE sem mensalidades.">
+    <title id="titulo-pagina">FinanceHub PRO Essential | O ERP Definitivo em Excel</title>
+    <meta id="meta-descricao" name="description" content="Sistema de gestão financeira premium em Excel para MEIs e pequenas empresas. Dashboard inteligente, controle de estoque, fluxo de caixa e DRE sem mensalidades.">
     <meta name="keywords" content="planilha de gestão financeira, planilha excel fluxo de caixa, controle de estoque excel, sistema financeiro mei, DRE automática excel, planilha controle financeiro empresarial, erp excel, dashboard excel">
     <meta name="author" content="FinanceHub PRO">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
@@ -212,7 +212,7 @@
     <div id="sticky-cta" class="fixed bottom-8 right-8 z-[100] translate-y-32 opacity-0 transition-all duration-700 ease-out pointer-events-none">
         <a href="checkout.html" class="pointer-events-auto btn-glow bg-brand-500 text-surfaceLight font-bold px-8 py-4 rounded-full shadow-2xl shadow-brand-500/20 flex items-center gap-3 transform hover:scale-105 transition-transform">
             <i data-lucide="zap" class="h-5 w-5"></i>
-            Quero Acesso Agora
+            <span data-i18n-text="sticky-cta">Quero Acesso Agora</span>
         </a>
     </div>
 
@@ -231,20 +231,21 @@
             </div>
             
             <div class="hidden md:flex items-center gap-10 text-sm font-medium text-slate-300">
-                <a href="#beneficios" class="hover:text-white transition-colors">Benefícios</a>
-                <a href="#plataforma" class="hover:text-white transition-colors">A Plataforma</a>
-                <a href="#comparacao" class="hover:text-white transition-colors">Comparação</a>
+                <a href="#beneficios" class="hover:text-white transition-colors" data-i18n-text="nav-beneficios">Benefícios</a>
+                <a href="#plataforma" class="hover:text-white transition-colors" data-i18n-text="nav-plataforma">A Plataforma</a>
+                <a href="#comparacao" class="hover:text-white transition-colors" data-i18n-text="nav-comparacao">Comparação</a>
                 <a href="#faq" class="hover:text-white transition-colors">FAQ</a>
+                <button type="button" id="link-trocar-regiao" class="text-brand-400 hover:text-brand-300 transition-colors font-semibold"></button>
             </div>
-            
+
             <div class="flex items-center gap-4">
                 <!-- Botão Entrar -->
                 <a href="login.html" class="hidden sm:flex text-sm font-semibold text-slate-300 hover:text-white transition-colors items-center gap-2">
-                    <i data-lucide="user" class="h-4 w-4"></i> Entrar
+                    <i data-lucide="user" class="h-4 w-4"></i> <span data-i18n-text="nav-entrar">Entrar</span>
                 </a>
                 <!-- Botão Comprar -->
                 <a href="checkout.html" class="glass px-6 py-3 rounded-full text-sm font-semibold hover:bg-white/10 transition-all border border-white/10 flex items-center gap-2">
-                    Garantir Acesso <i data-lucide="arrow-right" class="h-4 w-4"></i>
+                    <span data-i18n-text="nav-garantir-acesso">Garantir Acesso</span> <i data-lucide="arrow-right" class="h-4 w-4"></i>
                 </a>
             </div>
         </div>
@@ -258,26 +259,26 @@
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
               <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-500"></span>
             </span>
-            Nova Versão 3.0 • Licença Vitalícia
+            <span data-i18n-text="hero-badge">Nova Versão 3.0 • Licença Vitalícia</span>
         </div>
 
         <h1 class="reveal text-5xl md:text-[5.5rem] font-extrabold text-white tracking-tight leading-[1.05] max-w-6xl mb-8" style="transition-delay: 100ms;">
-            Você trabalha muito, mas não vê <br class="hidden md:block"> a <span class="text-gradient-brand">cor do dinheiro?</span>
+            <span data-i18n-html="hero-titulo">Você trabalha muito, mas não vê <br class="hidden md:block"> a <span class="text-gradient-brand">cor do dinheiro?</span></span>
         </h1>
-        
+
         <p class="reveal text-xl md:text-2xl text-slate-400 max-w-3xl mb-12 leading-relaxed font-light" style="transition-delay: 200ms;">
-            O fim do "achismo". Assuma o controle financeiro total com um ERP blindado dentro do Excel. Descubra o seu lucro real, controle o seu estoque e tome decisões seguras sem pagar mensalidades.
+            <span data-i18n-text="hero-sub">O fim do "achismo". Assuma o controle financeiro total com um ERP blindado dentro do Excel. Descubra o seu lucro real, controle o seu estoque e tome decisões seguras sem pagar mensalidades.</span>
         </p>
 
         <!-- CTA Buttons -->
         <div class="reveal flex flex-col sm:flex-row items-center gap-5 w-full sm:w-auto z-20" style="transition-delay: 300ms;">
             <a href="checkout.html" class="btn-glow w-full sm:w-auto bg-brand-500 text-surfaceLight font-extrabold text-lg px-10 py-5 rounded-2xl flex items-center justify-center gap-3 transition-transform transform hover:scale-[1.03]">
                 <i data-lucide="zap" class="h-6 w-6"></i>
-                Quero Organizar Minha Empresa
+                <span data-i18n-text="hero-cta-principal">Quero Organizar Minha Empresa</span>
             </a>
             <a href="#plataforma" class="w-full sm:w-auto glass hover:bg-white/5 text-white font-semibold text-lg px-10 py-5 rounded-2xl flex items-center justify-center gap-3 transition-all">
                 <i data-lucide="eye" class="h-6 w-6"></i>
-                Ver Como Funciona
+                <span data-i18n-text="hero-cta-secundario">Ver Como Funciona</span>
             </a>
         </div>
 
@@ -450,14 +451,14 @@
     <!-- ================= COMPARISON ================= -->
     <section id="comparacao" class="py-32 relative">
         <div class="max-w-5xl mx-auto px-6 reveal">
-            <h2 class="text-4xl md:text-5xl font-bold text-center text-white mb-20 tracking-tight">O Fim das Planilhas Amadoras</h2>
-            
+            <h2 class="text-4xl md:text-5xl font-bold text-center text-white mb-20 tracking-tight" data-i18n-text="comp-titulo">O Fim das Planilhas Amadoras</h2>
+
             <div class="grid md:grid-cols-2 gap-10 relative">
                 <div class="hidden md:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-16 w-16 bg-surface rounded-full border border-white/10 items-center justify-center font-bold text-slate-400 z-20 shadow-xl">VS</div>
 
                 <div class="p-10 rounded-3xl border border-red-500/20 bg-red-500/5 opacity-70">
-                    <h3 class="text-2xl font-bold text-slate-300 mb-8">Planilhas da Internet</h3>
-                    <ul class="space-y-6">
+                    <h3 class="text-2xl font-bold text-slate-300 mb-8" data-i18n-text="comp-perdedor-titulo">Planilhas da Internet</h3>
+                    <ul class="space-y-6" data-i18n-html="comp-perdedor-lista">
                         <li class="flex items-start gap-4 text-slate-400 text-lg"><i data-lucide="x" class="h-6 w-6 text-red-500 flex-shrink-0 mt-0.5"></i> Fórmulas expostas que quebram facilmente</li>
                         <li class="flex items-start gap-4 text-slate-400 text-lg"><i data-lucide="x" class="h-6 w-6 text-red-500 flex-shrink-0 mt-0.5"></i> Design visualmente cansativo (branco/verde)</li>
                         <li class="flex items-start gap-4 text-slate-400 text-lg"><i data-lucide="x" class="h-6 w-6 text-red-500 flex-shrink-0 mt-0.5"></i> Dados isolados (você digita tudo duas vezes)</li>
@@ -467,10 +468,10 @@
 
                 <div class="p-10 rounded-3xl border border-brand-500/40 glass-card relative overflow-hidden transform md:scale-110 shadow-2xl z-10">
                     <div class="absolute inset-0 bg-gradient-to-br from-brand-500/10 to-transparent pointer-events-none"></div>
-                    <div class="absolute top-0 right-0 bg-brand-500 text-surface text-sm font-bold px-4 py-2 rounded-bl-xl shadow-lg">O PADRÃO PRO</div>
-                    
+                    <div class="absolute top-0 right-0 bg-brand-500 text-surface text-sm font-bold px-4 py-2 rounded-bl-xl shadow-lg" data-i18n-text="comp-vencedor-badge">O PADRÃO PRO</div>
+
                     <h3 class="text-3xl font-bold text-white mb-8">FinanceHub PRO</h3>
-                    <ul class="space-y-6 relative z-10">
+                    <ul class="space-y-6 relative z-10" data-i18n-html="comp-vencedor-lista">
                         <li class="flex items-start gap-4 text-slate-200 text-lg"><i data-lucide="check-circle-2" class="h-6 w-6 text-brand-400 flex-shrink-0 mt-0.5"></i> Arquitetura blindada e protegida contra erros</li>
                         <li class="flex items-start gap-4 text-slate-200 text-lg"><i data-lucide="check-circle-2" class="h-6 w-6 text-brand-400 flex-shrink-0 mt-0.5"></i> Design Dark Mode UI/UX de software SaaS</li>
                         <li class="flex items-start gap-4 text-slate-200 text-lg"><i data-lucide="check-circle-2" class="h-6 w-6 text-brand-400 flex-shrink-0 mt-0.5"></i> Motor Relacional (Estoque, Vendas e Caixa conversam)</li>
@@ -520,34 +521,34 @@
             <div class="absolute inset-0 bg-gradient-to-b from-brand-500/10 to-transparent z-0"></div>
             
             <div class="relative z-10">
-                <span class="inline-block bg-brand-500/20 text-brand-400 text-sm font-bold px-5 py-2 rounded-full uppercase tracking-widest border border-brand-500/30 mb-8">
+                <span class="inline-block bg-brand-500/20 text-brand-400 text-sm font-bold px-5 py-2 rounded-full uppercase tracking-widest border border-brand-500/30 mb-8" data-i18n-text="preco-badge">
                     Oferta Exclusiva de Lançamento
                 </span>
                 <h2 class="text-4xl md:text-6xl font-extrabold text-white tracking-tight mb-6">FinanceHub PRO Essential</h2>
-                <p class="text-slate-400 text-xl mb-12">Acesso Vitalício + Atualizações Gratuitas • Sistema sem Mensalidades</p>
-                
+                <p class="text-slate-400 text-xl mb-12" data-i18n-text="preco-sub">Acesso Vitalício + Atualizações Gratuitas • Sistema sem Mensalidades</p>
+
                 <div class="mb-14 flex flex-col items-center justify-center">
-                    <span class="text-slate-500 text-2xl line-through decoration-red-500/50 mb-2">De R$ 97,00</span>
+                    <span class="text-slate-500 text-2xl line-through decoration-red-500/50 mb-2" id="preco-de">De R$ 97,00</span>
                     <div class="flex items-baseline gap-3 text-brand-400 my-2">
-                        <span class="text-4xl font-bold">por apenas</span>
-                        <span class="text-7xl md:text-[6rem] font-extrabold tracking-tighter">R$ 42,35</span>
+                        <span class="text-4xl font-bold" data-i18n-text="preco-por-apenas">por apenas</span>
+                        <span class="text-7xl md:text-[6rem] font-extrabold tracking-tighter" id="preco-final">R$ 42,35</span>
                     </div>
-                    <span class="text-slate-300 text-lg font-medium mt-4">Pagamento único. Acesso Vitalício.</span>
-                    
+                    <span class="text-slate-300 text-lg font-medium mt-4" data-i18n-text="preco-condicao">Pagamento único. Acesso Vitalício.</span>
+
                     <div class="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-surface/50 border border-white/5 text-slate-400 text-sm">
                         <i data-lucide="info" class="h-4 w-4 text-brand-400"></i>
-                        Isto é mais barato do que um lanche na padaria.
+                        <span data-i18n-text="preco-comparativo">Isto é mais barato do que um lanche na padaria.</span>
                     </div>
                 </div>
 
                 <a href="checkout.html" class="btn-glow inline-flex items-center justify-center w-full max-w-xl bg-brand-500 text-surfaceLight font-extrabold text-2xl py-6 rounded-2xl transition-all transform hover:scale-[1.03] mb-8 shadow-2xl">
-                    QUERO ORGANIZAR MEU FINANCEIRO →
+                    <span data-i18n-text="preco-cta">QUERO ORGANIZAR MEU FINANCEIRO →</span>
                 </a>
-                
+
                 <div class="flex flex-wrap justify-center gap-8 text-base text-slate-400 font-medium">
-                    <div class="flex items-center gap-2"><i data-lucide="check-circle-2" class="h-5 w-5 text-brand-400"></i> Download Imediato</div>
-                    <div class="flex items-center gap-2"><i data-lucide="check-circle-2" class="h-5 w-5 text-brand-400"></i> Excel Nativo (Win/Mac)</div>
-                    <div class="flex items-center gap-2"><i data-lucide="shield-check" class="h-5 w-5 text-brand-400"></i> Garantia de 7 dias</div>
+                    <div class="flex items-center gap-2"><i data-lucide="check-circle-2" class="h-5 w-5 text-brand-400"></i> <span data-i18n-text="preco-selo-1">Download Imediato</span></div>
+                    <div class="flex items-center gap-2"><i data-lucide="check-circle-2" class="h-5 w-5 text-brand-400"></i> <span data-i18n-text="preco-selo-2">Excel Nativo (Win/Mac)</span></div>
+                    <div class="flex items-center gap-2"><i data-lucide="shield-check" class="h-5 w-5 text-brand-400"></i> <span data-i18n-text="preco-selo-3">Garantia de 7 dias</span></div>
                 </div>
             </div>
         </div>
@@ -818,6 +819,110 @@
                 notebookFrame.style.transform = `rotateY(0deg) rotateX(0deg)`;
             }
         });
+
+        /* ==========================================
+           TRADUÇÃO PT/EN + REGIÃO — mesma detecção de país usada no checkout.html
+           (BR fica em português/BRL, resto do mundo em inglês/USD).
+           Cobre só as seções de maior impacto de conversão (hero, comparação, preço,
+           nav). Depoimentos, "A Plataforma" e FAQ continuam só em português por ora.
+        ========================================== */
+        const TEXTOS = {
+            'nav-beneficios': { pt: 'Benefícios', en: 'Benefits' },
+            'nav-plataforma': { pt: 'A Plataforma', en: 'Platform' },
+            'nav-comparacao': { pt: 'Comparação', en: 'Comparison' },
+            'nav-entrar': { pt: 'Entrar', en: 'Log In' },
+            'nav-garantir-acesso': { pt: 'Garantir Acesso', en: 'Get Access' },
+            'sticky-cta': { pt: 'Quero Acesso Agora', en: 'Get Instant Access' },
+            'hero-badge': { pt: 'Nova Versão 3.0 • Licença Vitalícia', en: 'New Version 3.0 • Lifetime License' },
+            'hero-sub': { pt: 'O fim do "achismo". Assuma o controle financeiro total com um ERP blindado dentro do Excel. Descubra o seu lucro real, controle o seu estoque e tome decisões seguras sem pagar mensalidades.', en: 'Stop guessing about your numbers. Take full control of your business finances with a bulletproof system built right into Excel. See your real profit, track your inventory, and make confident decisions — with no monthly fees.' },
+            'hero-cta-principal': { pt: 'Quero Organizar Minha Empresa', en: 'Start Organizing My Business' },
+            'hero-cta-secundario': { pt: 'Ver Como Funciona', en: 'See How It Works' },
+            'comp-titulo': { pt: 'O Fim das Planilhas Amadoras', en: 'You Can Compare' },
+            'comp-perdedor-titulo': { pt: 'Planilhas da Internet', en: 'Generic Finance Software' },
+            'comp-vencedor-badge': { pt: 'O PADRÃO PRO', en: 'THE PRO STANDARD' },
+            'preco-badge': { pt: 'Oferta Exclusiva de Lançamento', en: 'Exclusive Launch Offer' },
+            'preco-sub': { pt: 'Acesso Vitalício + Atualizações Gratuitas • Sistema sem Mensalidades', en: 'Lifetime Access + Free Updates • No Monthly Fees' },
+            'preco-por-apenas': { pt: 'por apenas', en: 'for just' },
+            'preco-condicao': { pt: 'Pagamento único. Acesso Vitalício.', en: 'One-time payment, lifetime access.' },
+            'preco-comparativo': { pt: 'Isto é mais barato do que um lanche na padaria.', en: "That's less than a single takeout lunch." },
+            'preco-cta': { pt: 'QUERO ORGANIZAR MEU FINANCEIRO →', en: 'GET INSTANT ACCESS →' },
+            'preco-selo-1': { pt: 'Download Imediato', en: 'Instant Download' },
+            'preco-selo-2': { pt: 'Excel Nativo (Win/Mac)', en: 'Native Excel (Win/Mac)' },
+            'preco-selo-3': { pt: 'Garantia de 7 dias', en: '7-Day Guarantee' },
+        };
+
+        const TEXTOS_HTML = {
+            'hero-titulo': {
+                pt: 'Você trabalha muito, mas não vê <br class="hidden md:block"> a <span class="text-gradient-brand">cor do dinheiro?</span>',
+                en: 'Stop guessing. Start <br class="hidden md:block"> <span class="text-gradient-brand">organizing your business finances.</span>',
+            },
+            'comp-perdedor-lista': {
+                pt: `<li class="flex items-start gap-4 text-slate-400 text-lg"><i data-lucide="x" class="h-6 w-6 text-red-500 flex-shrink-0 mt-0.5"></i> Fórmulas expostas que quebram facilmente</li>
+                     <li class="flex items-start gap-4 text-slate-400 text-lg"><i data-lucide="x" class="h-6 w-6 text-red-500 flex-shrink-0 mt-0.5"></i> Design visualmente cansativo (branco/verde)</li>
+                     <li class="flex items-start gap-4 text-slate-400 text-lg"><i data-lucide="x" class="h-6 w-6 text-red-500 flex-shrink-0 mt-0.5"></i> Dados isolados (você digita tudo duas vezes)</li>
+                     <li class="flex items-start gap-4 text-slate-400 text-lg"><i data-lucide="x" class="h-6 w-6 text-red-500 flex-shrink-0 mt-0.5"></i> Sem alertas de estoque ou inadimplência</li>`,
+                en: `<li class="flex items-start gap-4 text-slate-400 text-lg"><i data-lucide="x" class="h-6 w-6 text-red-500 flex-shrink-0 mt-0.5"></i> $49/month, forever — even if you barely use it</li>
+                     <li class="flex items-start gap-4 text-slate-400 text-lg"><i data-lucide="x" class="h-6 w-6 text-red-500 flex-shrink-0 mt-0.5"></i> Your data locked in someone else's cloud</li>
+                     <li class="flex items-start gap-4 text-slate-400 text-lg"><i data-lucide="x" class="h-6 w-6 text-red-500 flex-shrink-0 mt-0.5"></i> Steep learning curve, endless onboarding calls</li>
+                     <li class="flex items-start gap-4 text-slate-400 text-lg"><i data-lucide="x" class="h-6 w-6 text-red-500 flex-shrink-0 mt-0.5"></i> Price goes up as your business grows</li>`,
+            },
+            'comp-vencedor-lista': {
+                pt: `<li class="flex items-start gap-4 text-slate-200 text-lg"><i data-lucide="check-circle-2" class="h-6 w-6 text-brand-400 flex-shrink-0 mt-0.5"></i> Arquitetura blindada e protegida contra erros</li>
+                     <li class="flex items-start gap-4 text-slate-200 text-lg"><i data-lucide="check-circle-2" class="h-6 w-6 text-brand-400 flex-shrink-0 mt-0.5"></i> Design Dark Mode UI/UX de software SaaS</li>
+                     <li class="flex items-start gap-4 text-slate-200 text-lg"><i data-lucide="check-circle-2" class="h-6 w-6 text-brand-400 flex-shrink-0 mt-0.5"></i> Motor Relacional (Estoque, Vendas e Caixa conversam)</li>
+                     <li class="flex items-start gap-4 text-slate-200 text-lg"><i data-lucide="check-circle-2" class="h-6 w-6 text-brand-400 flex-shrink-0 mt-0.5"></i> Assistente IA com alertas visuais no painel</li>`,
+                en: `<li class="flex items-start gap-4 text-slate-200 text-lg"><i data-lucide="check-circle-2" class="h-6 w-6 text-brand-400 flex-shrink-0 mt-0.5"></i> One-time payment: $14.99, forever</li>
+                     <li class="flex items-start gap-4 text-slate-200 text-lg"><i data-lucide="check-circle-2" class="h-6 w-6 text-brand-400 flex-shrink-0 mt-0.5"></i> Runs locally in Excel — your data stays on your computer</li>
+                     <li class="flex items-start gap-4 text-slate-200 text-lg"><i data-lucide="check-circle-2" class="h-6 w-6 text-brand-400 flex-shrink-0 mt-0.5"></i> 5-minute setup, zero onboarding calls</li>
+                     <li class="flex items-start gap-4 text-slate-200 text-lg"><i data-lucide="check-circle-2" class="h-6 w-6 text-brand-400 flex-shrink-0 mt-0.5"></i> AI Assistant with visual dashboard alerts</li>`,
+            },
+        };
+
+        function aplicarRegiao(regiao) {
+            const intl = regiao === 'intl';
+            const idioma = intl ? 'en' : 'pt';
+
+            document.documentElement.lang = intl ? 'en' : 'pt-BR';
+            document.getElementById('titulo-pagina').textContent = intl
+                ? 'FinanceHub PRO Essential | The Definitive Excel Finance System'
+                : 'FinanceHub PRO Essential | O ERP Definitivo em Excel';
+            document.getElementById('meta-descricao').setAttribute('content', intl
+                ? 'Premium Excel-based finance system for small businesses. Smart dashboard, inventory control, cash flow and automatic reports — no monthly fees.'
+                : 'Sistema de gestão financeira premium em Excel para MEIs e pequenas empresas. Dashboard inteligente, controle de estoque, fluxo de caixa e DRE sem mensalidades.');
+
+            Object.entries(TEXTOS).forEach(([chave, valores]) => {
+                document.querySelectorAll(`[data-i18n-text="${chave}"]`).forEach(el => {
+                    el.textContent = valores[idioma];
+                });
+            });
+            Object.entries(TEXTOS_HTML).forEach(([chave, valores]) => {
+                document.querySelectorAll(`[data-i18n-html="${chave}"]`).forEach(el => {
+                    el.innerHTML = valores[idioma];
+                });
+            });
+
+            document.getElementById('preco-de').textContent = intl ? '$34' : 'De R$ 97,00';
+            document.getElementById('preco-final').textContent = intl ? '$14.99' : 'R$ 42,35';
+
+            const linkTroca = document.getElementById('link-trocar-regiao');
+            if (linkTroca) linkTroca.textContent = intl ? '🇧🇷 Ver em R$' : '🇺🇸 View in USD';
+
+            lucide.createIcons(); // reaplica os ícones trocados pelo innerHTML acima
+        }
+
+        document.getElementById('link-trocar-regiao')?.addEventListener('click', () => {
+            aplicarRegiao(document.documentElement.lang === 'en' ? 'br' : 'intl');
+        });
+
+        (async function detectarRegiaoInicial() {
+            try {
+                const resp = await fetch('/api/detectar-pais');
+                const { pais } = await resp.json();
+                aplicarRegiao(pais && pais !== 'BR' ? 'intl' : 'br');
+            } catch (err) {
+                aplicarRegiao('br');
+            }
+        })();
     </script>
 </body>
 </html>

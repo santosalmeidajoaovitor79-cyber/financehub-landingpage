@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" id="html-root">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meus Produtos | FinanceHub PRO</title>
+    <title id="titulo-pagina">Meus Produtos | FinanceHub PRO</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -43,16 +43,16 @@
                     <i data-lucide="user" class="h-5 w-5"></i>
                 </div>
                 <div class="hidden sm:block">
-                    <p class="text-sm font-bold text-white leading-tight">Área do Cliente</p>
+                    <p class="text-sm font-bold text-white leading-tight" data-i18n-text="area-cliente">Área do Cliente</p>
                     <p class="text-xs text-brand-400 flex items-center gap-1">
                         <span class="w-1.5 h-1.5 rounded-full bg-brand-500 animate-pulse"></span>
-                        Acesso Vitalício Ativo
+                        <span data-i18n-text="acesso-ativo">Acesso Vitalício Ativo</span>
                     </p>
                 </div>
 
                 <!-- BOTÃO DE SAIR -->
                 <button id="btn-sair" class="ml-2 sm:ml-4 text-sm font-medium text-slate-400 hover:text-white transition flex items-center gap-2">
-                    <i data-lucide="log-out" class="h-4 w-4"></i> Sair
+                    <i data-lucide="log-out" class="h-4 w-4"></i> <span data-i18n-text="sair">Sair</span>
                 </button>
             </div>
         </div>
@@ -62,24 +62,27 @@
     <div id="loading-view" class="flex-grow flex items-center justify-center">
         <div class="flex items-center gap-3 text-brand-400">
             <i data-lucide="loader-2" class="h-6 w-6 animate-spin"></i>
-            <span>Verificando sua conta...</span>
+            <span data-i18n-text="verificando">Verificando sua conta...</span>
         </div>
     </div>
 
     <!-- CONTEÚDO PRINCIPAL (só aparece depois de confirmar sessão + pagamento) -->
     <main id="conteudo-liberado" class="hidden flex-grow max-w-6xl mx-auto px-6 py-12 md:py-16 w-full relative z-10">
 
-        <header class="mb-10">
-            <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-2">Meus Produtos</h1>
-            <p class="text-slate-400 text-lg">Aqui estão os sistemas e atualizações disponíveis para download.</p>
+        <header class="mb-10 flex items-start justify-between flex-wrap gap-4">
+            <div>
+                <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-2" data-i18n-text="meus-produtos-titulo">Meus Produtos</h1>
+                <p class="text-slate-400 text-lg" data-i18n-text="meus-produtos-sub">Aqui estão os sistemas e atualizações disponíveis para download.</p>
+            </div>
+            <button type="button" id="link-trocar-regiao" class="text-sm font-semibold text-brand-400 hover:text-brand-300 transition underline underline-offset-2"></button>
         </header>
 
         <!-- ALERTA IMPORTANTE PARA O GOOGLE DRIVE -->
         <div class="bg-brand-500/10 border border-brand-500/30 rounded-2xl p-6 mb-10 flex gap-4 items-start md:items-center">
             <i data-lucide="alert-circle" class="h-6 w-6 text-brand-400 flex-shrink-0 mt-1 md:mt-0"></i>
             <div>
-                <h3 class="text-white font-bold mb-1">Aviso Importante sobre o Download</h3>
-                <p class="text-slate-300 text-sm">Para que a planilha funcione corretamente no seu Excel, você precisa baixá-la para o seu computador. <strong class="text-brand-400">Assista aos tutoriais curtos abaixo antes de clicar nos links do Google Drive.</strong></p>
+                <h3 class="text-white font-bold mb-1" data-i18n-text="aviso-download-titulo">Aviso Importante sobre o Download</h3>
+                <p class="text-slate-300 text-sm" data-i18n-html="aviso-download-texto">Para que a planilha funcione corretamente no seu Excel, você precisa baixá-la para o seu computador. <strong class="text-brand-400">Assista aos tutoriais curtos abaixo antes de clicar nos links do Google Drive.</strong></p>
             </div>
         </div>
 
@@ -95,16 +98,16 @@
                         </div>
                         <div>
                             <h2 class="text-xl font-bold text-white">FinanceHub PRO</h2>
-                            <p class="text-sm text-slate-400">Sistema Oficial (.xlsx)</p>
+                            <p class="text-sm text-slate-400" data-i18n-text="sistema-oficial">Sistema Oficial (.xlsx)</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- PLAYER DE VÍDEO -->
+                <!-- PLAYER DE VÍDEO (narração em português) -->
                 <div class="bg-surface rounded-xl p-1 mb-6 border border-white/5 shadow-inner">
                     <div class="px-4 py-3 border-b border-white/5 flex items-center gap-2">
                         <i data-lucide="play-circle" class="h-4 w-4 text-brand-400"></i>
-                        <span class="text-sm font-semibold text-slate-300">Passo a passo: Como baixar a Planilha</span>
+                        <span class="text-sm font-semibold text-slate-300" data-i18n-text="video-planilha-titulo">Passo a passo: Como baixar a Planilha</span>
                     </div>
                     <video controls class="w-full rounded-b-lg aspect-video bg-black object-cover" poster="print-dashboard.png">
                         <source src="2026-08-10 21-30-03.mp4" type="video/mp4">
@@ -116,7 +119,7 @@
                 <div class="mt-auto pt-2">
                     <a href="#" id="btn-baixar-planilha" target="_blank" rel="noopener noreferrer" class="btn-glow w-full bg-brand-500 text-surfaceLight font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-transform hover:scale-[1.02] shadow-lg shadow-brand-500/20">
                         <i data-lucide="download" class="h-5 w-5"></i>
-                        Baixar Planilha (Google Drive)
+                        <span data-i18n-text="btn-baixar-planilha">Baixar Planilha (Google Drive)</span>
                     </a>
                 </div>
             </div>
@@ -129,17 +132,17 @@
                             <i data-lucide="book-open" class="h-7 w-7"></i>
                         </div>
                         <div>
-                            <h2 class="text-xl font-bold text-white">Manual de Uso</h2>
-                            <p class="text-sm text-slate-400">Guia de Implantação (PDF)</p>
+                            <h2 class="text-xl font-bold text-white" data-i18n-text="manual-titulo">Manual de Uso</h2>
+                            <p class="text-sm text-slate-400" data-i18n-text="manual-sub">Guia de Implantação (PDF)</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- PLAYER DE VÍDEO -->
+                <!-- PLAYER DE VÍDEO (narração em português) -->
                 <div class="bg-surface rounded-xl p-1 mb-6 border border-white/5 shadow-inner">
                     <div class="px-4 py-3 border-b border-white/5 flex items-center gap-2">
                         <i data-lucide="play-circle" class="h-4 w-4 text-blue-400"></i>
-                        <span class="text-sm font-semibold text-slate-300">Passo a passo: Como baixar o Manual</span>
+                        <span class="text-sm font-semibold text-slate-300" data-i18n-text="video-manual-titulo">Passo a passo: Como baixar o Manual</span>
                     </div>
                     <video controls class="w-full rounded-b-lg aspect-video bg-black object-cover">
                         <source src="2026-08-10 21-30-38.mp4" type="video/mp4">
@@ -151,7 +154,7 @@
                 <div class="mt-auto pt-2">
                     <a href="#" id="btn-baixar-manual" target="_blank" rel="noopener noreferrer" class="w-full bg-surface/50 border border-white/10 text-white hover:bg-white/5 font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all">
                         <i data-lucide="file-text" class="h-5 w-5 text-slate-400"></i>
-                        Acessar Manual (Google Drive)
+                        <span data-i18n-text="btn-acessar-manual">Acessar Manual (Google Drive)</span>
                     </a>
                 </div>
             </div>
@@ -165,13 +168,13 @@
             </div>
             <div class="flex-1 text-center md:text-left">
                 <div class="flex items-center justify-center md:justify-start gap-2 mb-1">
-                    <h2 class="text-xl font-bold text-white">Dashboard IA</h2>
-                    <span class="text-xs font-bold uppercase tracking-wider bg-brand-500/20 text-brand-400 px-2 py-0.5 rounded-full">Novo</span>
+                    <h2 class="text-xl font-bold text-white" data-i18n-text="dashboard-ia-titulo">Dashboard IA</h2>
+                    <span class="text-xs font-bold uppercase tracking-wider bg-brand-500/20 text-brand-400 px-2 py-0.5 rounded-full" data-i18n-text="badge-novo">Novo</span>
                 </div>
-                <p class="text-slate-400 text-sm">Suba qualquer planilha sua e receba métricas e gráficos automáticos, gerados por IA. Incluso no seu acesso.</p>
+                <p class="text-slate-400 text-sm" data-i18n-text="dashboard-ia-desc">Suba qualquer planilha sua e receba métricas e gráficos automáticos, gerados por IA. Incluso no seu acesso.</p>
             </div>
             <div class="bg-brand-500 text-surfaceLight font-bold py-3 px-6 rounded-xl flex items-center gap-2 whitespace-nowrap transition-transform group-hover:scale-[1.03]">
-                Abrir Dashboard <i data-lucide="arrow-right" class="h-4 w-4"></i>
+                <span data-i18n-text="abrir-dashboard">Abrir Dashboard</span> <i data-lucide="arrow-right" class="h-4 w-4"></i>
             </div>
         </a>
 
@@ -182,8 +185,8 @@
                     <i data-lucide="life-buoy" class="h-6 w-6"></i>
                 </div>
                 <div>
-                    <h3 class="text-lg font-bold text-white">Precisa de ajuda com o download?</h3>
-                    <p class="text-slate-400 text-sm">Nossa equipe está pronta para te auxiliar em caso de dúvidas.</p>
+                    <h3 class="text-lg font-bold text-white" data-i18n-text="suporte-titulo">Precisa de ajuda com o download?</h3>
+                    <p class="text-slate-400 text-sm" data-i18n-text="suporte-sub">Nossa equipe está pronta para te auxiliar em caso de dúvidas.</p>
                 </div>
             </div>
 
@@ -197,13 +200,78 @@
     <!-- ESTADO: PAGAMENTO PENDENTE (logado, mas ainda não pagou) -->
     <div id="pagamento-pendente-view" class="hidden flex-grow flex flex-col items-center justify-center text-center px-6 py-16">
         <i data-lucide="clock" class="h-10 w-10 text-brand-400 mb-4"></i>
-        <h2 class="text-2xl font-bold text-white mb-2">Ainda não identificamos seu pagamento</h2>
-        <p class="text-slate-400 max-w-md mb-6">Se você já pagou, aguarde alguns instantes e atualize a página. Se o problema continuar, fale com a gente.</p>
-        <a href="mailto:financehubbrasil@gmail.com" class="bg-brand-500 text-surfaceLight font-bold py-3 px-8 rounded-xl">Falar com o suporte</a>
+        <h2 class="text-2xl font-bold text-white mb-2" data-i18n-text="pendente-titulo">Ainda não identificamos seu pagamento</h2>
+        <p class="text-slate-400 max-w-md mb-6" data-i18n-text="pendente-sub">Se você já pagou, aguarde alguns instantes e atualize a página. Se o problema continuar, fale com a gente.</p>
+        <a href="mailto:financehubbrasil@gmail.com" class="bg-brand-500 text-surfaceLight font-bold py-3 px-8 rounded-xl" data-i18n-text="pendente-cta">Falar com o suporte</a>
     </div>
 
     <script>
         lucide.createIcons();
+
+        /* Tradução PT/EN — mesma detecção de país do checkout.html/index.html. */
+        const TEXTOS = {
+            'area-cliente': { pt: 'Área do Cliente', en: 'Member Area' },
+            'acesso-ativo': { pt: 'Acesso Vitalício Ativo', en: 'Lifetime Access Active' },
+            'sair': { pt: 'Sair', en: 'Log Out' },
+            'verificando': { pt: 'Verificando sua conta...', en: 'Verifying your account...' },
+            'meus-produtos-titulo': { pt: 'Meus Produtos', en: 'My Products' },
+            'meus-produtos-sub': { pt: 'Aqui estão os sistemas e atualizações disponíveis para download.', en: 'Here are the systems and updates available for download.' },
+            'aviso-download-titulo': { pt: 'Aviso Importante sobre o Download', en: 'Important Download Notice' },
+            'sistema-oficial': { pt: 'Sistema Oficial (.xlsx)', en: 'Official System (.xlsx)' },
+            'video-planilha-titulo': { pt: 'Passo a passo: Como baixar a Planilha', en: 'Step-by-step: How to download the Spreadsheet (video in Portuguese)' },
+            'btn-baixar-planilha': { pt: 'Baixar Planilha (Google Drive)', en: 'Download Spreadsheet (Google Drive)' },
+            'manual-titulo': { pt: 'Manual de Uso', en: 'User Manual' },
+            'manual-sub': { pt: 'Guia de Implantação (PDF)', en: 'Setup Guide (PDF)' },
+            'video-manual-titulo': { pt: 'Passo a passo: Como baixar o Manual', en: 'Step-by-step: How to download the Manual (video in Portuguese)' },
+            'btn-acessar-manual': { pt: 'Acessar Manual (Google Drive)', en: 'Access Manual (Google Drive)' },
+            'badge-novo': { pt: 'Novo', en: 'New' },
+            'dashboard-ia-titulo': { pt: 'Dashboard IA', en: 'AI Dashboard' },
+            'dashboard-ia-desc': { pt: 'Suba qualquer planilha sua e receba métricas e gráficos automáticos, gerados por IA. Incluso no seu acesso.', en: 'Upload any spreadsheet and get automatic metrics and charts, generated by AI. Included in your access.' },
+            'abrir-dashboard': { pt: 'Abrir Dashboard', en: 'Open Dashboard' },
+            'suporte-titulo': { pt: 'Precisa de ajuda com o download?', en: 'Need help with your download?' },
+            'suporte-sub': { pt: 'Nossa equipe está pronta para te auxiliar em caso de dúvidas.', en: 'Our team is ready to help if you have any questions.' },
+            'pendente-titulo': { pt: 'Ainda não identificamos seu pagamento', en: "We haven't confirmed your payment yet" },
+            'pendente-sub': { pt: 'Se você já pagou, aguarde alguns instantes e atualize a página. Se o problema continuar, fale com a gente.', en: "If you've already paid, please wait a moment and refresh the page. If the issue continues, contact us." },
+            'pendente-cta': { pt: 'Falar com o suporte', en: 'Contact support' },
+        };
+        const TEXTOS_HTML = {
+            'aviso-download-texto': {
+                pt: 'Para que a planilha funcione corretamente no seu Excel, você precisa baixá-la para o seu computador. <strong class="text-brand-400">Assista aos tutoriais curtos abaixo antes de clicar nos links do Google Drive.</strong>',
+                en: 'For the spreadsheet to work correctly in Excel, you need to download it to your computer. <strong class="text-brand-400">Watch the short tutorials below before clicking the Google Drive links.</strong>',
+            },
+        };
+
+        function aplicarRegiao(regiao) {
+            const intl = regiao === 'intl';
+            const idioma = intl ? 'en' : 'pt';
+            document.getElementById('html-root').lang = intl ? 'en' : 'pt-BR';
+            document.getElementById('titulo-pagina').textContent = intl ? 'My Products | FinanceHub PRO' : 'Meus Produtos | FinanceHub PRO';
+
+            Object.entries(TEXTOS).forEach(([chave, valores]) => {
+                document.querySelectorAll(`[data-i18n-text="${chave}"]`).forEach(el => { el.textContent = valores[idioma]; });
+            });
+            Object.entries(TEXTOS_HTML).forEach(([chave, valores]) => {
+                document.querySelectorAll(`[data-i18n-html="${chave}"]`).forEach(el => { el.innerHTML = valores[idioma]; });
+            });
+
+            const linkTroca = document.getElementById('link-trocar-regiao');
+            if (linkTroca) linkTroca.textContent = intl ? '🇧🇷 Ver em R$' : '🇺🇸 View in USD';
+            lucide.createIcons();
+        }
+
+        document.getElementById('link-trocar-regiao')?.addEventListener('click', () => {
+            aplicarRegiao(document.getElementById('html-root').lang === 'en' ? 'br' : 'intl');
+        });
+
+        (async function detectarRegiaoInicial() {
+            try {
+                const resp = await fetch('/api/detectar-pais');
+                const { pais } = await resp.json();
+                aplicarRegiao(pais && pais !== 'BR' ? 'intl' : 'br');
+            } catch (err) {
+                aplicarRegiao('br');
+            }
+        })();
     </script>
 
     <!-- ================= SCRIPT DE PROTEÇÃO (GUARDIÃO SUPABASE) ================= -->
