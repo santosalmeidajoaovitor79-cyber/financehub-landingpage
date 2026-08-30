@@ -110,6 +110,7 @@
                         <div class="md:col-span-2">
                             <label for="email" class="block text-sm text-slate-400 mb-1" data-i18n-text="label-email">E-mail (Seu futuro login)</label>
                             <input type="email" id="email" name="email" autocomplete="email" required class="input-field w-full px-4 py-3 rounded-xl">
+                            <p id="email-status" class="text-xs mt-1 hidden"></p>
                         </div>
                         <div class="md:col-span-2">
                             <label for="password" class="block text-sm text-slate-400 mb-1" data-i18n-text="label-senha">Crie uma Senha Segura</label>
@@ -456,6 +457,40 @@
                      .replace(/(\d{4})(\d{1,2})$/, '$1-$2');
             }
             cpfInput.value = v;
+        });
+
+        // Checagem leve de e-mail: dispara quando o cliente sai do campo (ex: indo
+        // pra senha), confere se o domínio existe de verdade (MX record). Não
+        // bloqueia o envio do formulário — é só um aviso pra pegar erro de digitação.
+        const emailInput = document.getElementById('email');
+        const emailStatus = document.getElementById('email-status');
+        let emailCheckTimeout;
+        emailInput?.addEventListener('blur', () => {
+            clearTimeout(emailCheckTimeout);
+            const valor = emailInput.value.trim();
+            if (!valor || !valor.includes('@')) {
+                emailStatus.classList.add('hidden');
+                return;
+            }
+            emailCheckTimeout = setTimeout(async () => {
+                try {
+                    const resp = await fetch(`/api/checar-email?email=${encodeURIComponent(valor)}`);
+                    const result = await resp.json();
+                    const intl = regiaoAtual === 'intl';
+                    if (result.valido) {
+                        emailStatus.textContent = intl ? '✓ Looks valid' : '✓ E-mail parece válido';
+                        emailStatus.className = 'text-xs mt-1 text-brand-400';
+                    } else {
+                        emailStatus.textContent = intl
+                            ? "This email domain doesn't seem to exist — double-check for typos."
+                            : 'Esse domínio de e-mail não parece existir — confira se digitou certo.';
+                        emailStatus.className = 'text-xs mt-1 text-amber-400';
+                    }
+                    emailStatus.classList.remove('hidden');
+                } catch (err) {
+                    emailStatus.classList.add('hidden'); // falha na checagem não deve travar o cliente
+                }
+            }, 250);
         });
 
         let metodoPagamento = 'pix';

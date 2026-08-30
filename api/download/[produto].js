@@ -18,6 +18,21 @@ const ARQUIVOS = {
         pt: 'ebook-fluxo-de-caixa-na-pratica-pt.pdf',
         en: 'ebook-the-cash-flow-playbook-en.pdf',
     },
+    // Bônus da compra do FinanceHub, não um produto vendido à parte — por isso
+    // usa o mesmo controle de acesso (campoPago) do financehub, ver PRODUTO_ACESSO
+    // abaixo. Só existe em PT por enquanto (mesmo caso dos vídeos-tutoriais).
+    'manual-financehub': {
+        pt: 'manual-de-uso-financehub-pt.pdf',
+        en: 'manual-de-uso-financehub-pt.pdf',
+    },
+};
+
+// Qual produto do catálogo (lib/produtos.js) manda no controle de acesso de
+// cada arquivo. Normalmente é o próprio produto; o manual é bônus do financehub.
+const PRODUTO_ACESSO = {
+    financehub: 'financehub',
+    'ebook-fluxo-caixa': 'ebook-fluxo-caixa',
+    'manual-financehub': 'financehub',
 };
 
 export default async function handler(req, res) {
@@ -33,8 +48,8 @@ export default async function handler(req, res) {
     }
 
     const { produto } = req.query;
-    const config = obterProduto(produto);
     const arquivos = ARQUIVOS[produto];
+    const config = arquivos ? obterProduto(PRODUTO_ACESSO[produto]) : null;
     if (!config || !arquivos) {
         return res.status(404).json({ erro: 'Produto desconhecido.' });
     }

@@ -19,6 +19,7 @@ const ARQUIVOS = [
     { local: 'FinanceHub_PRO_ERP_EN.xlsx', remoto: 'financehub-pro-essential-en.xlsx' },
     { local: 'Fluxo-de-Caixa-na-Pratica.pdf', remoto: 'ebook-fluxo-de-caixa-na-pratica-pt.pdf' },
     { local: 'The-Cash-Flow-Playbook.pdf', remoto: 'ebook-the-cash-flow-playbook-en.pdf' },
+    { local: 'Manual_de_Uso_FinanceHub_PRO.pdf', remoto: 'manual-de-uso-financehub-pt.pdf' },
 ];
 
 async function main() {
