@@ -1,8 +1,7 @@
 import Stripe from 'stripe';
+import { obterProduto } from '../lib/produtos.js';
 
 const ALLOWED_ORIGIN = process.env.SITE_URL || '*';
-// Produto "FinanceHub PRO Essential", USD $14.99, pagamento único (já criado no Stripe).
-const STRIPE_PRICE_ID = 'price_1U9poHBBsAS1lAp1tE7oCQFN';
 
 export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', ALLOWED_ORIGIN);
@@ -16,7 +15,10 @@ export default async function handler(req, res) {
         return res.status(500).json({ erro: 'Erro de configuração do servidor.' });
     }
 
-    const { userId, email } = req.body || {};
+    const { userId, email, produto } = req.body || {};
+    const produtoId = produto || 'financehub';
+    const config = obterProduto(produtoId);
+    if (!config) return res.status(400).json({ erro: 'Produto inválido.' });
     if (!userId || !email) {
         return res.status(400).json({ erro: 'Dados incompletos para iniciar o pagamento.' });
     }
@@ -28,13 +30,13 @@ export default async function handler(req, res) {
         const session = await stripe.checkout.sessions.create({
             mode: 'payment',
             payment_method_types: ['card'],
-            line_items: [{ price: STRIPE_PRICE_ID, quantity: 1 }],
+            line_items: [{ price: config.stripePriceId, quantity: 1 }],
             customer_email: email,
-            // client_reference_id é o que o webhook usa pra saber qual conta do
-            // Supabase liberar quando o pagamento for confirmado.
-            client_reference_id: userId,
-            success_url: `${origem}/checkout.html?stripe_retorno=sucesso`,
-            cancel_url: `${origem}/checkout.html?stripe_retorno=cancelado`,
+            // client_reference_id é o que o webhook usa pra saber qual conta E qual
+            // produto liberar no Supabase quando o pagamento for confirmado.
+            client_reference_id: `${userId}:${produtoId}`,
+            success_url: `${origem}/checkout.html?produto=${produtoId}&stripe_retorno=sucesso`,
+            cancel_url: `${origem}/checkout.html?produto=${produtoId}&stripe_retorno=cancelado`,
         });
 
         return res.status(200).json({ url: session.url });

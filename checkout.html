@@ -68,10 +68,10 @@
                 </div>
                 <div class="glass-card p-6 rounded-3xl">
                     <div class="flex items-center gap-4 mb-6 pb-6 border-b border-white/10">
-                        <img src="print-dashboard.png" alt="Produto" class="w-24 h-16 object-cover rounded-lg border border-white/10">
+                        <img id="produto-imagem" src="print-dashboard.png" alt="Produto" class="w-24 h-16 object-cover rounded-lg border border-white/10">
                         <div>
-                            <h2 class="text-lg font-bold">FinanceHub PRO Essential</h2>
-                            <p class="text-sm text-brand-400 font-medium" data-i18n-text="acesso-vitalicio">Acesso Vitalício</p>
+                            <h2 class="text-lg font-bold" id="produto-nome">FinanceHub PRO Essential</h2>
+                            <p class="text-sm text-brand-400 font-medium" id="produto-subtitulo">Acesso Vitalício</p>
                         </div>
                     </div>
                     <div class="flex justify-between items-center font-bold text-xl pt-4">
@@ -89,9 +89,16 @@
                     <span data-i18n-text="finalizar-compra-sub">Estas informações criarão a sua conta automaticamente para acessar o sistema.</span>
                 </p>
 
+                <!-- Some quando o visitante já tem sessão ativa (ex: já comprou o FinanceHub
+                     e agora está levando o e-book) — não faz sentido pedir conta de novo. -->
+                <div id="ja-logado-aviso" class="hidden bg-brand-500/10 border border-brand-500/30 rounded-xl p-4 mb-6 text-sm text-slate-300 flex items-center gap-3">
+                    <i data-lucide="user-check" class="h-5 w-5 text-brand-400 flex-shrink-0"></i>
+                    <span data-i18n-text="comprando-como">Comprando como</span>&nbsp;<strong id="email-logado" class="text-white"></strong>
+                </div>
+
                 <form id="checkout-form" class="space-y-6">
                     <!-- 1. DADOS PESSOAIS -->
-                    <div class="grid md:grid-cols-2 gap-4">
+                    <div class="grid md:grid-cols-2 gap-4" id="dados-pessoais">
                         <div>
                             <label for="nome" class="block text-sm text-slate-400 mb-1" data-i18n-text="label-nome">Nome Completo</label>
                             <input type="text" id="nome" name="nome" autocomplete="name" required class="input-field w-full px-4 py-3 rounded-xl">
@@ -222,7 +229,7 @@
                 <i data-lucide="check" class="h-12 w-12 stroke-[3]"></i>
             </div>
             <h2 class="text-4xl font-extrabold text-white mb-4">Payment Approved!</h2>
-            <p class="text-slate-400 text-lg mb-8">Your account is being activated. Please log in to access FinanceHub PRO — it may take a few seconds to reflect.</p>
+            <p class="text-slate-400 text-lg mb-8">Your account is being activated. Please log in to access your purchase — it may take a few seconds to reflect.</p>
 
             <a href="login.html" class="w-full bg-brand-500 text-black font-extrabold text-xl py-4 rounded-xl flex items-center justify-center gap-2 hover:scale-[1.02] transition-transform shadow-xl">
                 LOG IN NOW <i data-lucide="arrow-right" class="h-6 w-6"></i>
@@ -244,12 +251,46 @@
         lucide.createIcons();
 
         /* ==========================================
-           TRADUÇÃO PT/EN + REGIÃO (BR usa Mercado Pago em BRL, resto do mundo usa Stripe em USD)
+           PRODUTO (via ?produto= na URL) + TRADUÇÃO PT/EN + REGIÃO
+           (BR usa Mercado Pago em BRL, resto do mundo usa Stripe em USD).
            Reaproveita a mesma detecção de país pra decidir idioma e forma de pagamento juntos.
         ========================================== */
+        const PRODUTOS = {
+            financehub: {
+                nome: { pt: 'FinanceHub PRO Essential', en: 'FinanceHub PRO Essential' },
+                subtitulo: { pt: 'Acesso Vitalício', en: 'Lifetime Access' },
+                imagem: 'print-dashboard.png',
+                precoBRL: 42.35,
+                precoUSD: 14.99,
+            },
+            'ebook-fluxo-caixa': {
+                nome: { pt: 'Fluxo de Caixa na Prática', en: 'The Cash Flow Playbook' },
+                subtitulo: { pt: 'E-book Digital', en: 'Digital E-book' },
+                imagem: 'print-dre.png',
+                precoBRL: 27.90,
+                precoUSD: 9.99,
+            },
+        };
+
+        const params = new URLSearchParams(window.location.search);
+        const produtoId = PRODUTOS[params.get('produto')] ? params.get('produto') : 'financehub';
+        const produtoInfo = PRODUTOS[produtoId];
+
+        function formatarPrecoBRL(valor) {
+            return `R$ ${valor.toFixed(2).replace('.', ',')}`;
+        }
+        function formatarPrecoUSD(valor) {
+            return `$${valor.toFixed(2)}`;
+        }
+        function textoBotaoPix() {
+            return `GERAR PIX DE ${formatarPrecoBRL(produtoInfo.precoBRL)}`;
+        }
+        function textoBotaoStripe() {
+            return `Pay ${formatarPrecoUSD(produtoInfo.precoUSD)} — Instant Access`;
+        }
+
         const TEXTOS = {
             voltar: { pt: 'Voltar', en: 'Back' },
-            'acesso-vitalicio': { pt: 'Acesso Vitalício', en: 'Lifetime Access' },
             'total-pagar': { pt: 'Total a pagar', en: 'Total due' },
             'finalizar-compra': { pt: 'Finalizar Compra', en: 'Complete Purchase' },
             'finalizar-compra-sub': { pt: 'Estas informações criarão a sua conta automaticamente para acessar o sistema.', en: 'This information will automatically create your account to access the system.' },
@@ -258,6 +299,7 @@
             'label-senha': { pt: 'Crie uma Senha Segura', en: 'Create a Secure Password' },
             'senha-min': { pt: 'Mínimo de 8 caracteres.', en: 'Minimum 8 characters.' },
             'forma-pagamento': { pt: 'Forma de Pagamento', en: 'Payment Method' },
+            'comprando-como': { pt: 'Comprando como', en: 'Buying as' },
         };
 
         let regiaoAtual = 'br';
@@ -273,16 +315,21 @@
         function aplicarRegiao(regiao) {
             regiaoAtual = regiao;
             const intl = regiao === 'intl';
+            const idioma = intl ? 'en' : 'pt';
 
             document.getElementById('html-root').lang = intl ? 'en' : 'pt-BR';
             document.getElementById('titulo-pagina').textContent = intl
-                ? 'Secure Checkout | FinanceHub PRO'
-                : 'Checkout Seguro | FinanceHub PRO';
+                ? `Secure Checkout | ${produtoInfo.nome.en}`
+                : `Checkout Seguro | ${produtoInfo.nome.pt}`;
             document.getElementById('meta-descricao').setAttribute('content', intl
-                ? 'Complete your FinanceHub PRO Essential purchase securely via Stripe.'
-                : 'Finalize sua compra do FinanceHub PRO Essential com segurança.');
+                ? `Complete your ${produtoInfo.nome.en} purchase securely via Stripe.`
+                : `Finalize sua compra de ${produtoInfo.nome.pt} com segurança.`);
 
             aplicarTraducoes(regiao);
+
+            document.getElementById('produto-imagem').src = produtoInfo.imagem;
+            document.getElementById('produto-nome').textContent = produtoInfo.nome[idioma];
+            document.getElementById('produto-subtitulo').textContent = produtoInfo.subtitulo[idioma];
 
             document.getElementById('campo-cpf').classList.toggle('hidden', intl);
             document.getElementById('cpf').required = !intl;
@@ -290,8 +337,13 @@
             document.getElementById('pagamento-brasil').classList.toggle('hidden', intl);
             document.getElementById('pagamento-internacional').classList.toggle('hidden', !intl);
 
-            document.getElementById('preco-exibido').textContent = intl ? '$14.99' : 'R$ 42,35';
+            document.getElementById('preco-exibido').textContent = intl
+                ? formatarPrecoUSD(produtoInfo.precoUSD)
+                : formatarPrecoBRL(produtoInfo.precoBRL);
             document.getElementById('preco-nota').textContent = intl ? 'One-time payment, lifetime access.' : '';
+
+            if (!btnSubmit.disabled) btnSubmit.textContent = textoBotaoPix();
+            if (!btnStripe.disabled) btnStripe.textContent = textoBotaoStripe();
 
             const linkTroca = document.getElementById('link-trocar-regiao');
             linkTroca.textContent = intl ? '🇧🇷 Pagar em R$' : '🌍 Pay in USD instead';
@@ -311,6 +363,50 @@
             }
         }
         detectarRegiaoInicial();
+
+        // Se o visitante já tem sessão ativa (ex: já comprou o FinanceHub e agora
+        // está levando o e-book), pula a criação de conta e usa o id/e-mail já logados.
+        let usuarioLogadoId = null;
+        let usuarioLogadoEmail = null;
+        let usuarioLogadoNome = '';
+        let usuarioLogadoCpf = '';
+
+        // window.supabaseClient é criado num <script type="module"> (deferred por padrão),
+        // que só roda DEPOIS deste script clássico. Espera ele existir antes de usar.
+        function aguardarSupabaseClient() {
+            return new Promise((resolve) => {
+                if (window.supabaseClient) return resolve();
+                const intervalo = setInterval(() => {
+                    if (window.supabaseClient) {
+                        clearInterval(intervalo);
+                        resolve();
+                    }
+                }, 20);
+            });
+        }
+
+        async function checarSessaoExistente() {
+            await aguardarSupabaseClient();
+            const { data: { session } } = await window.supabaseClient.auth.getSession();
+            if (session) {
+                usuarioLogadoId = session.user.id;
+                usuarioLogadoEmail = session.user.email;
+                document.getElementById('dados-pessoais').classList.add('hidden');
+                document.getElementById('ja-logado-aviso').classList.remove('hidden');
+                document.getElementById('email-logado').textContent = usuarioLogadoEmail;
+
+                // Reaproveita nome/CPF já cadastrados na primeira compra (a rota /api/gerar-pix
+                // exige os dois pra emitir o PIX, mesmo pra um segundo produto).
+                const { data: perfil } = await window.supabaseClient
+                    .from('profiles')
+                    .select('nome, cpf')
+                    .eq('id', usuarioLogadoId)
+                    .maybeSingle();
+                usuarioLogadoNome = perfil?.nome || '';
+                usuarioLogadoCpf = perfil?.cpf || '';
+            }
+        }
+        const promessaSessaoExistente = checarSessaoExistente();
 
         const togglePassword = document.getElementById('toggle-password');
         const passwordInput = document.getElementById('password');
@@ -372,6 +468,9 @@
         const btnStripe = document.getElementById('btn-stripe');
 
         function getDadosComprador() {
+            if (usuarioLogadoId) {
+                return { nome: usuarioLogadoNome, cpf: usuarioLogadoCpf, email: usuarioLogadoEmail, password: '' };
+            }
             return {
                 nome: document.getElementById('nome').value.trim(),
                 cpf: document.getElementById('cpf').value.trim(),
@@ -381,6 +480,8 @@
         }
 
         function validarDadosComprador(dados) {
+            if (usuarioLogadoId) return true; // já autenticado, nada a criar/validar
+
             const precisaCpf = regiaoAtual !== 'intl';
             if (!dados.nome || (precisaCpf && !dados.cpf) || !dados.email || !dados.password) {
                 alert(precisaCpf
@@ -396,10 +497,12 @@
         }
 
         async function criarConta(dados, metodo) {
+            if (usuarioLogadoId) return usuarioLogadoId;
+
             const resp = await fetch('/api/criar-conta', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ...dados, metodo })
+                body: JSON.stringify({ ...dados, metodo, produto: produtoId })
             });
             const result = await resp.json();
             if (!resp.ok || !result.success) {
@@ -429,7 +532,7 @@
             if (!cardBrickCarregado) {
                 cardBrickCarregado = true;
                 cardBrickController = await mp.bricks().create('cardPayment', 'cardPaymentBrick_container', {
-                    initialization: { amount: 42.35 },
+                    initialization: { amount: produtoInfo.precoBRL },
                     callbacks: {
                         onReady: () => {},
                         onError: (error) => console.error('Erro no Card Brick:', error),
@@ -464,7 +567,8 @@
                     installments: cardFormData.installments,
                     email: dados.email,
                     cpf: dados.cpf,
-                    userId
+                    userId,
+                    produto: produtoId
                 })
             });
             const result = await resp.json();
@@ -473,10 +577,12 @@
             }
 
             // Loga o cliente no navegador — sem isso, a meus-produtos.html não encontra sessão
-            // e manda o cliente de volta pro início mesmo já tendo pago.
-            await window.supabaseClient.auth.signInWithPassword({ email: dados.email, password: dados.password });
+            // e manda o cliente de volta pro início mesmo já tendo pago. Pula se já estava logado.
+            if (!usuarioLogadoId) {
+                await window.supabaseClient.auth.signInWithPassword({ email: dados.email, password: dados.password });
+            }
 
-            fbq('track', 'Purchase', { value: 42.35, currency: 'BRL' });
+            fbq('track', 'Purchase', { value: produtoInfo.precoBRL, currency: 'BRL' });
 
             document.getElementById('checkout-view').classList.add('hidden');
             document.getElementById('success-view-approved').classList.remove('hidden');
@@ -524,7 +630,7 @@
                 const pixResponse = await fetch('/api/gerar-pix', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ nome: dados.nome, email: dados.email, cpf: dados.cpf, userId })
+                    body: JSON.stringify({ nome: dados.nome, email: dados.email, cpf: dados.cpf, userId, produto: produtoId })
                 });
                 const pixResult = await pixResponse.json();
                 if (!pixResponse.ok) throw new Error(pixResult.erro || 'Erro ao conectar com Mercado Pago.');
@@ -549,8 +655,11 @@
                             clearInterval(pixTimeoutID);
                             // Mesma lógica do cartão: loga o cliente no navegador antes de mandar
                             // ele pra área de membros, senão o Guardião não acha sessão nenhuma.
-                            await window.supabaseClient.auth.signInWithPassword({ email: dados.email, password: dados.password });
-                            fbq('track', 'Purchase', { value: 42.35, currency: 'BRL' });
+                            // Pula se já estava logado (comprando um segundo produto).
+                            if (!usuarioLogadoId) {
+                                await window.supabaseClient.auth.signInWithPassword({ email: dados.email, password: dados.password });
+                            }
+                            fbq('track', 'Purchase', { value: produtoInfo.precoBRL, currency: 'BRL' });
                             document.getElementById('success-view-pix').classList.remove('flex');
                             document.getElementById('success-view-pix').classList.add('hidden');
                             document.getElementById('success-view-approved').classList.remove('hidden');
@@ -564,7 +673,7 @@
 
             } catch (err) {
                 alert('Erro: ' + err.message);
-                btnSubmit.innerHTML = 'GERAR PIX DE R$ 42,35';
+                btnSubmit.innerHTML = textoBotaoPix();
                 btnSubmit.disabled = false;
             }
         });
@@ -584,7 +693,7 @@
                 const resp = await fetch('/api/criar-checkout-stripe', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ userId, email: dados.email })
+                    body: JSON.stringify({ userId, email: dados.email, produto: produtoId })
                 });
                 const result = await resp.json();
                 if (!resp.ok || !result.url) {
@@ -596,21 +705,30 @@
             } catch (err) {
                 alert('Error: ' + err.message);
                 btnStripe.disabled = false;
-                btnStripe.innerHTML = 'Pay $14.99 — Instant Access';
+                btnStripe.innerHTML = textoBotaoStripe();
             }
         });
 
         // Retorno do Stripe (sucesso ou cancelamento) — chega aqui via success_url/cancel_url.
-        (function tratarRetornoStripe() {
+        // Espera checarSessaoExistente() terminar antes de decidir o que mostrar, senão
+        // usuarioLogadoId ainda estaria null mesmo quando a sessão existe (corrida assíncrona).
+        (async function tratarRetornoStripe() {
             const params = new URLSearchParams(window.location.search);
             const retorno = params.get('stripe_retorno');
             if (!retorno) return;
+
+            await promessaSessaoExistente;
 
             aplicarRegiao('intl');
             document.getElementById('checkout-view').classList.add('hidden');
 
             if (retorno === 'sucesso') {
-                fbq('track', 'Purchase', { value: 14.99, currency: 'USD' });
+                fbq('track', 'Purchase', { value: produtoInfo.precoUSD, currency: 'USD' });
+                if (usuarioLogadoId) {
+                    // Já estava logado (segundo produto) — não faz sentido pedir login de novo.
+                    window.location.href = 'meus-produtos.html';
+                    return;
+                }
                 document.getElementById('success-view-stripe').classList.remove('hidden');
                 document.getElementById('success-view-stripe').classList.add('flex');
             } else if (retorno === 'cancelado') {

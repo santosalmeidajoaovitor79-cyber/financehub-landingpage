@@ -1,16 +1,22 @@
 import { createClient } from '@supabase/supabase-js';
+import { obterProduto } from '../../lib/produtos.js';
 
 const ALLOWED_ORIGIN = process.env.SITE_URL || '*';
 const BUCKET = 'produtos-pagos';
 const EXPIRA_EM_SEGUNDOS = 300; // 5 minutos
 
-// Cada produto mapeia pro caminho PT/EN dentro do bucket privado. A versão
-// servida depende de como o cliente pagou: Mercado Pago (pix/card) -> PT,
-// Stripe -> EN — é o mesmo sinal que já usamos pra decidir idioma no site.
-const CATALOGO = {
+// Caminho PT/EN de cada produto dentro do bucket privado. A versão servida
+// depende de como o cliente pagou aquele produto especificamente
+// (forma_pagamento/ebook_forma_pagamento): Mercado Pago (pix/card) -> PT,
+// Stripe -> EN — mesmo sinal já usado pra decidir idioma no site.
+const ARQUIVOS = {
     financehub: {
         pt: 'financehub-pro-essential-pt.xlsx',
         en: 'financehub-pro-essential-en.xlsx',
+    },
+    'ebook-fluxo-caixa': {
+        pt: 'ebook-fluxo-de-caixa-na-pratica-pt.pdf',
+        en: 'ebook-the-cash-flow-playbook-en.pdf',
     },
 };
 
@@ -27,8 +33,9 @@ export default async function handler(req, res) {
     }
 
     const { produto } = req.query;
-    const arquivos = CATALOGO[produto];
-    if (!arquivos) {
+    const config = obterProduto(produto);
+    const arquivos = ARQUIVOS[produto];
+    if (!config || !arquivos) {
         return res.status(404).json({ erro: 'Produto desconhecido.' });
     }
 
@@ -47,15 +54,15 @@ export default async function handler(req, res) {
 
     const { data: perfil, error: perfilError } = await supabase
         .from('profiles')
-        .select('pago, forma_pagamento')
+        .select(`${config.campoPago}, ${config.campoFormaPagamento}`)
         .eq('id', userData.user.id)
         .maybeSingle();
 
-    if (perfilError || !perfil?.pago) {
+    if (perfilError || !perfil?.[config.campoPago]) {
         return res.status(403).json({ erro: 'Você ainda não tem acesso a esse produto.' });
     }
 
-    const idioma = perfil.forma_pagamento === 'stripe' ? 'en' : 'pt';
+    const idioma = perfil[config.campoFormaPagamento] === 'stripe' ? 'en' : 'pt';
     const caminhoArquivo = arquivos[idioma];
 
     const { data: signedData, error: signedError } = await supabase

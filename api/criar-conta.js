@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { obterProduto } from '../lib/produtos.js';
 
 // Troque '*' pelo domínio real do seu site (ex: 'https://seudominio.com')
 // ou defina a variável de ambiente SITE_URL na Vercel.
@@ -14,7 +15,12 @@ export default async function handler(req, res) {
         return res.status(405).json({ success: false, error: 'Método não permitido' });
     }
 
-    const { nome, cpf, email, password, metodo } = req.body || {};
+    const { nome, cpf, email, password, metodo, produto } = req.body || {};
+
+    const config = obterProduto(produto || 'financehub');
+    if (!config) {
+        return res.status(400).json({ success: false, error: 'Produto inválido.' });
+    }
 
     // Validação básica no servidor (o front pode ser burlado, o servidor não pode confiar nele)
     if (!nome || !email || !password) {
@@ -60,16 +66,19 @@ export default async function handler(req, res) {
             // que falhou no pagamento, deixamos ele retomar a compra pendente.
             const jaExiste = authError.status === 422 || /already been registered/i.test(authError.message || '');
             if (jaExiste) {
+                // Conta já existe (pode ter comprado o outro produto antes) — reaproveita
+                // o mesmo id em vez de bloquear, a não ser que ESTE produto específico
+                // já esteja pago.
                 const { data: existingProfile } = await supabase
                     .from('profiles')
-                    .select('id, pago')
+                    .select(`id, ${config.campoPago}`)
                     .eq('email', email)
                     .maybeSingle();
 
-                if (existingProfile?.pago) {
+                if (existingProfile?.[config.campoPago]) {
                     return res.status(409).json({
                         success: false,
-                        error: 'Este e-mail já possui uma compra aprovada. Faça login em vez de comprar de novo.'
+                        error: 'Este e-mail já possui uma compra aprovada deste produto. Faça login em vez de comprar de novo.'
                     });
                 }
                 if (existingProfile) {
@@ -85,6 +94,8 @@ export default async function handler(req, res) {
 
         const userId = authData.user.id;
 
+        // pago/ebook_pago começam false por padrão da coluna — forma_pagamento só é
+        // preenchida quando o pagamento de fato é confirmado (não aqui na criação).
         const { error: profileError } = await supabase
             .from('profiles')
             .insert([{
@@ -92,8 +103,7 @@ export default async function handler(req, res) {
                 nome,
                 cpf: cpfLimpo,
                 email,
-                pago: false,
-                forma_pagamento: metodo || 'pix'
+                pago: false
             }]);
 
         if (profileError) throw profileError;

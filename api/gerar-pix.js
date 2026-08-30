@@ -1,4 +1,5 @@
 import { MercadoPagoConfig, Payment } from 'mercadopago';
+import { obterProduto } from '../lib/produtos.js';
 
 const ALLOWED_ORIGIN = process.env.SITE_URL || '*';
 
@@ -10,7 +11,10 @@ export default async function handler(req, res) {
     if (req.method !== 'POST') return res.status(405).json({ erro: 'Método não permitido' });
 
     try {
-        const { nome, email, cpf, userId } = req.body || {};
+        const { nome, email, cpf, userId, produto } = req.body || {};
+
+        const config = obterProduto(produto || 'financehub');
+        if (!config) return res.status(400).json({ erro: 'Produto inválido.' });
 
         if (!nome || !email || !cpf || !userId) {
             return res.status(400).json({ erro: 'Dados incompletos para gerar o PIX.' });
@@ -26,12 +30,13 @@ export default async function handler(req, res) {
 
         const response = await payment.create({
             body: {
-                transaction_amount: 42.35,
-                description: 'FinanceHub PRO Essential',
+                transaction_amount: config.precoBRL,
+                description: config.descricaoMp,
                 payment_method_id: 'pix',
-                // Guarda o userId no pagamento -> é o que permite ao /api/verificar-pagamento
-                // saber qual conta do Supabase marcar como paga quando o PIX for aprovado.
-                external_reference: userId,
+                // Guarda userId+produto no pagamento -> é o que permite ao
+                // /api/verificar-pagamento saber qual conta E qual campo marcar
+                // como pago quando o PIX for aprovado.
+                external_reference: `${userId}:${produto || 'financehub'}`,
                 payer: {
                     email,
                     first_name: nome,

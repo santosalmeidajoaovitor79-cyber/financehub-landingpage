@@ -1,5 +1,6 @@
 import { MercadoPagoConfig, Payment } from 'mercadopago';
 import { createClient } from '@supabase/supabase-js';
+import { obterProduto } from '../lib/produtos.js';
 
 const ALLOWED_ORIGIN = process.env.SITE_URL || '*';
 
@@ -16,8 +17,11 @@ export default async function handler(req, res) {
     try {
         const {
             token, issuer_id, payment_method_id, installments,
-            email, cpf, userId
+            email, cpf, userId, produto
         } = req.body || {};
+
+        const config = obterProduto(produto || 'financehub');
+        if (!config) return res.status(400).json({ erro: 'Produto inválido.' });
 
         if (!token || !payment_method_id || !email || !cpf || !userId) {
             return res.status(400).json({ erro: 'Dados do pagamento incompletos.' });
@@ -30,9 +34,9 @@ export default async function handler(req, res) {
 
         const response = await payment.create({
             body: {
-                transaction_amount: 42.35,
+                transaction_amount: config.precoBRL,
                 token,
-                description: 'FinanceHub PRO Essential',
+                description: config.descricaoMp,
                 installments: Number(installments) || 1,
                 payment_method_id,
                 issuer_id,
@@ -50,7 +54,9 @@ export default async function handler(req, res) {
 
         if (aprovado) {
             const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
-            await supabase.from('profiles').update({ pago: true }).eq('id', userId);
+            await supabase.from('profiles')
+                .update({ [config.campoPago]: true, [config.campoFormaPagamento]: 'card' })
+                .eq('id', userId);
         }
 
         return res.status(200).json({

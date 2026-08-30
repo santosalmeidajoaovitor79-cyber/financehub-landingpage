@@ -178,6 +178,20 @@
             </div>
         </a>
 
+        <!-- CARD: UPSELL DO E-BOOK (só aparece pra quem ainda não comprou) -->
+        <a href="ebook.html" id="card-upsell-ebook" class="hidden btn-glow glass-card rounded-3xl p-6 md:p-8 mb-8 flex flex-col md:flex-row items-center gap-6 group">
+            <div class="w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 shrink-0">
+                <i data-lucide="book-open" class="h-7 w-7"></i>
+            </div>
+            <div class="flex-1 text-center md:text-left">
+                <h2 class="text-xl font-bold text-white mb-1">Fluxo de Caixa na Prática</h2>
+                <p class="text-slate-400 text-sm">E-book direto ao ponto sobre fluxo de caixa pra pequeno negócio. Leitura no navegador.</p>
+            </div>
+            <div class="bg-white/5 border border-white/10 group-hover:bg-white/10 text-white font-bold py-3 px-6 rounded-xl flex items-center gap-2 whitespace-nowrap transition-all">
+                Conhecer o E-book <i data-lucide="arrow-right" class="h-4 w-4"></i>
+            </div>
+        </a>
+
         <!-- CARD DE SUPORTE NO RODAPÉ DA ÁREA -->
         <div class="glass-card rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
             <div class="flex items-center gap-4 text-center md:text-left">
@@ -342,7 +356,7 @@
 
             const { data: perfil, error } = await supabase
                 .from('profiles')
-                .select('pago')
+                .select('pago, ebook_pago')
                 .eq('id', session.user.id)
                 .maybeSingle();
 
@@ -360,6 +374,12 @@
             if (btnManual) {
                 btnManual.href = "https://drive.google.com/file/d/1e0piKxzfkQ6XzkcBpzRn5wyurrAY5SqZ/view?usp=sharing";
             }
+
+            const cardUpsellEbook = document.getElementById('card-upsell-ebook');
+            if (cardUpsellEbook && !perfil.ebook_pago) {
+                cardUpsellEbook.classList.remove('hidden');
+            }
+
             mostrar(conteudoLiberado);
         }
 

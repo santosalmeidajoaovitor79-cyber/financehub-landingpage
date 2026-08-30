@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR" id="html-root">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="titulo-pagina">Fluxo de Caixa na Prática (E-book) | FinanceHub PRO</title>
+    <meta id="meta-descricao" name="description" content="E-book prático sobre fluxo de caixa para pequenos negócios. Leitura direto no navegador.">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { 400: '#34d399', 500: '#22c55e', 600: '#16a34a' }, surface: '#020617' } } } }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { background-color: #020617; color: #f8fafc; background-image: radial-gradient(circle at top center, rgba(15, 23, 42, 1) 0%, rgba(2, 6, 23, 1) 100%); min-height: 100vh; }
+        .glass-card { background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); }
+    </style>
+</head>
+<body class="antialiased">
+
+    <nav class="w-full glass-card border-b-0 border-x-0 border-t-0 border-b border-white/5 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2 text-slate-400 hover:text-white transition">
+                <i data-lucide="arrow-left" class="h-4 w-4"></i> <span data-i18n-text="voltar">Voltar</span>
+            </a>
+            <button type="button" id="link-trocar-regiao" class="text-sm font-semibold text-brand-400 hover:text-brand-300 transition underline underline-offset-2"></button>
+        </div>
+    </nav>
+
+    <main class="max-w-3xl mx-auto px-6 py-16 md:py-24 text-center">
+        <span class="inline-block bg-brand-500/20 text-brand-400 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-6" data-i18n-text="badge">E-book Digital</span>
+
+        <h1 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-6" id="produto-titulo">Fluxo de Caixa na Prática</h1>
+        <p class="text-slate-400 text-lg md:text-xl max-w-xl mx-auto mb-10" data-i18n-text="pitch">Um guia direto ao ponto pra você parar de perder dinheiro por não entender pra onde ele vai — sem economês, sem enrolação, pensado pra dono de pequeno negócio.</p>
+
+        <div class="glass-card rounded-3xl p-8 md:p-12 mb-10">
+            <div class="flex items-center justify-center gap-2 text-brand-400 mb-6">
+                <i data-lucide="book-open" class="h-6 w-6"></i>
+                <span class="font-semibold" data-i18n-text="leitura-navegador">Leitura direto no navegador — sem baixar PDF solto</span>
+            </div>
+
+            <div class="flex flex-col items-center justify-center mb-8">
+                <span class="text-4xl md:text-5xl font-extrabold text-brand-400" id="preco-exibido">R$ 27,90</span>
+                <span class="text-slate-500 text-sm mt-2" data-i18n-text="preco-condicao">Pagamento único.</span>
+            </div>
+
+            <a id="btn-comprar" href="checkout.html?produto=ebook-fluxo-caixa" class="btn-glow inline-flex items-center justify-center w-full bg-brand-500 text-surface font-extrabold text-xl py-5 rounded-2xl transition-transform transform hover:scale-[1.02] shadow-2xl">
+                <span data-i18n-text="cta">QUERO O E-BOOK AGORA</span> <i data-lucide="arrow-right" class="h-5 w-5 ml-2"></i>
+            </a>
+        </div>
+
+        <div class="grid sm:grid-cols-3 gap-4 text-sm text-slate-400">
+            <div class="flex items-center justify-center gap-2"><i data-lucide="smartphone" class="h-4 w-4 text-brand-400"></i> <span data-i18n-text="selo-1">Funciona no celular</span></div>
+            <div class="flex items-center justify-center gap-2"><i data-lucide="infinity" class="h-4 w-4 text-brand-400"></i> <span data-i18n-text="selo-2">Acesso vitalício</span></div>
+            <div class="flex items-center justify-center gap-2"><i data-lucide="shield-check" class="h-4 w-4 text-brand-400"></i> <span data-i18n-text="selo-3">Pagamento seguro</span></div>
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        const TEXTOS = {
+            voltar: { pt: 'Voltar', en: 'Back' },
+            badge: { pt: 'E-book Digital', en: 'Digital E-book' },
+            pitch: { pt: 'Um guia direto ao ponto pra você parar de perder dinheiro por não entender pra onde ele vai — sem economês, sem enrolação, pensado pra dono de pequeno negócio.', en: 'A no-nonsense guide to help you stop losing money without knowing where it went — no jargon, no fluff, built for small business owners.' },
+            'leitura-navegador': { pt: 'Leitura direto no navegador — sem baixar PDF solto', en: 'Read right in your browser — no loose PDF download' },
+            'preco-condicao': { pt: 'Pagamento único.', en: 'One-time payment.' },
+            cta: { pt: 'QUERO O E-BOOK AGORA', en: 'GET THE E-BOOK NOW' },
+            'selo-1': { pt: 'Funciona no celular', en: 'Works great on mobile' },
+            'selo-2': { pt: 'Acesso vitalício', en: 'Lifetime access' },
+            'selo-3': { pt: 'Pagamento seguro', en: 'Secure payment' },
+        };
+        const TITULOS = { pt: 'Fluxo de Caixa na Prática', en: 'The Cash Flow Playbook' };
+
+        function aplicarRegiao(regiao) {
+            const intl = regiao === 'intl';
+            const idioma = intl ? 'en' : 'pt';
+
+            document.getElementById('html-root').lang = intl ? 'en' : 'pt-BR';
+            document.getElementById('titulo-pagina').textContent = intl
+                ? 'The Cash Flow Playbook (E-book) | FinanceHub PRO'
+                : 'Fluxo de Caixa na Prática (E-book) | FinanceHub PRO';
+            document.getElementById('meta-descricao').setAttribute('content', intl
+                ? 'A practical e-book on cash flow for small businesses. Read right in your browser.'
+                : 'E-book prático sobre fluxo de caixa para pequenos negócios. Leitura direto no navegador.');
+
+            document.querySelectorAll('[data-i18n-text]').forEach(el => {
+                const chave = el.getAttribute('data-i18n-text');
+                if (TEXTOS[chave]) el.textContent = TEXTOS[chave][idioma];
+            });
+
+            document.getElementById('produto-titulo').textContent = TITULOS[idioma];
+            document.getElementById('preco-exibido').textContent = intl ? '$9.99' : 'R$ 27,90';
+
+            const linkTroca = document.getElementById('link-trocar-regiao');
+            linkTroca.textContent = intl ? '🇧🇷 Ver em R$' : '🇺🇸 View in USD';
+        }
+
+        document.getElementById('link-trocar-regiao').addEventListener('click', () => {
+            aplicarRegiao(document.getElementById('html-root').lang === 'en' ? 'br' : 'intl');
+        });
+
+        (async function detectarRegiaoInicial() {
+            try {
+                const resp = await fetch('/api/detectar-pais');
+                const { pais } = await resp.json();
+                aplicarRegiao(pais && pais !== 'BR' ? 'intl' : 'br');
+            } catch (err) {
+                aplicarRegiao('br');
+            }
+        })();
+    </script>
+</body>
+</html>
