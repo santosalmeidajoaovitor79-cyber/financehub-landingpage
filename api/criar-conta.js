@@ -88,6 +88,35 @@ export default async function handler(req, res) {
                         message: 'Retomando compra pendente.'
                     });
                 }
+
+                // Existe no Auth mas não tem linha em profiles (ex: dado apagado direto
+                // no banco sem apagar o usuário). Em vez de travar o cliente numa conta
+                // órfã, acha o usuário existente e recria a linha pra ele.
+                const { data: listaUsuarios, error: listError } = await supabase.auth.admin.listUsers({ page: 1, perPage: 1000 });
+                const usuarioExistente = !listError && listaUsuarios?.users?.find(
+                    u => u.email?.toLowerCase() === email.toLowerCase()
+                );
+
+                if (usuarioExistente) {
+                    const { error: recreateError } = await supabase
+                        .from('profiles')
+                        .insert([{
+                            id: usuarioExistente.id,
+                            nome,
+                            cpf: cpfLimpo,
+                            email,
+                            pago: false
+                        }]);
+
+                    if (!recreateError) {
+                        return res.status(200).json({
+                            success: true,
+                            userId: usuarioExistente.id,
+                            message: 'Conta recuperada.'
+                        });
+                    }
+                    console.error('Erro ao recriar profile pra usuário órfão:', recreateError.message);
+                }
             }
             throw authError;
         }
