@@ -224,28 +224,29 @@
 
     <!-- ================= NAVBAR ================= -->
     <nav class="fixed top-0 w-full z-50 glass border-b-0 transition-all duration-300" id="navbar">
-        <div class="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
-            <div class="flex items-center gap-3 cursor-pointer">
-                <i data-lucide="bar-chart-3" class="text-brand-500 h-8 w-8"></i>
-                <span class="font-bold text-2xl tracking-tight text-white">FinanceHub <span class="text-brand-500">PRO</span></span>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 sm:h-24 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2 sm:gap-3 cursor-pointer shrink-0">
+                <i data-lucide="bar-chart-3" class="text-brand-500 h-6 w-6 sm:h-8 sm:w-8"></i>
+                <span class="font-bold text-lg sm:text-2xl tracking-tight text-white whitespace-nowrap">FinanceHub <span class="text-brand-500">PRO</span></span>
             </div>
-            
+
             <div class="hidden md:flex items-center gap-10 text-sm font-medium text-slate-300">
                 <a href="#beneficios" class="hover:text-white transition-colors" data-i18n-text="nav-beneficios">Benefícios</a>
                 <a href="#plataforma" class="hover:text-white transition-colors" data-i18n-text="nav-plataforma">A Plataforma</a>
                 <a href="#comparacao" class="hover:text-white transition-colors" data-i18n-text="nav-comparacao">Comparação</a>
                 <a href="#faq" class="hover:text-white transition-colors">FAQ</a>
-                <button type="button" id="link-trocar-regiao" class="text-brand-400 hover:text-brand-300 transition-colors font-semibold"></button>
             </div>
 
-            <div class="flex items-center gap-4">
-                <!-- Botão Entrar -->
-                <a href="login.html" class="hidden sm:flex text-sm font-semibold text-slate-300 hover:text-white transition-colors items-center gap-2">
-                    <i data-lucide="user" class="h-4 w-4"></i> <span data-i18n-text="nav-entrar">Entrar</span>
+            <div class="flex items-center gap-2 sm:gap-4">
+                <!-- Troca de idioma/região: sempre visível, inclusive no mobile -->
+                <button type="button" id="link-trocar-regiao" class="text-xs sm:text-sm text-brand-400 hover:text-brand-300 transition-colors font-semibold whitespace-nowrap shrink-0"></button>
+                <!-- Botão Entrar: sempre visível (só ícone no mobile, ícone + texto a partir de sm) -->
+                <a href="login.html" class="flex text-sm font-semibold text-slate-300 hover:text-white transition-colors items-center gap-2 shrink-0" aria-label="Entrar">
+                    <i data-lucide="user" class="h-4 w-4"></i> <span class="hidden sm:inline" data-i18n-text="nav-entrar">Entrar</span>
                 </a>
                 <!-- Botão Comprar -->
-                <a href="checkout.html" class="glass px-6 py-3 rounded-full text-sm font-semibold hover:bg-white/10 transition-all border border-white/10 flex items-center gap-2">
-                    <span data-i18n-text="nav-garantir-acesso">Garantir Acesso</span> <i data-lucide="arrow-right" class="h-4 w-4"></i>
+                <a href="checkout.html" class="glass px-3 sm:px-6 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-semibold hover:bg-white/10 transition-all border border-white/10 flex items-center gap-1.5 sm:gap-2 whitespace-nowrap shrink-0">
+                    <span data-i18n-text="nav-garantir-acesso">Garantir Acesso</span> <i data-lucide="arrow-right" class="h-3.5 w-3.5 sm:h-4 sm:w-4"></i>
                 </a>
             </div>
         </div>
@@ -262,7 +263,7 @@
             <span data-i18n-text="hero-badge">Nova Versão 3.0 • Licença Vitalícia</span>
         </div>
 
-        <h1 class="reveal text-5xl md:text-[5.5rem] font-extrabold text-white tracking-tight leading-[1.05] max-w-6xl mb-8" style="transition-delay: 100ms;">
+        <h1 class="reveal text-4xl sm:text-5xl md:text-[5.5rem] font-extrabold text-white tracking-tight leading-[1.05] max-w-6xl mb-8 break-words" style="transition-delay: 100ms;">
             <span data-i18n-html="hero-titulo">Você trabalha muito, mas não vê <br class="hidden md:block"> a <span class="text-gradient-brand">cor do dinheiro?</span></span>
         </h1>
 
@@ -290,7 +291,7 @@
                 <i data-lucide="star" class="h-5 w-5 fill-current"></i>
                 <i data-lucide="star" class="h-5 w-5 fill-current"></i>
             </div>
-            <p class="text-sm md:text-base text-slate-500 font-medium">Avaliado com 5 estrelas por mais de <span class="text-slate-300">5.400 empreendedores.</span></p>
+            <p class="text-sm md:text-base text-slate-500 font-medium" data-i18n-html="trust-avaliado">Avaliado com 5 estrelas por mais de <span class="text-slate-300">5.400 empreendedores.</span></p>
         </div>
 
         <!-- UPLOADED MOCKUP (Parallax 3D Suave) -->
@@ -316,12 +317,12 @@
     <!-- ================= LOGO CLOUD ================= -->
     <section class="py-12 border-y border-white/5 bg-surfaceLight/20">
         <div class="max-w-7xl mx-auto px-6 text-center">
-            <p class="text-sm text-slate-500 uppercase tracking-widest font-semibold mb-8">Poder corporativo adaptado para a realidade de:</p>
+            <p class="text-sm text-slate-500 uppercase tracking-widest font-semibold mb-8" data-i18n-text="trust-badge">Poder corporativo adaptado para a realidade de:</p>
             <div class="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-60 grayscale hover:grayscale-0 transition-all duration-700">
-                <div class="flex items-center gap-3 font-bold text-2xl text-white"><i data-lucide="building-2" class="h-8 w-8"></i> MEIs</div>
-                <div class="flex items-center gap-3 font-bold text-2xl text-white"><i data-lucide="store" class="h-8 w-8"></i> Pequenas Empresas</div>
-                <div class="flex items-center gap-3 font-bold text-2xl text-white"><i data-lucide="briefcase" class="h-8 w-8"></i> Profissionais Autônomos</div>
-                <div class="flex items-center gap-3 font-bold text-2xl text-white"><i data-lucide="file-spreadsheet" class="h-8 w-8 text-green-500"></i> Excel Nativo</div>
+                <div class="flex items-center gap-3 font-bold text-2xl text-white"><i data-lucide="building-2" class="h-8 w-8"></i> <span data-i18n-text="trust-meis">MEIs</span></div>
+                <div class="flex items-center gap-3 font-bold text-2xl text-white"><i data-lucide="store" class="h-8 w-8"></i> <span data-i18n-text="trust-pme">Pequenas Empresas</span></div>
+                <div class="flex items-center gap-3 font-bold text-2xl text-white"><i data-lucide="briefcase" class="h-8 w-8"></i> <span data-i18n-text="trust-autonomos">Profissionais Autônomos</span></div>
+                <div class="flex items-center gap-3 font-bold text-2xl text-white"><i data-lucide="file-spreadsheet" class="h-8 w-8 text-green-500"></i> <span data-i18n-text="trust-excel">Excel Nativo</span></div>
             </div>
         </div>
     </section>
@@ -329,8 +330,8 @@
     <!-- ================= BENEFITS SECTION ================= -->
     <section id="beneficios" class="py-32 relative max-w-7xl mx-auto px-6">
         <div class="text-center mb-24 reveal">
-            <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-6 tracking-tight">Arquitetura de dados invisível. <br/>Resultados cristalinos.</h2>
-            <p class="text-slate-400 max-w-2xl mx-auto text-lg md:text-xl">O FinanceHub atua nos bastidores. Você apenas digita os dados essenciais e o nosso motor calcula estoques, margens e relatórios instantaneamente.</p>
+            <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-6 tracking-tight" data-i18n-html="beneficios-titulo">Arquitetura de dados invisível. <br/>Resultados cristalinos.</h2>
+            <p class="text-slate-400 max-w-2xl mx-auto text-lg md:text-xl" data-i18n-text="beneficios-sub">O FinanceHub atua nos bastidores. Você apenas digita os dados essenciais e o nosso motor calcula estoques, margens e relatórios instantaneamente.</p>
         </div>
 
         <div class="grid md:grid-cols-3 gap-8">
@@ -338,24 +339,24 @@
                 <div class="h-16 w-16 rounded-2xl bg-brand-500/10 flex items-center justify-center border border-brand-500/20 mb-8 transition-transform group-hover:scale-110 group-hover:bg-brand-500/20">
                     <i data-lucide="package" class="h-8 w-8 text-brand-400"></i>
                 </div>
-                <h3 class="text-2xl font-bold text-white mb-4">Estoque Inteligente</h3>
-                <p class="text-slate-400 text-lg leading-relaxed">Baixa automática a cada venda, cálculo contínuo de custo médio e alertas visuais assim que um produto atingir o nível mínimo crítico.</p>
+                <h3 class="text-2xl font-bold text-white mb-4" data-i18n-text="beneficio-1-titulo">Estoque Inteligente</h3>
+                <p class="text-slate-400 text-lg leading-relaxed" data-i18n-text="beneficio-1-desc">Baixa automática a cada venda, cálculo contínuo de custo médio e alertas visuais assim que um produto atingir o nível mínimo crítico.</p>
             </div>
 
             <div class="glass-card p-10 rounded-3xl reveal group" style="transition-delay: 100ms;">
                 <div class="h-16 w-16 rounded-2xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20 mb-8 transition-transform group-hover:scale-110 group-hover:bg-blue-500/20">
                     <i data-lucide="pie-chart" class="h-8 w-8 text-blue-400"></i>
                 </div>
-                <h3 class="text-2xl font-bold text-white mb-4">Fluxo de Caixa e DRE</h3>
-                <p class="text-slate-400 text-lg leading-relaxed">Demonstrativo de Resultado exato. Descubra seu Lucro Real (CMV) e saiba exatamente para onde está indo cada centavo da sua empresa mensalmente.</p>
+                <h3 class="text-2xl font-bold text-white mb-4" data-i18n-text="beneficio-2-titulo">Fluxo de Caixa e DRE</h3>
+                <p class="text-slate-400 text-lg leading-relaxed" data-i18n-text="beneficio-2-desc">Demonstrativo de Resultado exato. Descubra seu Lucro Real (CMV) e saiba exatamente para onde está indo cada centavo da sua empresa mensalmente.</p>
             </div>
 
             <div class="glass-card p-10 rounded-3xl reveal group" style="transition-delay: 200ms;">
                 <div class="h-16 w-16 rounded-2xl bg-purple-500/10 flex items-center justify-center border border-purple-500/20 mb-8 transition-transform group-hover:scale-110 group-hover:bg-purple-500/20">
                     <i data-lucide="shield-check" class="h-8 w-8 text-purple-400"></i>
                 </div>
-                <h3 class="text-2xl font-bold text-white mb-4">Estrutura 100% Protegida</h3>
-                <p class="text-slate-400 text-lg leading-relaxed">Adeus fórmulas quebradas. O sistema diferencia visualmente células de digitação livre das automáticas, impedindo edições acidentais.</p>
+                <h3 class="text-2xl font-bold text-white mb-4" data-i18n-text="beneficio-3-titulo">Estrutura 100% Protegida</h3>
+                <p class="text-slate-400 text-lg leading-relaxed" data-i18n-text="beneficio-3-desc">Adeus fórmulas quebradas. O sistema diferencia visualmente células de digitação livre das automáticas, impedindo edições acidentais.</p>
             </div>
         </div>
     </section>
@@ -366,11 +367,11 @@
         
         <div class="max-w-7xl mx-auto px-6 relative z-10">
             <div class="text-center mb-20 reveal">
-                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-brand-400 text-xs font-bold uppercase tracking-wider mb-6">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-brand-400 text-xs font-bold uppercase tracking-wider mb-6" data-i18n-text="plataforma-badge">
                     A Plataforma
                 </div>
-                <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-6 leading-tight">Visão 360° do seu negócio.</h2>
-                <p class="text-slate-400 max-w-2xl mx-auto text-lg md:text-xl">Zero curva de aprendizado. Você não precisa saber fórmulas de Excel. É só preencher os espaços em branco e o sistema faz toda a matemática pesada por você.</p>
+                <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-6 leading-tight" data-i18n-text="plataforma-titulo">Visão 360° do seu negócio.</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto text-lg md:text-xl" data-i18n-text="plataforma-sub">Zero curva de aprendizado. Você não precisa saber fórmulas de Excel. É só preencher os espaços em branco e o sistema faz toda a matemática pesada por você.</p>
             </div>
 
             <!-- Galeria de Prints Clicáveis -->
@@ -382,14 +383,14 @@
                         <img src="print-dashboard.png" alt="Dashboard Executivo FinanceHub" class="w-full h-full object-cover object-top transition-transform duration-700 group-hover/img:scale-105" />
                         <div class="absolute inset-0 bg-brand-500/20 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm z-30">
                             <div class="bg-surface text-white px-5 py-2.5 rounded-full font-semibold flex items-center gap-2 transform translate-y-4 group-hover/img:translate-y-0 transition-transform duration-300 shadow-xl">
-                                <i data-lucide="zoom-in" class="h-4 w-4"></i> Ampliar
+                                <i data-lucide="zoom-in" class="h-4 w-4"></i> <span data-i18n-text="ampliar">Ampliar</span>
                             </div>
                         </div>
                         <div class="absolute inset-0 shadow-[inset_0_0_20px_#020617] pointer-events-none z-20"></div>
                     </div>
                     <div class="px-2">
-                        <h3 class="text-2xl font-bold text-white mb-3">Dashboard Executivo</h3>
-                        <p class="text-slate-400 text-lg leading-relaxed">Indicadores em tempo real, Gráficos Premium com design Dark Mode e assistente IA que avisa sobre pendências.</p>
+                        <h3 class="text-2xl font-bold text-white mb-3" data-i18n-text="feature-1-titulo">Dashboard Executivo</h3>
+                        <p class="text-slate-400 text-lg leading-relaxed" data-i18n-text="feature-1-desc">Indicadores em tempo real, Gráficos Premium com design Dark Mode e assistente IA que avisa sobre pendências.</p>
                     </div>
                 </div>
                 
@@ -399,14 +400,14 @@
                         <img src="print-vendas.png" alt="Gestão de Vendas FinanceHub" class="w-full h-full object-cover object-top transition-transform duration-700 group-hover/img:scale-105" />
                         <div class="absolute inset-0 bg-brand-500/20 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm z-30">
                             <div class="bg-surface text-white px-5 py-2.5 rounded-full font-semibold flex items-center gap-2 transform translate-y-4 group-hover/img:translate-y-0 transition-transform duration-300 shadow-xl">
-                                <i data-lucide="zoom-in" class="h-4 w-4"></i> Ampliar
+                                <i data-lucide="zoom-in" class="h-4 w-4"></i> <span data-i18n-text="ampliar">Ampliar</span>
                             </div>
                         </div>
                         <div class="absolute inset-0 shadow-[inset_0_0_20px_#020617] pointer-events-none z-20"></div>
                     </div>
                     <div class="px-2">
-                        <h3 class="text-2xl font-bold text-white mb-3">Gestão de Vendas Inteligente</h3>
-                        <p class="text-slate-400 text-lg leading-relaxed">Registro inteligente que debita o estoque automaticamente e calcula as suas margens de lucro no ato da venda.</p>
+                        <h3 class="text-2xl font-bold text-white mb-3" data-i18n-text="feature-2-titulo">Gestão de Vendas Inteligente</h3>
+                        <p class="text-slate-400 text-lg leading-relaxed" data-i18n-text="feature-2-desc">Registro inteligente que debita o estoque automaticamente e calcula as suas margens de lucro no ato da venda.</p>
                     </div>
                 </div>
 
@@ -416,14 +417,14 @@
                         <img src="print-caixa.png" alt="Fluxo de Caixa FinanceHub" class="w-full h-full object-cover object-top transition-transform duration-700 group-hover/img:scale-105" />
                         <div class="absolute inset-0 bg-brand-500/20 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm z-30">
                             <div class="bg-surface text-white px-5 py-2.5 rounded-full font-semibold flex items-center gap-2 transform translate-y-4 group-hover/img:translate-y-0 transition-transform duration-300 shadow-xl">
-                                <i data-lucide="zoom-in" class="h-4 w-4"></i> Ampliar
+                                <i data-lucide="zoom-in" class="h-4 w-4"></i> <span data-i18n-text="ampliar">Ampliar</span>
                             </div>
                         </div>
                         <div class="absolute inset-0 shadow-[inset_0_0_20px_#020617] pointer-events-none z-20"></div>
                     </div>
                     <div class="px-2">
-                        <h3 class="text-2xl font-bold text-white mb-3">Fluxo de Caixa Colorido</h3>
-                        <p class="text-slate-400 text-lg leading-relaxed">Categorização precisa de despesas e controle de contas a pagar e receber através de status visuais codificados por cores.</p>
+                        <h3 class="text-2xl font-bold text-white mb-3" data-i18n-text="feature-3-titulo">Fluxo de Caixa Colorido</h3>
+                        <p class="text-slate-400 text-lg leading-relaxed" data-i18n-text="feature-3-desc">Categorização precisa de despesas e controle de contas a pagar e receber através de status visuais codificados por cores.</p>
                     </div>
                 </div>
 
@@ -433,14 +434,14 @@
                         <img src="print-dre.png" alt="DRE FinanceHub" class="w-full h-full object-cover object-top transition-transform duration-700 group-hover/img:scale-105" />
                         <div class="absolute inset-0 bg-brand-500/20 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm z-30">
                             <div class="bg-surface text-white px-5 py-2.5 rounded-full font-semibold flex items-center gap-2 transform translate-y-4 group-hover/img:translate-y-0 transition-transform duration-300 shadow-xl">
-                                <i data-lucide="zoom-in" class="h-4 w-4"></i> Ampliar
+                                <i data-lucide="zoom-in" class="h-4 w-4"></i> <span data-i18n-text="ampliar">Ampliar</span>
                             </div>
                         </div>
                         <div class="absolute inset-0 shadow-[inset_0_0_20px_#020617] pointer-events-none z-20"></div>
                     </div>
                     <div class="px-2">
-                        <h3 class="text-2xl font-bold text-white mb-3">DRE Profissional</h3>
-                        <p class="text-slate-400 text-lg leading-relaxed">O relatório contábil exigido por contadores já calculado. Pronto para exportar em PDF com um clique (Ctrl+P).</p>
+                        <h3 class="text-2xl font-bold text-white mb-3" data-i18n-text="feature-4-titulo">DRE Profissional</h3>
+                        <p class="text-slate-400 text-lg leading-relaxed" data-i18n-text="feature-4-desc">O relatório contábil exigido por contadores já calculado. Pronto para exportar em PDF com um clique (Ctrl+P).</p>
                     </div>
                 </div>
 
@@ -484,32 +485,32 @@
 
     <!-- ================= TESTIMONIALS ================= -->
     <section class="py-32 max-w-7xl mx-auto px-6">
-        <h2 class="text-4xl font-bold text-center text-white mb-20 reveal tracking-tight">Quem organizou a casa, recomenda.</h2>
+        <h2 class="text-4xl font-bold text-center text-white mb-20 reveal tracking-tight" data-i18n-text="testemunhos-titulo">Quem organizou a casa, recomenda.</h2>
         <div class="grid md:grid-cols-3 gap-8">
             <div class="glass-card p-8 rounded-3xl reveal group hover:-translate-y-2 transition-all">
                 <div class="flex gap-1 text-yellow-500 mb-6"><i data-lucide="star" class="h-5 w-5 fill-current"></i><i data-lucide="star" class="h-5 w-5 fill-current"></i><i data-lucide="star" class="h-5 w-5 fill-current"></i><i data-lucide="star" class="h-5 w-5 fill-current"></i><i data-lucide="star" class="h-5 w-5 fill-current"></i></div>
-                <p class="text-slate-300 mb-8 text-lg leading-relaxed italic">"Eu trabalhava o mês inteiro e não sabia se a minha loja estava a dar lucro ou prejuízo. Em 2 dias a usar o FinanceHub, descobri para onde o meu dinheiro estava a fugir. Mudou o meu negócio!"</p>
+                <p class="text-slate-300 mb-8 text-lg leading-relaxed italic" data-i18n-text="testemunho-1-texto">"Eu trabalhava o mês inteiro e não sabia se a minha loja estava a dar lucro ou prejuízo. Em 2 dias a usar o FinanceHub, descobri para onde o meu dinheiro estava a fugir. Mudou o meu negócio!"</p>
                 <div class="flex items-center gap-4">
                     <div class="h-12 w-12 rounded-full bg-brand-500/20 border border-brand-500/30 flex items-center justify-center text-brand-400 font-bold text-xl">R</div>
-                    <div><p class="text-white font-bold">Rafael S.</p><p class="text-slate-500 text-sm">Comércio Retalhista</p></div>
+                    <div><p class="text-white font-bold">Rafael S.</p><p class="text-slate-500 text-sm" data-i18n-text="testemunho-1-cargo">Comércio Retalhista</p></div>
                 </div>
             </div>
 
             <div class="glass-card p-8 rounded-3xl reveal group hover:-translate-y-2 transition-all" style="transition-delay: 100ms;">
                 <div class="flex gap-1 text-yellow-500 mb-6"><i data-lucide="star" class="h-5 w-5 fill-current"></i><i data-lucide="star" class="h-5 w-5 fill-current"></i><i data-lucide="star" class="h-5 w-5 fill-current"></i><i data-lucide="star" class="h-5 w-5 fill-current"></i><i data-lucide="star" class="h-5 w-5 fill-current"></i></div>
-                <p class="text-slate-300 mb-8 text-lg leading-relaxed italic">"Já tinha tentado assinar sistemas online caros e sempre desistia por serem muito complexos. Esta planilha é genial porque tem o visual de um sistema caro, mas a facilidade do Excel. Recomendo muito!"</p>
+                <p class="text-slate-300 mb-8 text-lg leading-relaxed italic" data-i18n-text="testemunho-2-texto">"Já tinha tentado assinar sistemas online caros e sempre desistia por serem muito complexos. Esta planilha é genial porque tem o visual de um sistema caro, mas a facilidade do Excel. Recomendo muito!"</p>
                 <div class="flex items-center gap-4">
                     <div class="h-12 w-12 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 font-bold text-xl">C</div>
-                    <div><p class="text-white font-bold">Camila T.</p><p class="text-slate-500 text-sm">Prestadora de Serviços</p></div>
+                    <div><p class="text-white font-bold">Camila T.</p><p class="text-slate-500 text-sm" data-i18n-text="testemunho-2-cargo">Prestadora de Serviços</p></div>
                 </div>
             </div>
 
             <div class="glass-card p-8 rounded-3xl reveal group hover:-translate-y-2 transition-all" style="transition-delay: 200ms;">
                 <div class="flex gap-1 text-yellow-500 mb-6"><i data-lucide="star" class="h-5 w-5 fill-current"></i><i data-lucide="star" class="h-5 w-5 fill-current"></i><i data-lucide="star" class="h-5 w-5 fill-current"></i><i data-lucide="star" class="h-5 w-5 fill-current"></i><i data-lucide="star" class="h-5 w-5 fill-current"></i></div>
-                <p class="text-slate-300 mb-8 text-lg leading-relaxed italic">"O alerta de stock baixo pagou o investimento da planilha na primeira semana. Antes eu deixava de vender porque esquecia de repor mercadoria. A DRE automática para mandar para o contabilista também é perfeita."</p>
+                <p class="text-slate-300 mb-8 text-lg leading-relaxed italic" data-i18n-text="testemunho-3-texto">"O alerta de stock baixo pagou o investimento da planilha na primeira semana. Antes eu deixava de vender porque esquecia de repor mercadoria. A DRE automática para mandar para o contabilista também é perfeita."</p>
                 <div class="flex items-center gap-4">
                     <div class="h-12 w-12 rounded-full bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400 font-bold text-xl">M</div>
-                    <div><p class="text-white font-bold">Marcos P.</p><p class="text-slate-500 text-sm">E-commerce</p></div>
+                    <div><p class="text-white font-bold">Marcos P.</p><p class="text-slate-500 text-sm" data-i18n-text="testemunho-3-cargo">E-commerce</p></div>
                 </div>
             </div>
         </div>
@@ -557,35 +558,35 @@
     <!-- ================= FAQ ================= -->
     <section id="faq" class="py-32 border-t border-white/5 bg-surfaceLight/20">
         <div class="max-w-4xl mx-auto px-6 reveal">
-            <h2 class="text-4xl font-bold text-center text-white mb-16 tracking-tight">Perguntas Frequentes</h2>
-            
+            <h2 class="text-4xl font-bold text-center text-white mb-16 tracking-tight" data-i18n-text="faq-titulo">Perguntas Frequentes</h2>
+
             <div class="space-y-6">
                 <details class="group glass-card rounded-2xl border border-white/5 overflow-hidden transition-all duration-300">
                     <summary class="flex justify-between items-center font-semibold text-lg cursor-pointer list-none p-8 text-white hover:text-brand-400 transition-colors">
-                        Preciso pagar mensalidade?
+                        <span data-i18n-text="faq-1-pergunta">Preciso pagar mensalidade?</span>
                         <span class="transition-transform duration-300 group-open:rotate-180"><i data-lucide="chevron-down" class="h-6 w-6"></i></span>
                     </summary>
-                    <div class="text-slate-400 text-base p-8 pt-0 leading-relaxed">
+                    <div class="text-slate-400 text-base p-8 pt-0 leading-relaxed" data-i18n-text="faq-1-resposta">
                         Não. O acesso ao FinanceHub PRO Essential é de pagamento único. Você compra uma vez e tem acesso vitalício ao arquivo atual sem nenhuma cobrança recorrente.
                     </div>
                 </details>
-                
+
                 <details class="group glass-card rounded-2xl border border-white/5 overflow-hidden transition-all duration-300">
                     <summary class="flex justify-between items-center font-semibold text-lg cursor-pointer list-none p-8 text-white hover:text-brand-400 transition-colors">
-                        Em quais versões do Excel o sistema funciona?
+                        <span data-i18n-text="faq-2-pergunta">Em quais versões do Excel o sistema funciona?</span>
                         <span class="transition-transform duration-300 group-open:rotate-180"><i data-lucide="chevron-down" class="h-6 w-6"></i></span>
                     </summary>
-                    <div class="text-slate-400 text-base p-8 pt-0 leading-relaxed">
+                    <div class="text-slate-400 text-base p-8 pt-0 leading-relaxed" data-i18n-html="faq-2-resposta">
                         O sistema foi arquitetado com fórmulas modernas e otimizado para o Microsoft Excel 2019, 2021, 2024 e Microsoft 365. Funciona nativamente tanto no Windows quanto no Mac OS. <em>Nota: Não é compatível com Google Sheets devido à complexidade da engenharia visual.</em>
                     </div>
                 </details>
 
                 <details class="group glass-card rounded-2xl border border-white/5 overflow-hidden transition-all duration-300">
                     <summary class="flex justify-between items-center font-semibold text-lg cursor-pointer list-none p-8 text-white hover:text-brand-400 transition-colors">
-                        Como recebo o acesso após a compra?
+                        <span data-i18n-text="faq-3-pergunta">Como recebo o acesso após a compra?</span>
                         <span class="transition-transform duration-300 group-open:rotate-180"><i data-lucide="chevron-down" class="h-6 w-6"></i></span>
                     </summary>
-                    <div class="text-slate-400 text-base p-8 pt-0 leading-relaxed">
+                    <div class="text-slate-400 text-base p-8 pt-0 leading-relaxed" data-i18n-text="faq-3-resposta">
                         A liberação é automática e instantânea pelo nosso sistema seguro. Assim que o pagamento for confirmado — seja via PIX ou Cartão de Crédito — você será redirecionado imediatamente para a sua Área de Membros para baixar o sistema e o guia de uso.
                     </div>
                 </details>
@@ -602,27 +603,27 @@
                         <i data-lucide="bar-chart-3" class="text-brand-500 h-8 w-8"></i>
                         <span class="font-bold text-2xl text-white">FinanceHub <span class="text-brand-500">PRO</span></span>
                     </div>
-                    <p class="text-base text-slate-500 leading-relaxed">
+                    <p class="text-base text-slate-500 leading-relaxed" data-i18n-text="footer-tagline">
                         A desenhar o futuro da gestão para pequenos negócios. Engenharia de ponta entregue através da ferramenta mais universal do mundo.
                     </p>
                 </div>
-                
+
                 <div class="flex flex-wrap md:flex-nowrap gap-12 md:gap-20">
                     <div>
-                        <h4 class="text-white font-semibold text-lg mb-6">Produto</h4>
+                        <h4 class="text-white font-semibold text-lg mb-6" data-i18n-text="footer-produto-titulo">Produto</h4>
                         <ul class="space-y-4 text-base text-slate-500">
-                            <li><a href="#beneficios" class="hover:text-brand-400 transition">Benefícios</a></li>
-                            <li><a href="#plataforma" class="hover:text-brand-400 transition">Plataforma</a></li>
-                            <li><a href="#comparacao" class="hover:text-brand-400 transition">Por que escolher?</a></li>
-                            <li><a href="#faq" class="hover:text-brand-400 transition">Dúvidas</a></li>
-                            <li><a href="ebook.html" class="hover:text-brand-400 transition">E-book: Fluxo de Caixa</a></li>
+                            <li><a href="#beneficios" class="hover:text-brand-400 transition" data-i18n-text="nav-beneficios">Benefícios</a></li>
+                            <li><a href="#plataforma" class="hover:text-brand-400 transition" data-i18n-text="nav-plataforma">Plataforma</a></li>
+                            <li><a href="#comparacao" class="hover:text-brand-400 transition" data-i18n-text="footer-por-que-escolher">Por que escolher?</a></li>
+                            <li><a href="#faq" class="hover:text-brand-400 transition" data-i18n-text="footer-duvidas">Dúvidas</a></li>
+                            <li><a href="ebook.html" class="hover:text-brand-400 transition" data-i18n-text="footer-ebook">E-book: Fluxo de Caixa</a></li>
                         </ul>
                     </div>
                     <div>
-                        <h4 class="text-white font-semibold text-lg mb-6">Suporte & Legal</h4>
+                        <h4 class="text-white font-semibold text-lg mb-6" data-i18n-text="footer-suporte-titulo">Suporte & Legal</h4>
                         <ul class="space-y-4 text-base text-slate-500">
-                            <li><button onclick="openModal('modal-termos')" class="hover:text-white transition text-left">Termos de Uso</button></li>
-                            <li><button onclick="openModal('modal-privacidade')" class="hover:text-white transition text-left">Política de Privacidade</button></li>
+                            <li><button onclick="openModal('modal-termos')" class="hover:text-white transition text-left" data-i18n-text="footer-termos">Termos de Uso</button></li>
+                            <li><button onclick="openModal('modal-privacidade')" class="hover:text-white transition text-left" data-i18n-text="footer-privacidade">Política de Privacidade</button></li>
                             
                             <li>
                                 <a href="mailto:financehubbrasil@gmail.com" class="hover:text-brand-400 transition flex items-center gap-2 font-medium">
@@ -643,8 +644,8 @@
             </div>
             
             <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-600">
-                <p>© 2026 FinanceHub PRO. Todos os direitos reservados.</p>
-                <p>Sistema Operacional encapsulado em .xlsx • Requer MS Excel.</p>
+                <p data-i18n-text="footer-copyright">© 2026 FinanceHub PRO. Todos os direitos reservados.</p>
+                <p data-i18n-text="footer-sistema-nota">Sistema Operacional encapsulado em .xlsx • Requer MS Excel.</p>
             </div>
         </div>
     </footer>
@@ -669,8 +670,8 @@
             <button onclick="closeModal('modal-termos')" class="absolute top-6 right-6 text-slate-400 hover:text-white transition">
                 <i data-lucide="x" class="h-6 w-6"></i>
             </button>
-            <h2 class="text-3xl font-bold text-white mb-6">Termos de Uso</h2>
-            <div class="prose prose-invert prose-slate max-w-none text-slate-400">
+            <h2 class="text-3xl font-bold text-white mb-6" data-i18n-text="termos-titulo">Termos de Uso</h2>
+            <div class="prose prose-invert prose-slate max-w-none text-slate-400" data-i18n-html="termos-corpo">
                 <p>Última atualização: Julho de 2026</p>
                 <p>Ao adquirir e utilizar o FinanceHub PRO Essential, concorda com os termos aqui descritos. Este produto é um ficheiro digital (.xlsx) formatado para uso no Microsoft Excel.</p>
                 <h3 class="text-white font-semibold mt-6 mb-2">1. Licença de Uso</h3>
@@ -690,8 +691,8 @@
             <button onclick="closeModal('modal-privacidade')" class="absolute top-6 right-6 text-slate-400 hover:text-white transition">
                 <i data-lucide="x" class="h-6 w-6"></i>
             </button>
-            <h2 class="text-3xl font-bold text-white mb-6">Política de Privacidade</h2>
-            <div class="prose prose-invert prose-slate max-w-none text-slate-400">
+            <h2 class="text-3xl font-bold text-white mb-6" data-i18n-text="privacidade-titulo">Política de Privacidade</h2>
+            <div class="prose prose-invert prose-slate max-w-none text-slate-400" data-i18n-html="privacidade-corpo">
                 <p>A sua privacidade é prioridade para o FinanceHub PRO.</p>
                 <h3 class="text-white font-semibold mt-6 mb-2">1. Dados do Sistema (Offline)</h3>
                 <p>O FinanceHub PRO é uma ferramenta offline. Nenhum dado financeiro, registo de cliente ou informação lançada na planilha é enviada para os nossos servidores. Todas as suas informações permanecem 100% locais no seu computador.</p>
@@ -794,7 +795,9 @@
             } else {
                 nav.classList.remove('border-b', 'border-white/5', 'shadow-2xl', 'bg-surface/80', 'backdrop-blur-md');
             }
-            if (window.scrollY > 700) {
+            // Some perto do rodapé pra não cobrir os links de contato lá embaixo.
+            const pertoDoRodape = window.scrollY + window.innerHeight > document.body.scrollHeight - 400;
+            if (window.scrollY > 700 && !pertoDoRodape) {
                 stickyCta.classList.remove('translate-y-32', 'opacity-0');
             } else {
                 stickyCta.classList.add('translate-y-32', 'opacity-0');
@@ -850,6 +853,62 @@
             'preco-selo-1': { pt: 'Download Imediato', en: 'Instant Download' },
             'preco-selo-2': { pt: 'Excel Nativo (Win/Mac)', en: 'Native Excel (Win/Mac)' },
             'preco-selo-3': { pt: 'Garantia de 7 dias', en: '7-Day Guarantee' },
+
+            'trust-badge': { pt: 'Poder corporativo adaptado para a realidade de:', en: 'Enterprise-grade power, built for:' },
+            'trust-meis': { pt: 'MEIs', en: 'Solopreneurs' },
+            'trust-pme': { pt: 'Pequenas Empresas', en: 'Small Businesses' },
+            'trust-autonomos': { pt: 'Profissionais Autônomos', en: 'Freelancers' },
+            'trust-excel': { pt: 'Excel Nativo', en: 'Native Excel' },
+
+            'beneficios-sub': { pt: 'O FinanceHub atua nos bastidores. Você apenas digita os dados essenciais e o nosso motor calcula estoques, margens e relatórios instantaneamente.', en: 'FinanceHub works behind the scenes. You just type in the essential data, and our engine calculates inventory, margins and reports instantly.' },
+            'beneficio-1-titulo': { pt: 'Estoque Inteligente', en: 'Smart Inventory' },
+            'beneficio-1-desc': { pt: 'Baixa automática a cada venda, cálculo contínuo de custo médio e alertas visuais assim que um produto atingir o nível mínimo crítico.', en: 'Automatic stock deduction on every sale, continuous average-cost calculation, and visual alerts the moment a product hits a critical low.' },
+            'beneficio-2-titulo': { pt: 'Fluxo de Caixa e DRE', en: 'Cash Flow & P&L' },
+            'beneficio-2-desc': { pt: 'Demonstrativo de Resultado exato. Descubra seu Lucro Real (CMV) e saiba exatamente para onde está indo cada centavo da sua empresa mensalmente.', en: 'Exact profit & loss statement. Find your Real Profit (COGS-based) and know exactly where every dollar of your business goes each month.' },
+            'beneficio-3-titulo': { pt: 'Estrutura 100% Protegida', en: '100% Protected Structure' },
+            'beneficio-3-desc': { pt: 'Adeus fórmulas quebradas. O sistema diferencia visualmente células de digitação livre das automáticas, impedindo edições acidentais.', en: 'Say goodbye to broken formulas. The system visually distinguishes free-entry cells from automatic ones, preventing accidental edits.' },
+
+            'plataforma-badge': { pt: 'A Plataforma', en: 'The Platform' },
+            'plataforma-titulo': { pt: 'Visão 360° do seu negócio.', en: 'A 360° view of your business.' },
+            'plataforma-sub': { pt: 'Zero curva de aprendizado. Você não precisa saber fórmulas de Excel. É só preencher os espaços em branco e o sistema faz toda a matemática pesada por você.', en: 'Zero learning curve. You don\'t need to know Excel formulas. Just fill in the blanks and the system does all the heavy math for you.' },
+            'ampliar': { pt: 'Ampliar', en: 'Zoom In' },
+            'feature-1-titulo': { pt: 'Dashboard Executivo', en: 'Executive Dashboard' },
+            'feature-1-desc': { pt: 'Indicadores em tempo real, Gráficos Premium com design Dark Mode e assistente IA que avisa sobre pendências.', en: 'Real-time metrics, premium charts with a dark-mode design, and an AI assistant that flags what needs your attention.' },
+            'feature-2-titulo': { pt: 'Gestão de Vendas Inteligente', en: 'Smart Sales Management' },
+            'feature-2-desc': { pt: 'Registro inteligente que debita o estoque automaticamente e calcula as suas margens de lucro no ato da venda.', en: 'Smart entry that automatically deducts inventory and calculates your profit margins the moment a sale happens.' },
+            'feature-3-titulo': { pt: 'Fluxo de Caixa Colorido', en: 'Color-Coded Cash Flow' },
+            'feature-3-desc': { pt: 'Categorização precisa de despesas e controle de contas a pagar e receber através de status visuais codificados por cores.', en: 'Precise expense categorization and accounts payable/receivable tracking through color-coded visual statuses.' },
+            'feature-4-titulo': { pt: 'DRE Profissional', en: 'Professional P&L Report' },
+            'feature-4-desc': { pt: 'O relatório contábil exigido por contadores já calculado. Pronto para exportar em PDF com um clique (Ctrl+P).', en: 'The accounting report your accountant needs, already calculated. Ready to export as PDF with one click (Ctrl+P).' },
+
+            'testemunhos-titulo': { pt: 'Quem organizou a casa, recomenda.', en: 'Business owners who got organized, recommend it.' },
+            'testemunho-1-texto': { pt: '"Eu trabalhava o mês inteiro e não sabia se a minha loja estava a dar lucro ou prejuízo. Em 2 dias a usar o FinanceHub, descobri para onde o meu dinheiro estava a fugir. Mudou o meu negócio!"', en: '"I worked all month long and had no idea if my store was making or losing money. Two days into using FinanceHub, I found out exactly where my money was leaking. It changed my business!"' },
+            'testemunho-1-cargo': { pt: 'Comércio Retalhista', en: 'Retail Business Owner' },
+            'testemunho-2-texto': { pt: '"Já tinha tentado assinar sistemas online caros e sempre desistia por serem muito complexos. Esta planilha é genial porque tem o visual de um sistema caro, mas a facilidade do Excel. Recomendo muito!"', en: '"I\'d tried expensive online systems before and always gave up because they were too complex. This spreadsheet is brilliant because it has the look of an expensive system with the ease of Excel. Highly recommend!"' },
+            'testemunho-2-cargo': { pt: 'Prestadora de Serviços', en: 'Service Provider' },
+            'testemunho-3-texto': { pt: '"O alerta de stock baixo pagou o investimento da planilha na primeira semana. Antes eu deixava de vender porque esquecia de repor mercadoria. A DRE automática para mandar para o contabilista também é perfeita."', en: '"The low-stock alert paid for the spreadsheet in the first week alone. I used to lose sales because I\'d forget to restock. The automatic P&L report to send to my accountant is perfect too."' },
+            'testemunho-3-cargo': { pt: 'E-commerce', en: 'E-commerce' },
+
+            'faq-titulo': { pt: 'Perguntas Frequentes', en: 'Frequently Asked Questions' },
+            'faq-1-pergunta': { pt: 'Preciso pagar mensalidade?', en: 'Do I have to pay a monthly fee?' },
+            'faq-1-resposta': { pt: 'Não. O acesso ao FinanceHub PRO Essential é de pagamento único. Você compra uma vez e tem acesso vitalício ao arquivo atual sem nenhuma cobrança recorrente.', en: 'No. Access to FinanceHub PRO Essential is a one-time payment. You buy once and get lifetime access to the current file with no recurring charges.' },
+            'faq-2-pergunta': { pt: 'Em quais versões do Excel o sistema funciona?', en: 'Which versions of Excel does it work with?' },
+            'faq-3-pergunta': { pt: 'Como recebo o acesso após a compra?', en: 'How do I get access after purchasing?' },
+            'faq-3-resposta': { pt: 'A liberação é automática e instantânea pelo nosso sistema seguro. Assim que o pagamento for confirmado — seja via PIX ou Cartão de Crédito — você será redirecionado imediatamente para a sua Área de Membros para baixar o sistema e o guia de uso.', en: 'Access is automatic and instant through our secure system. As soon as payment is confirmed via Stripe, you\'ll be redirected right away to your Member Area to download the system and the setup guide.' },
+
+            'footer-tagline': { pt: 'A desenhar o futuro da gestão para pequenos negócios. Engenharia de ponta entregue através da ferramenta mais universal do mundo.', en: 'Designing the future of small business management. Cutting-edge engineering delivered through the world\'s most universal tool.' },
+            'footer-produto-titulo': { pt: 'Produto', en: 'Product' },
+            'footer-por-que-escolher': { pt: 'Por que escolher?', en: 'Why Choose Us?' },
+            'footer-duvidas': { pt: 'Dúvidas', en: 'FAQ' },
+            'footer-ebook': { pt: 'E-book: Fluxo de Caixa', en: 'E-book: Cash Flow' },
+            'footer-suporte-titulo': { pt: 'Suporte & Legal', en: 'Support & Legal' },
+            'footer-termos': { pt: 'Termos de Uso', en: 'Terms of Use' },
+            'footer-privacidade': { pt: 'Política de Privacidade', en: 'Privacy Policy' },
+            'footer-copyright': { pt: '© 2026 FinanceHub PRO. Todos os direitos reservados.', en: '© 2026 FinanceHub PRO. All rights reserved.' },
+            'footer-sistema-nota': { pt: 'Sistema Operacional encapsulado em .xlsx • Requer MS Excel.', en: 'Delivered as a self-contained .xlsx file • Requires MS Excel.' },
+
+            'termos-titulo': { pt: 'Termos de Uso', en: 'Terms of Use' },
+            'privacidade-titulo': { pt: 'Política de Privacidade', en: 'Privacy Policy' },
         };
 
         const TEXTOS_HTML = {
@@ -876,6 +935,52 @@
                      <li class="flex items-start gap-4 text-slate-200 text-lg"><i data-lucide="check-circle-2" class="h-6 w-6 text-brand-400 flex-shrink-0 mt-0.5"></i> Runs locally in Excel — your data stays on your computer</li>
                      <li class="flex items-start gap-4 text-slate-200 text-lg"><i data-lucide="check-circle-2" class="h-6 w-6 text-brand-400 flex-shrink-0 mt-0.5"></i> 5-minute setup, zero onboarding calls</li>
                      <li class="flex items-start gap-4 text-slate-200 text-lg"><i data-lucide="check-circle-2" class="h-6 w-6 text-brand-400 flex-shrink-0 mt-0.5"></i> AI Assistant with visual dashboard alerts</li>`,
+            },
+            'trust-avaliado': {
+                pt: 'Avaliado com 5 estrelas por mais de <span class="text-slate-300">5.400 empreendedores.</span>',
+                en: 'Rated 5 stars by over <span class="text-slate-300">5,400 business owners.</span>',
+            },
+            'beneficios-titulo': {
+                pt: 'Arquitetura de dados invisível. <br/>Resultados cristalinos.',
+                en: 'Invisible data architecture. <br/>Crystal-clear results.',
+            },
+            'faq-2-resposta': {
+                pt: 'O sistema foi arquitetado com fórmulas modernas e otimizado para o Microsoft Excel 2019, 2021, 2024 e Microsoft 365. Funciona nativamente tanto no Windows quanto no Mac OS. <em>Nota: Não é compatível com Google Sheets devido à complexidade da engenharia visual.</em>',
+                en: 'The system was built with modern formulas and optimized for Microsoft Excel 2019, 2021, 2024 and Microsoft 365. It runs natively on both Windows and Mac OS. <em>Note: Not compatible with Google Sheets due to the complexity of the visual engineering.</em>',
+            },
+            'termos-corpo': {
+                pt: `<p>Última atualização: Julho de 2026</p>
+                     <p>Ao adquirir e utilizar o FinanceHub PRO Essential, concorda com os termos aqui descritos. Este produto é um ficheiro digital (.xlsx) formatado para uso no Microsoft Excel.</p>
+                     <h3 class="text-white font-semibold mt-6 mb-2">1. Licença de Uso</h3>
+                     <p>A compra garante uma licença de uso individual e intransferível. É expressamente proibida a revenda, distribuição, modificação para fins comerciais ou pirataria deste material.</p>
+                     <h3 class="text-white font-semibold mt-6 mb-2">2. Compatibilidade</h3>
+                     <p>O cliente tem conhecimento de que o produto requer instalação prévia do Microsoft Excel (versões 2019, 2021, 2024 ou 365) em ambiente Windows ou Mac OS. O funcionamento em softwares de terceiros (como Google Sheets ou Apple Numbers) não é suportado nem garantido.</p>
+                     <h3 class="text-white font-semibold mt-6 mb-2">3. Garantia e Reembolso</h3>
+                     <p>Oferecemos 7 dias de garantia incondicional conforme a legislação aplicável. Caso o produto não atenda às expectativas, o reembolso pode ser solicitado diretamente através do nosso suporte.</p>`,
+                en: `<p>Last updated: July 2026</p>
+                     <p>By purchasing and using FinanceHub PRO Essential, you agree to the terms described here. This product is a digital file (.xlsx) formatted for use in Microsoft Excel.</p>
+                     <h3 class="text-white font-semibold mt-6 mb-2">1. License of Use</h3>
+                     <p>Your purchase grants an individual, non-transferable license. Resale, distribution, modification for commercial purposes, or piracy of this material is expressly prohibited.</p>
+                     <h3 class="text-white font-semibold mt-6 mb-2">2. Compatibility</h3>
+                     <p>You acknowledge that the product requires Microsoft Excel (2019, 2021, 2024, or 365) already installed on Windows or Mac OS. Operation in third-party software (such as Google Sheets or Apple Numbers) is not supported or guaranteed.</p>
+                     <h3 class="text-white font-semibold mt-6 mb-2">3. Warranty and Refunds</h3>
+                     <p>We offer an unconditional 7-day guarantee as permitted by applicable law. If the product doesn't meet your expectations, a refund can be requested directly through our support.</p>`,
+            },
+            'privacidade-corpo': {
+                pt: `<p>A sua privacidade é prioridade para o FinanceHub PRO.</p>
+                     <h3 class="text-white font-semibold mt-6 mb-2">1. Dados do Sistema (Offline)</h3>
+                     <p>O FinanceHub PRO é uma ferramenta offline. Nenhum dado financeiro, registo de cliente ou informação lançada na planilha é enviada para os nossos servidores. Todas as suas informações permanecem 100% locais no seu computador.</p>
+                     <h3 class="text-white font-semibold mt-6 mb-2">2. Dados de Compra</h3>
+                     <p>Para processar a sua compra, utilizamos um gateway seguro que recolhe dados estritamente necessários para cobrança e emissão de faturas (Nome, CPF/CNPJ, E-mail). Nós temos acesso apenas aos seus dados de contacto para suporte e envio do produto.</p>
+                     <h3 class="text-white font-semibold mt-6 mb-2">3. Uso de Cookies (Site)</h3>
+                     <p>O nosso site utiliza cookies básicos (como o Google Analytics) apenas para fins estatísticos de tráfego e melhoria da experiência de navegação, sem identificar os utilizadores individualmente de forma invasiva.</p>`,
+                en: `<p>Your privacy is a priority for FinanceHub PRO.</p>
+                     <h3 class="text-white font-semibold mt-6 mb-2">1. System Data (Offline)</h3>
+                     <p>FinanceHub PRO is an offline tool. No financial data, customer records, or information entered into the spreadsheet is ever sent to our servers. All of your information stays 100% local on your computer.</p>
+                     <h3 class="text-white font-semibold mt-6 mb-2">2. Purchase Data</h3>
+                     <p>To process your purchase, we use a secure payment gateway (Stripe) that collects only the data strictly necessary for billing (name, email, and, for card payments, standard billing details). We only have access to your contact details for support and product delivery.</p>
+                     <h3 class="text-white font-semibold mt-6 mb-2">3. Cookies (Website)</h3>
+                     <p>Our website uses basic cookies (such as Google Analytics and the Meta Pixel) solely for traffic statistics and to improve the browsing experience, without invasively identifying individual users.</p>`,
             },
         };
 
@@ -906,7 +1011,9 @@
             document.getElementById('preco-final').textContent = intl ? '$14.99' : 'R$ 42,35';
 
             const linkTroca = document.getElementById('link-trocar-regiao');
-            if (linkTroca) linkTroca.textContent = intl ? '🇧🇷 Ver em R$' : '🇺🇸 View in USD';
+            if (linkTroca) linkTroca.innerHTML = intl
+                ? '<img src="https://flagcdn.com/br.svg" alt="Ver em R$" title="Ver em R$" class="inline-block h-5 w-7 rounded-[3px] align-middle shadow-sm">'
+                : '<img src="https://flagcdn.com/us.svg" alt="View in USD" title="View in USD" class="inline-block h-5 w-7 rounded-[3px] align-middle shadow-sm">';
 
             lucide.createIcons(); // reaplica os ícones trocados pelo innerHTML acima
         }

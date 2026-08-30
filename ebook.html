@@ -93,7 +93,9 @@
             document.getElementById('preco-exibido').textContent = intl ? '$9.99' : 'R$ 27,90';
 
             const linkTroca = document.getElementById('link-trocar-regiao');
-            linkTroca.textContent = intl ? '🇧🇷 Ver em R$' : '🇺🇸 View in USD';
+            linkTroca.innerHTML = intl
+                ? '<img src="https://flagcdn.com/br.svg" alt="Ver em R$" title="Ver em R$" class="inline-block h-5 w-7 rounded-[3px] align-middle shadow-sm">'
+                : '<img src="https://flagcdn.com/us.svg" alt="View in USD" title="View in USD" class="inline-block h-5 w-7 rounded-[3px] align-middle shadow-sm">';
         }
 
         document.getElementById('link-trocar-regiao').addEventListener('click', () => {

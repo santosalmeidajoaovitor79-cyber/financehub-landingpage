@@ -346,7 +346,12 @@
             if (!btnStripe.disabled) btnStripe.textContent = textoBotaoStripe();
 
             const linkTroca = document.getElementById('link-trocar-regiao');
-            linkTroca.textContent = intl ? '🇧🇷 Pagar em R$' : '🌍 Pay in USD instead';
+            // Bandeira como imagem (não emoji): o emoji de bandeira depende de fonte do
+            // sistema e em muitos dispositivos (Windows/Android mais antigos) cai pra
+            // mostrar só as letras "US"/"BR" em vez do desenho da bandeira.
+            linkTroca.innerHTML = intl
+                ? '<img src="https://flagcdn.com/br.svg" alt="Ver em R$" title="Ver em R$" class="inline-block h-5 w-7 rounded-[3px] align-middle shadow-sm">'
+                : '<img src="https://flagcdn.com/us.svg" alt="Pay in USD" title="Pay in USD" class="inline-block h-5 w-7 rounded-[3px] align-middle shadow-sm">';
         }
 
         document.getElementById('link-trocar-regiao').addEventListener('click', () => {
