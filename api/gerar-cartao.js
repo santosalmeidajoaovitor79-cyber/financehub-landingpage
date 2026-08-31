@@ -1,6 +1,6 @@
 import { MercadoPagoConfig, Payment } from 'mercadopago';
 import { createClient } from '@supabase/supabase-js';
-import { obterProduto } from '../lib/produtos.js';
+import { obterProdutos } from '../lib/produtos.js';
 
 const ALLOWED_ORIGIN = process.env.SITE_URL || '*';
 
@@ -20,7 +20,7 @@ export default async function handler(req, res) {
             email, cpf, userId, produto
         } = req.body || {};
 
-        const config = obterProduto(produto || 'financehub');
+        const config = obterProdutos(produto || 'financehub');
         if (!config) return res.status(400).json({ erro: 'Produto inválido.' });
 
         if (!token || !payment_method_id || !email || !cpf || !userId) {
@@ -54,9 +54,13 @@ export default async function handler(req, res) {
 
         if (aprovado) {
             const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
-            await supabase.from('profiles')
-                .update({ [config.campoPago]: true, [config.campoFormaPagamento]: 'card' })
-                .eq('id', userId);
+            // Um update por produto do combo (ex: venda casada financehub + ebook),
+            // cada um com seu próprio campo de acesso na tabela profiles.
+            for (const p of config.produtos) {
+                await supabase.from('profiles')
+                    .update({ [p.campoPago]: true, [p.campoFormaPagamento]: 'card' })
+                    .eq('id', userId);
+            }
         }
 
         return res.status(200).json({

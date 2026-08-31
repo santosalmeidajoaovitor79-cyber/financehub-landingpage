@@ -1,6 +1,6 @@
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
-import { obterProduto } from '../lib/produtos.js';
+import { obterProdutos } from '../lib/produtos.js';
 
 // O Stripe exige o corpo BRUTO (não parseado) da requisição pra validar a assinatura
 // do webhook — por isso desligamos o bodyParser padrão da Vercel só nessa rota.
@@ -42,19 +42,24 @@ export default async function handler(req, res) {
     if (evento.type === 'checkout.session.completed') {
         const session = evento.data.object;
         const [userId, produto] = (session.client_reference_id || '').split(':');
-        const config = obterProduto(produto || 'financehub');
+        const config = obterProdutos(produto || 'financehub');
 
         if (userId && config) {
             const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
-            const { error } = await supabase
-                .from('profiles')
-                .update({ [config.campoPago]: true, [config.campoFormaPagamento]: 'stripe' })
-                .eq('id', userId)
-                .eq(config.campoPago, false);
+            // Um update por produto do combo (venda casada) — mesmo padrão do
+            // verificar-pagamento.js (Mercado Pago), preservando a checagem de
+            // idempotência por produto.
+            for (const p of config.produtos) {
+                const { error } = await supabase
+                    .from('profiles')
+                    .update({ [p.campoPago]: true, [p.campoFormaPagamento]: 'stripe' })
+                    .eq('id', userId)
+                    .eq(p.campoPago, false);
 
-            if (error) {
-                console.error('Erro ao liberar acesso via webhook do Stripe:', error.message);
-                return res.status(500).send('Erro ao atualizar o Supabase.');
+                if (error) {
+                    console.error('Erro ao liberar acesso via webhook do Stripe:', error.message);
+                    return res.status(500).send('Erro ao atualizar o Supabase.');
+                }
             }
         } else {
             console.error('Webhook do Stripe sem client_reference_id válido — não deu pra saber qual conta liberar.');

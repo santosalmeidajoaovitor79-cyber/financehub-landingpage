@@ -1,6 +1,6 @@
 import { MercadoPagoConfig, Payment } from 'mercadopago';
 import { createClient } from '@supabase/supabase-js';
-import { obterProduto } from '../lib/produtos.js';
+import { obterProdutos } from '../lib/produtos.js';
 
 export default async function handler(req, res) {
     if (req.method !== 'GET') return res.status(405).json({ erro: 'Método não permitido' });
@@ -18,15 +18,20 @@ export default async function handler(req, res) {
         // na tela, mas o Supabase nunca sabia que o cliente pagou.
         if (response.status === 'approved' && response.external_reference) {
             const [userId, produto] = response.external_reference.split(':');
-            const config = obterProduto(produto || 'financehub');
+            const config = obterProdutos(produto || 'financehub');
 
             if (config && userId) {
                 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
-                await supabase
-                    .from('profiles')
-                    .update({ [config.campoPago]: true, [config.campoFormaPagamento]: 'pix' })
-                    .eq('id', userId)
-                    .eq(config.campoPago, false);
+                // Um update por produto do combo — o filtro .eq(campoPago, false) evita
+                // reprocessar o mesmo produto a cada nova checagem (o front consulta essa
+                // rota de 3 em 3 segundos enquanto o PIX não é confirmado).
+                for (const p of config.produtos) {
+                    await supabase
+                        .from('profiles')
+                        .update({ [p.campoPago]: true, [p.campoFormaPagamento]: 'pix' })
+                        .eq('id', userId)
+                        .eq(p.campoPago, false);
+                }
             }
         }
 

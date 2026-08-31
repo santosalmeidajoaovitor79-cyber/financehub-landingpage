@@ -1,5 +1,5 @@
 import { MercadoPagoConfig, Payment } from 'mercadopago';
-import { obterProduto } from '../lib/produtos.js';
+import { obterProdutos } from '../lib/produtos.js';
 
 const ALLOWED_ORIGIN = process.env.SITE_URL || '*';
 
@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     try {
         const { nome, email, cpf, userId, produto } = req.body || {};
 
-        const config = obterProduto(produto || 'financehub');
+        const config = obterProdutos(produto || 'financehub');
         if (!config) return res.status(400).json({ erro: 'Produto inválido.' });
 
         if (!nome || !email || !cpf || !userId) {

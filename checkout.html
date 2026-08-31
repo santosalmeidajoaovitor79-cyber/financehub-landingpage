@@ -63,6 +63,9 @@
         .check-pop { animation: check-pop-in .5s cubic-bezier(.34,1.56,.64,1) both; }
         @keyframes check-pop-in { from { opacity: 0; transform: scale(0.4); } to { opacity: 1; transform: scale(1); } }
 
+        .bump-box { background: linear-gradient(135deg, rgba(34,197,94,0.08) 0%, rgba(34,197,94,0.02) 100%); transition: border-color .3s, background .3s, transform .2s; }
+        .bump-box:has(#bump-ebook:checked) { background: linear-gradient(135deg, rgba(34,197,94,0.14) 0%, rgba(34,197,94,0.04) 100%); border-style: solid; border-color: rgba(34,197,94,0.5); }
+
         .cta-glow { position: relative; overflow: hidden; animation: glow-pulse 2.6s ease-in-out infinite; }
         @keyframes glow-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.4), 0 0 20px rgba(34,197,94,0.3); } 50% { box-shadow: 0 0 0 10px rgba(34,197,94,0), 0 0 20px rgba(34,197,94,0.3); } }
         .cta-glow::after { content: ''; position: absolute; top: 0; left: -75%; width: 50%; height: 100%; background: linear-gradient(120deg, transparent, rgba(255,255,255,0.35), transparent); transform: skewX(-20deg); }
@@ -108,6 +111,26 @@
                         <span class="text-3xl text-brand-400" id="preco-exibido">R$ 42,35</span>
                     </div>
                     <p class="text-slate-500 text-xs mt-2" id="preco-nota"></p>
+                </div>
+
+                <!-- ================= VENDA CASADA (order bump): oferece o e-book junto com a
+                     planilha, opcional, desmarcado por padrão. Só aparece quando o produto
+                     original da URL é o financehub — nunca força nada, o cliente decide. -->
+                <div id="order-bump" class="bump-box hidden rounded-2xl p-4 border-2 border-dashed border-brand-500/30 hover:border-brand-500/50 transition-colors">
+                    <label for="bump-ebook" class="flex items-start gap-3 cursor-pointer">
+                        <input type="checkbox" id="bump-ebook" class="mt-1 h-5 w-5 rounded accent-brand-500 shrink-0 cursor-pointer">
+                        <span class="flex-1">
+                            <span class="flex items-center flex-wrap gap-2 mb-1">
+                                <div class="w-6 h-6 rounded-full bg-brand-500/15 flex items-center justify-center shrink-0">
+                                    <i data-lucide="sparkles" class="h-3.5 w-3.5 text-brand-400"></i>
+                                </div>
+                                <span class="font-bold text-white text-sm" data-i18n-text="bump-titulo">Complete sua gestão financeira</span>
+                                <span class="text-[10px] font-bold uppercase tracking-wide bg-brand-500/20 text-brand-400 px-2 py-0.5 rounded-full" data-i18n-text="bump-oferta">Oferta exclusiva</span>
+                            </span>
+                            <span class="block text-xs text-slate-400 leading-relaxed mb-1.5" data-i18n-text="bump-descricao">Leve também o e-book Fluxo de Caixa na Prática e nunca mais fique no escuro sobre pra onde vai o dinheiro do seu negócio. Leitura direto no navegador, liberado na hora.</span>
+                            <span class="block text-sm font-bold text-brand-400" id="bump-preco">Adicione por apenas + R$ 27,90</span>
+                        </span>
+                    </label>
                 </div>
             </div>
 
@@ -302,9 +325,32 @@
             },
         };
 
+        // Suporta um "combo" de produtos separados por "+" na URL (ex: financehub+ebook-fluxo-caixa),
+        // usado pela venda casada abaixo. Um id simples continua funcionando normalmente.
+        function produtoIdValido(id) {
+            return !!id && id.split('+').every(parte => PRODUTOS[parte]);
+        }
+        function montarProdutoInfo(id) {
+            const partes = id.split('+').map(p => PRODUTOS[p]).filter(Boolean);
+            if (partes.length <= 1) return partes[0] || PRODUTOS.financehub;
+            return {
+                nome: {
+                    pt: partes.map(p => p.nome.pt).join(' + '),
+                    en: partes.map(p => p.nome.en).join(' + '),
+                },
+                subtitulo: { pt: 'Pacote com 2 itens', en: '2-item bundle' },
+                imagem: partes.find(p => p.imagem)?.imagem || null,
+                precoBRL: partes.reduce((soma, p) => soma + p.precoBRL, 0),
+                precoUSD: partes.reduce((soma, p) => soma + p.precoUSD, 0),
+            };
+        }
+
         const params = new URLSearchParams(window.location.search);
-        const produtoId = PRODUTOS[params.get('produto')] ? params.get('produto') : 'financehub';
-        const produtoInfo = PRODUTOS[produtoId];
+        // produtoBaseId é sempre o produto original da URL (sem a venda casada) — é
+        // o que decide se a caixa de oferta do e-book aparece ou não.
+        const produtoBaseId = produtoIdValido(params.get('produto')) ? params.get('produto') : 'financehub';
+        let produtoId = produtoBaseId;
+        let produtoInfo = montarProdutoInfo(produtoId);
 
         function formatarPrecoBRL(valor) {
             return `R$ ${valor.toFixed(2).replace('.', ',')}`;
@@ -330,6 +376,9 @@
             'senha-min': { pt: 'Mínimo de 8 caracteres.', en: 'Minimum 8 characters.' },
             'forma-pagamento': { pt: 'Forma de Pagamento', en: 'Payment Method' },
             'comprando-como': { pt: 'Comprando como', en: 'Buying as' },
+            'bump-titulo': { pt: 'Complete sua gestão financeira', en: 'Complete your financial toolkit' },
+            'bump-oferta': { pt: 'Oferta exclusiva', en: 'Exclusive offer' },
+            'bump-descricao': { pt: 'Leve também o e-book Fluxo de Caixa na Prática e nunca mais fique no escuro sobre pra onde vai o dinheiro do seu negócio. Leitura direto no navegador, liberado na hora.', en: 'Add the e-book The Cash Flow Playbook and never lose track of where your business money goes again. Read right in your browser, unlocked instantly.' },
         };
 
         let regiaoAtual = 'br';
@@ -384,7 +433,30 @@
             linkTroca.innerHTML = intl
                 ? '<img src="https://flagcdn.com/br.svg" alt="Ver em R$" title="Ver em R$" class="inline-block h-5 w-7 rounded-[3px] align-middle shadow-sm">'
                 : '<img src="https://flagcdn.com/us.svg" alt="Pay in USD" title="Pay in USD" class="inline-block h-5 w-7 rounded-[3px] align-middle shadow-sm">';
+
+            if (bumpPrecoEl) {
+                const precoEbook = intl ? formatarPrecoUSD(PRODUTOS['ebook-fluxo-caixa'].precoUSD) : formatarPrecoBRL(PRODUTOS['ebook-fluxo-caixa'].precoBRL);
+                bumpPrecoEl.textContent = intl ? `Add it for just +${precoEbook}` : `Adicione por apenas + ${precoEbook}`;
+            }
         }
+
+        // ================= VENDA CASADA (order bump) =================
+        // Opcional, desmarcado por padrão — só aparece na compra da planilha (financehub)
+        // e nunca é aplicado sozinho: o cliente precisa marcar a caixa pra somar o e-book.
+        const orderBumpBox = document.getElementById('order-bump');
+        const bumpCheckbox = document.getElementById('bump-ebook');
+        const bumpPrecoEl = document.getElementById('bump-preco');
+
+        if (produtoBaseId === 'financehub' && orderBumpBox) {
+            orderBumpBox.classList.remove('hidden');
+        }
+
+        function atualizarProdutoEfetivo() {
+            produtoId = bumpCheckbox.checked ? `${produtoBaseId}+ebook-fluxo-caixa` : produtoBaseId;
+            produtoInfo = montarProdutoInfo(produtoId);
+            aplicarRegiao(regiaoAtual);
+        }
+        bumpCheckbox?.addEventListener('change', atualizarProdutoEfetivo);
 
         document.getElementById('link-trocar-regiao').addEventListener('click', () => {
             aplicarRegiao(regiaoAtual === 'intl' ? 'br' : 'intl');
@@ -431,6 +503,9 @@
                 document.getElementById('dados-pessoais').classList.add('hidden');
                 document.getElementById('ja-logado-aviso').classList.remove('hidden');
                 document.getElementById('email-logado').textContent = usuarioLogadoEmail;
+                // Cliente já logado normalmente está comprando um segundo produto avulso —
+                // não faz sentido oferecer a venda casada aqui, então some com a caixa.
+                document.getElementById('order-bump')?.classList.add('hidden');
 
                 // Reaproveita nome/CPF já cadastrados na primeira compra (a rota /api/gerar-pix
                 // exige os dois pra emitir o PIX, mesmo pra um segundo produto).
@@ -602,6 +677,14 @@
 
             if (!cardBrickCarregado) {
                 cardBrickCarregado = true;
+                // O Brick do cartão fixa o valor no momento em que carrega — trava a oferta
+                // do e-book aqui pra não deixar o valor exibido no cartão dessincronizar
+                // do que seria cobrado (o servidor sempre cobra o valor certo de qualquer
+                // forma, isso é só pra não confundir visualmente o cliente).
+                if (bumpCheckbox && !bumpCheckbox.disabled) {
+                    bumpCheckbox.disabled = true;
+                    orderBumpBox?.classList.add('opacity-50', 'pointer-events-none');
+                }
                 cardBrickController = await mp.bricks().create('cardPayment', 'cardPaymentBrick_container', {
                     initialization: { amount: produtoInfo.precoBRL },
                     callbacks: {

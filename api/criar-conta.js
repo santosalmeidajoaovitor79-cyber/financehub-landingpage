@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import { obterProduto } from '../lib/produtos.js';
+import { obterProdutos } from '../lib/produtos.js';
 
 // Troque '*' pelo domínio real do seu site (ex: 'https://seudominio.com')
 // ou defina a variável de ambiente SITE_URL na Vercel.
@@ -17,10 +17,11 @@ export default async function handler(req, res) {
 
     const { nome, cpf, email, password, metodo, produto } = req.body || {};
 
-    const config = obterProduto(produto || 'financehub');
+    const config = obterProdutos(produto || 'financehub');
     if (!config) {
         return res.status(400).json({ success: false, error: 'Produto inválido.' });
     }
+    const camposPago = config.produtos.map(p => p.campoPago);
 
     // Validação básica no servidor (o front pode ser burlado, o servidor não pode confiar nele)
     if (!nome || !email || !password) {
@@ -66,16 +67,17 @@ export default async function handler(req, res) {
             // que falhou no pagamento, deixamos ele retomar a compra pendente.
             const jaExiste = authError.status === 422 || /already been registered/i.test(authError.message || '');
             if (jaExiste) {
-                // Conta já existe (pode ter comprado o outro produto antes) — reaproveita
-                // o mesmo id em vez de bloquear, a não ser que ESTE produto específico
-                // já esteja pago.
+                // Conta já existe (pode ter comprado outro produto antes) — reaproveita
+                // o mesmo id em vez de bloquear, a não ser que TODOS os produtos desta
+                // compra (pode ser um combo/venda casada) já estejam pagos.
                 const { data: existingProfile } = await supabase
                     .from('profiles')
-                    .select(`id, ${config.campoPago}`)
+                    .select(`id, ${camposPago.join(', ')}`)
                     .eq('email', email)
                     .maybeSingle();
 
-                if (existingProfile?.[config.campoPago]) {
+                const jaPagouTudo = existingProfile && camposPago.every(campo => existingProfile[campo]);
+                if (jaPagouTudo) {
                     return res.status(409).json({
                         success: false,
                         error: 'Este e-mail já possui uma compra aprovada deste produto. Faça login em vez de comprar de novo.'

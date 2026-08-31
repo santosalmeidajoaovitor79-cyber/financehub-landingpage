@@ -1,5 +1,5 @@
 import Stripe from 'stripe';
-import { obterProduto } from '../lib/produtos.js';
+import { obterProdutos } from '../lib/produtos.js';
 
 const ALLOWED_ORIGIN = process.env.SITE_URL || '*';
 
@@ -17,7 +17,7 @@ export default async function handler(req, res) {
 
     const { userId, email, produto } = req.body || {};
     const produtoId = produto || 'financehub';
-    const config = obterProduto(produtoId);
+    const config = obterProdutos(produtoId);
     if (!config) return res.status(400).json({ erro: 'Produto inválido.' });
     if (!userId || !email) {
         return res.status(400).json({ erro: 'Dados incompletos para iniciar o pagamento.' });
@@ -30,7 +30,8 @@ export default async function handler(req, res) {
         const session = await stripe.checkout.sessions.create({
             mode: 'payment',
             payment_method_types: ['card'],
-            line_items: [{ price: config.stripePriceId, quantity: 1 }],
+            // Um line_item por produto do combo — o Stripe soma o total sozinho.
+            line_items: config.produtos.map(p => ({ price: p.stripePriceId, quantity: 1 })),
             customer_email: email,
             // client_reference_id é o que o webhook usa pra saber qual conta E qual
             // produto liberar no Supabase quando o pagamento for confirmado.
