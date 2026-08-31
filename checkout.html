@@ -22,9 +22,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="titulo-pagina">Checkout Seguro | FinanceHub PRO</title>
     <meta id="meta-descricao" name="description" content="Finalize sua compra do FinanceHub PRO Essential com segurança.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { 400: '#34d399', 500: '#22c55e' }, surface: '#020617' } } } }
+        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { 400: '#34d399', 500: '#22c55e' }, surface: '#020617' }, fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] } } } }
     </script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- SDK do Mercado Pago: necessário para tokenizar o cartão no navegador -->
@@ -40,16 +43,42 @@
         );
     </script>
     <style>
-        body { background-color: #020617; color: white; background-image: radial-gradient(circle at top right, rgba(15, 23, 42, 1) 0%, rgba(2, 6, 23, 1) 100%); min-height: 100vh;}
-        .glass-card { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+        * { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: #020617; color: white; min-height: 100vh; overflow-x: hidden; position: relative; }
+        .glass-card { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); animation: fade-in-up .6s cubic-bezier(.22,1,.36,1) both; }
         .input-field { background: rgba(2, 6, 23, 0.5); border: 1px solid rgba(255,255,255,0.1); color: white; transition: all 0.3s ease; }
         .input-field:focus { border-color: #22c55e; outline: none; box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2); }
         .tab-active { border-color: #22c55e; background-color: rgba(34, 197, 94, 0.1); color: #34d399; }
         .tab-inactive { border-color: rgba(255, 255, 255, 0.1); color: #94a3b8; }
         .tab-inactive:hover { border-color: rgba(255, 255, 255, 0.2); color: white; }
+
+        .bg-scene { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+        .blob { position: absolute; border-radius: 9999px; filter: blur(100px); opacity: 0.25; animation: float-blob 24s ease-in-out infinite; }
+        .blob-1 { width: 480px; height: 480px; background: radial-gradient(circle, #22c55e, transparent 70%); top: -180px; right: -140px; }
+        .blob-2 { width: 420px; height: 420px; background: radial-gradient(circle, #16a34a, transparent 70%); bottom: -160px; left: -120px; animation-delay: -10s; }
+        @keyframes float-blob { 0%, 100% { transform: translate(0,0) scale(1); } 33% { transform: translate(30px,-40px) scale(1.06); } 66% { transform: translate(-20px,30px) scale(0.95); } }
+
+        @keyframes fade-in-up { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+
+        .check-pop { animation: check-pop-in .5s cubic-bezier(.34,1.56,.64,1) both; }
+        @keyframes check-pop-in { from { opacity: 0; transform: scale(0.4); } to { opacity: 1; transform: scale(1); } }
+
+        .cta-glow { position: relative; overflow: hidden; animation: glow-pulse 2.6s ease-in-out infinite; }
+        @keyframes glow-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.4), 0 0 20px rgba(34,197,94,0.3); } 50% { box-shadow: 0 0 0 10px rgba(34,197,94,0), 0 0 20px rgba(34,197,94,0.3); } }
+        .cta-glow::after { content: ''; position: absolute; top: 0; left: -75%; width: 50%; height: 100%; background: linear-gradient(120deg, transparent, rgba(255,255,255,0.35), transparent); transform: skewX(-20deg); }
+        .cta-glow:hover::after { animation: shine-sweep 1s ease forwards; }
+        @keyframes shine-sweep { from { left: -75%; } to { left: 125%; } }
+
+        ::selection { background: rgba(34, 197, 94, 0.35); color: #fff; }
+        @media (prefers-reduced-motion: reduce) { .blob, .cta-glow, .glass-card, .check-pop { animation: none !important; } }
     </style>
 </head>
 <body class="antialiased flex items-center justify-center p-4 md:p-8">
+
+    <div class="bg-scene">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
 
     <div class="max-w-6xl w-full relative z-10" id="main-container">
 
@@ -158,7 +187,7 @@
 
                             <!-- BOTÃO SUBMIT (usado apenas no fluxo PIX; o cartão usa o botão do próprio Brick) -->
                             <div class="pt-4" id="pix-submit-wrapper">
-                                <button type="submit" id="btn-submit" class="w-full bg-brand-500 text-black font-extrabold text-xl py-4 rounded-xl shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-transform hover:scale-[1.02] flex justify-center items-center gap-2">
+                                <button type="submit" id="btn-submit" class="cta-glow w-full bg-brand-500 text-black font-extrabold text-xl py-4 rounded-xl transition-transform hover:scale-[1.02] flex justify-center items-center gap-2">
                                     GERAR PIX DE R$ 42,35
                                 </button>
                             </div>
@@ -170,7 +199,7 @@
                                 <i data-lucide="shield-check" class="h-6 w-6 text-blue-400 flex-shrink-0"></i>
                                 <p>Payment is securely processed by Stripe. You'll be redirected to Stripe's checkout page to complete your purchase, then brought right back.</p>
                             </div>
-                            <button type="button" id="btn-stripe" class="w-full bg-brand-500 text-black font-extrabold text-xl py-4 rounded-xl shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-transform hover:scale-[1.02] flex justify-center items-center gap-2">
+                            <button type="button" id="btn-stripe" class="cta-glow w-full bg-brand-500 text-black font-extrabold text-xl py-4 rounded-xl transition-transform hover:scale-[1.02] flex justify-center items-center gap-2">
                                 Pay $14.99 — Instant Access
                             </button>
                         </div>
@@ -210,13 +239,13 @@
 
         <!-- ================= ESTADO 3: TELA DE SUCESSO (CARTÃO / PIX APROVADO) ================= -->
         <div id="success-view-approved" class="hidden max-w-xl mx-auto glass-card p-10 rounded-3xl text-center flex-col items-center">
-            <div class="w-24 h-24 bg-brand-500 text-white rounded-full flex items-center justify-center mb-6 shadow-[0_0_40px_rgba(34,197,94,0.5)]">
+            <div class="check-pop w-24 h-24 bg-brand-500 text-white rounded-full flex items-center justify-center mb-6 shadow-[0_0_40px_rgba(34,197,94,0.5)]">
                 <i data-lucide="check" class="h-12 w-12 stroke-[3]"></i>
             </div>
             <h2 class="text-4xl font-extrabold text-white mb-4">Pagamento Aprovado!</h2>
             <p class="text-slate-400 text-lg mb-8">Sua conta foi ativada. Você está sendo redirecionado para a Área de Membros...</p>
 
-            <a href="meus-produtos.html" class="w-full bg-brand-500 text-black font-extrabold text-xl py-4 rounded-xl flex items-center justify-center gap-2 hover:scale-[1.02] transition-transform shadow-xl">
+            <a href="meus-produtos.html" class="cta-glow w-full bg-brand-500 text-black font-extrabold text-xl py-4 rounded-xl flex items-center justify-center gap-2 hover:scale-[1.02] transition-transform shadow-xl">
                 ACESSAR SISTEMA AGORA <i data-lucide="arrow-right" class="h-6 w-6"></i>
             </a>
         </div>
@@ -226,13 +255,13 @@
              sessão do navegador se perdeu na navegação pra fora do site. Em vez de guardar a senha
              em sessionStorage pra logar sozinho (arriscado num app de pagamento), pedimos login manual. -->
         <div id="success-view-stripe" class="hidden max-w-xl mx-auto glass-card p-10 rounded-3xl text-center flex-col items-center">
-            <div class="w-24 h-24 bg-brand-500 text-white rounded-full flex items-center justify-center mb-6 shadow-[0_0_40px_rgba(34,197,94,0.5)]">
+            <div class="check-pop w-24 h-24 bg-brand-500 text-white rounded-full flex items-center justify-center mb-6 shadow-[0_0_40px_rgba(34,197,94,0.5)]">
                 <i data-lucide="check" class="h-12 w-12 stroke-[3]"></i>
             </div>
             <h2 class="text-4xl font-extrabold text-white mb-4">Payment Approved!</h2>
             <p class="text-slate-400 text-lg mb-8">Your account is being activated. Please log in to access your purchase — it may take a few seconds to reflect.</p>
 
-            <a href="login.html" class="w-full bg-brand-500 text-black font-extrabold text-xl py-4 rounded-xl flex items-center justify-center gap-2 hover:scale-[1.02] transition-transform shadow-xl">
+            <a href="login.html" class="cta-glow w-full bg-brand-500 text-black font-extrabold text-xl py-4 rounded-xl flex items-center justify-center gap-2 hover:scale-[1.02] transition-transform shadow-xl">
                 LOG IN NOW <i data-lucide="arrow-right" class="h-6 w-6"></i>
             </a>
         </div>
@@ -267,7 +296,7 @@
             'ebook-fluxo-caixa': {
                 nome: { pt: 'Fluxo de Caixa na Prática', en: 'The Cash Flow Playbook' },
                 subtitulo: { pt: 'E-book Digital', en: 'Digital E-book' },
-                imagem: 'print-dre.png',
+                imagem: null,
                 precoBRL: 27.90,
                 precoUSD: 9.99,
             },
@@ -328,7 +357,9 @@
 
             aplicarTraducoes(regiao);
 
-            document.getElementById('produto-imagem').src = produtoInfo.imagem;
+            const imagemProdutoEl = document.getElementById('produto-imagem');
+            imagemProdutoEl.classList.toggle('hidden', !produtoInfo.imagem);
+            if (produtoInfo.imagem) imagemProdutoEl.src = produtoInfo.imagem;
             document.getElementById('produto-nome').textContent = produtoInfo.nome[idioma];
             document.getElementById('produto-subtitulo').textContent = produtoInfo.subtitulo[idioma];
 

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loja | FinanceHub PRO</title>
+    <meta name="description" content="Conheça os produtos digitais da FinanceHub PRO: sistema de gestão financeira em Excel e e-books práticos para pequenos negócios.">
+    <link rel="canonical" href="https://www.financehubpro.online/loja.html">
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class', theme: { extend: {
+            colors: { brand: { 400: '#34d399', 500: '#22c55e', 600: '#16a34a' }, surface: '#020617' },
+            fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
+        } } }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        * { font-family: 'Plus Jakarta Sans', sans-serif; }
+
+        body {
+            background-color: #020617;
+            color: #f8fafc;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .glass-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.045) 0%, rgba(255,255,255,0.01) 100%);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.35);
+        }
+
+        /* ===== fundo animado ===== */
+        .bg-scene { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+        .blob {
+            position: absolute;
+            border-radius: 9999px;
+            filter: blur(90px);
+            opacity: 0.32;
+            animation: float-blob 22s ease-in-out infinite;
+        }
+        .blob-1 { width: 480px; height: 480px; background: radial-gradient(circle, #22c55e, transparent 70%); top: -160px; left: -120px; animation-delay: 0s; }
+        .blob-2 { width: 420px; height: 420px; background: radial-gradient(circle, #16a34a, transparent 70%); bottom: -140px; right: -100px; animation-delay: -8s; }
+        .blob-3 { width: 340px; height: 340px; background: radial-gradient(circle, #34d399, transparent 70%); top: 40%; left: 50%; animation-delay: -14s; opacity: 0.18; }
+
+        @keyframes float-blob {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(40px, -50px) scale(1.08); }
+            66% { transform: translate(-30px, 30px) scale(0.94); }
+        }
+
+        .grid-overlay {
+            position: absolute; inset: 0;
+            background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+            background-size: 56px 56px;
+            mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+        }
+
+        main, nav, footer { position: relative; z-index: 1; }
+
+        /* ===== scroll reveal ===== */
+        .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1); }
+        .reveal.in-view { opacity: 1; transform: translateY(0); }
+
+        /* ===== hero badge pulse ===== */
+        .pulse-dot { position: relative; }
+        .pulse-dot::after {
+            content: ''; position: absolute; inset: 0; border-radius: 9999px;
+            background: currentColor; animation: pulse-ring 2s cubic-bezier(0.4,0,0.6,1) infinite;
+        }
+        @keyframes pulse-ring { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(2.4); opacity: 0; } }
+
+        /* ===== product card ===== */
+        .product-card {
+            position: relative;
+            transition: transform .45s cubic-bezier(.22,1,.36,1), box-shadow .45s cubic-bezier(.22,1,.36,1), border-color .45s;
+        }
+        .product-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(34, 197, 94, 0.35);
+            box-shadow: 0 20px 60px -12px rgba(34, 197, 94, 0.25), 0 8px 24px rgba(0,0,0,0.4);
+        }
+        .product-card::before {
+            content: '';
+            position: absolute; inset: 0; border-radius: inherit; padding: 1px;
+            background: linear-gradient(135deg, rgba(34,197,94,0.55), transparent 45%, rgba(34,197,94,0.3));
+            opacity: 0; transition: opacity .45s;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor; mask-composite: exclude;
+            pointer-events: none;
+        }
+        .product-card:hover::before { opacity: 1; }
+
+        .card-img-wrap { position: relative; overflow: hidden; }
+        .card-img-wrap::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(2,6,23,0.85) 0%, transparent 55%);
+        }
+
+        /* ===== shine sweep no botão/link ===== */
+        .shine { position: relative; overflow: hidden; }
+        .shine::after {
+            content: ''; position: absolute; top: 0; left: -75%; width: 50%; height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.35), transparent);
+            transform: skewX(-20deg);
+        }
+        .product-card:hover .shine::after { animation: shine-sweep 1s ease forwards; }
+        @keyframes shine-sweep { from { left: -75%; } to { left: 125%; } }
+
+        /* ===== badge mais vendido ===== */
+        .badge-float { animation: badge-bounce 3s ease-in-out infinite; }
+        @keyframes badge-bounce { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-4px) rotate(-3deg); } }
+
+        /* ===== trust icons ===== */
+        .trust-icon { transition: transform .3s, color .3s; }
+        .trust-item:hover .trust-icon { transform: scale(1.15) rotate(-6deg); color: #34d399; }
+
+        /* ===== nav on scroll ===== */
+        #nav-bar { transition: background-color .3s, box-shadow .3s, border-color .3s; }
+        #nav-bar.scrolled { box-shadow: 0 8px 30px rgba(0,0,0,0.35); border-color: rgba(255,255,255,0.1); }
+
+        ::selection { background: rgba(34, 197, 94, 0.35); color: #fff; }
+
+        @media (prefers-reduced-motion: reduce) {
+            .blob, .pulse-dot::after, .badge-float { animation: none !important; }
+            .reveal { transition: none !important; opacity: 1 !important; transform: none !important; }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="bg-scene">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <nav id="nav-bar" class="w-full glass-card border-b-0 border-x-0 border-t-0 border-b border-white/5 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-brand-500/10 border border-brand-500/25 flex items-center justify-center">
+                    <i data-lucide="bar-chart-3" class="text-brand-500 h-5 w-5"></i>
+                </div>
+                <span class="font-extrabold text-xl tracking-tight text-white">FinanceHub <span class="text-brand-500">PRO</span></span>
+            </div>
+            <a href="login.html" class="text-sm font-semibold text-slate-300 hover:text-white transition-colors flex items-center gap-2 group">
+                <i data-lucide="user" class="h-4 w-4 transition-transform group-hover:scale-110"></i> Entrar
+            </a>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-6">
+
+        <header class="text-center pt-20 pb-16 md:pt-28 md:pb-20">
+            <div class="reveal inline-flex items-center gap-2 glass-card rounded-full px-4 py-1.5 mb-6 text-xs font-semibold text-brand-400">
+                <span class="relative flex h-2 w-2 pulse-dot text-brand-500"><span class="relative rounded-full h-2 w-2 bg-brand-500"></span></span>
+                Produtos digitais, acesso imediato
+            </div>
+            <h1 class="reveal text-4xl md:text-6xl font-extrabold text-white tracking-tight mb-5 leading-tight" style="transition-delay:.05s">
+                Ferramentas pra <span class="bg-gradient-to-r from-brand-400 to-emerald-300 bg-clip-text text-transparent">organizar</span><br class="hidden md:block"> as finanças do seu negócio
+            </h1>
+            <p class="reveal text-slate-400 text-lg max-w-xl mx-auto" style="transition-delay:.1s">
+                Nada de mensalidade ou letra miúda. Escolha a solução ideal pro seu momento e comece a usar hoje mesmo.
+            </p>
+        </header>
+
+        <section class="reveal grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-16 md:mb-20" style="transition-delay:.15s">
+            <div class="trust-item glass-card rounded-2xl p-4 md:p-5 flex flex-col items-center text-center gap-2">
+                <i data-lucide="shield-check" class="trust-icon h-6 w-6 text-slate-400"></i>
+                <span class="text-xs md:text-sm font-medium text-slate-300">Pagamento seguro</span>
+            </div>
+            <div class="trust-item glass-card rounded-2xl p-4 md:p-5 flex flex-col items-center text-center gap-2">
+                <i data-lucide="zap" class="trust-icon h-6 w-6 text-slate-400"></i>
+                <span class="text-xs md:text-sm font-medium text-slate-300">Acesso imediato</span>
+            </div>
+            <div class="trust-item glass-card rounded-2xl p-4 md:p-5 flex flex-col items-center text-center gap-2">
+                <i data-lucide="infinity" class="trust-icon h-6 w-6 text-slate-400"></i>
+                <span class="text-xs md:text-sm font-medium text-slate-300">Sem mensalidade</span>
+            </div>
+            <div class="trust-item glass-card rounded-2xl p-4 md:p-5 flex flex-col items-center text-center gap-2">
+                <i data-lucide="credit-card" class="trust-icon h-6 w-6 text-slate-400"></i>
+                <span class="text-xs md:text-sm font-medium text-slate-300">Pix ou cartão</span>
+            </div>
+        </section>
+
+        <div id="grade-produtos" class="grid sm:grid-cols-2 gap-8 pb-24"></div>
+    </main>
+
+    <footer class="relative z-10 border-t border-white/5 py-10">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate-500">
+            <span>&copy; <span id="ano"></span> FinanceHub PRO. Todos os direitos reservados.</span>
+            <div class="flex items-center gap-2">
+                <i data-lucide="lock" class="h-4 w-4"></i>
+                <span>Ambiente de compra seguro</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        document.getElementById('ano').textContent = new Date().getFullYear();
+
+        // Lista de produtos da loja — pra adicionar um produto novo no futuro,
+        // basta acrescentar um objeto aqui. Nada mais no arquivo precisa mudar.
+        const PRODUTOS_LOJA = [
+            {
+                nome: 'FinanceHub PRO Essential',
+                descricao: 'Sistema completo de gestão financeira em Excel: estoque, fluxo de caixa e DRE automática. Acesso vitalício, sem mensalidade.',
+                imagem: 'print-dashboard.png',
+                preco: 'A partir de R$ 42,35',
+                link: 'index.html',
+                icone: 'bar-chart-3',
+                badge: 'Mais procurado',
+            },
+            {
+                nome: 'Fluxo de Caixa na Prática',
+                descricao: 'E-book direto ao ponto sobre fluxo de caixa pra pequeno negócio, com leitura direto no navegador.',
+                imagem: null,
+                preco: 'A partir de R$ 27,90',
+                link: 'ebook.html',
+                icone: 'book-open',
+                badge: null,
+            },
+        ];
+
+        const grade = document.getElementById('grade-produtos');
+        PRODUTOS_LOJA.forEach((produto, i) => {
+            const card = document.createElement('a');
+            card.href = produto.link;
+            card.className = 'product-card reveal glass-card rounded-3xl overflow-hidden flex flex-col group';
+            card.style.transitionDelay = (0.2 + i * 0.1) + 's';
+            card.innerHTML = `
+                ${produto.badge ? `
+                <div class="badge-float absolute top-4 left-4 z-10 bg-brand-500 text-slate-950 text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1 shadow-lg shadow-brand-500/30">
+                    <i data-lucide="flame" class="h-3.5 w-3.5"></i> ${produto.badge}
+                </div>` : ''}
+                <div class="card-img-wrap aspect-video bg-surface">
+                    ${produto.imagem
+                        ? `<img src="${produto.imagem}" alt="${produto.nome}" class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110" loading="lazy">`
+                        : `<div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-brand-500/10 to-surface">
+                               <i data-lucide="${produto.icone}" class="h-16 w-16 text-brand-500/40 transition-transform duration-700 group-hover:scale-110"></i>
+                           </div>`}
+                </div>
+                <div class="p-6 md:p-8 flex flex-col flex-1">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
+                            <i data-lucide="${produto.icone}" class="h-5 w-5"></i>
+                        </div>
+                        <h2 class="text-xl font-bold text-white">${produto.nome}</h2>
+                    </div>
+                    <p class="text-slate-400 text-sm mb-6 flex-1 leading-relaxed">${produto.descricao}</p>
+                    <div class="flex items-center justify-between pt-4 border-t border-white/5">
+                        <span class="text-brand-400 font-bold">${produto.preco}</span>
+                        <span class="shine text-sm font-semibold text-white bg-white/5 group-hover:bg-brand-500 group-hover:text-slate-950 px-4 py-2 rounded-full flex items-center gap-1 group-hover:gap-2 transition-all duration-300">
+                            Conhecer <i data-lucide="arrow-right" class="h-4 w-4"></i>
+                        </span>
+                    </div>
+                </div>
+            `;
+            grade.appendChild(card);
+        });
+        lucide.createIcons();
+
+        // scroll reveal
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // nav shadow on scroll
+        const navBar = document.getElementById('nav-bar');
+        window.addEventListener('scroll', () => {
+            navBar.classList.toggle('scrolled', window.scrollY > 12);
+        }, { passive: true });
+    </script>
+</body>
+</html>

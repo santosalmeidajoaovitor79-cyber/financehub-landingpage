@@ -6,19 +6,57 @@
     <title id="titulo-pagina">Fluxo de Caixa na Prática (E-book) | FinanceHub PRO</title>
     <meta id="meta-descricao" name="description" content="E-book prático sobre fluxo de caixa para pequenos negócios. Leitura direto no navegador.">
     <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { 400: '#34d399', 500: '#22c55e', 600: '#16a34a' }, surface: '#020617' } } } }
+        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { 400: '#34d399', 500: '#22c55e', 600: '#16a34a' }, surface: '#020617' }, fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] } } } }
     </script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        body { background-color: #020617; color: #f8fafc; background-image: radial-gradient(circle at top center, rgba(15, 23, 42, 1) 0%, rgba(2, 6, 23, 1) 100%); min-height: 100vh; }
+        * { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: #020617; color: #f8fafc; min-height: 100vh; overflow-x: hidden; position: relative; }
         .glass-card { background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); }
+
+        .bg-scene { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+        .blob { position: absolute; border-radius: 9999px; filter: blur(90px); opacity: 0.3; animation: float-blob 22s ease-in-out infinite; }
+        .blob-1 { width: 460px; height: 460px; background: radial-gradient(circle, #22c55e, transparent 70%); top: -160px; left: -120px; }
+        .blob-2 { width: 400px; height: 400px; background: radial-gradient(circle, #16a34a, transparent 70%); bottom: -140px; right: -100px; animation-delay: -10s; }
+        @keyframes float-blob { 0%, 100% { transform: translate(0,0) scale(1); } 33% { transform: translate(40px,-50px) scale(1.08); } 66% { transform: translate(-30px,30px) scale(0.94); } }
+        .grid-overlay { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: 56px 56px; mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%); }
+        nav, main { position: relative; z-index: 1; }
+
+        .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1); }
+        .reveal.in-view { opacity: 1; transform: translateY(0); }
+
+        #nav-bar { transition: box-shadow .3s, border-color .3s; }
+        #nav-bar.scrolled { box-shadow: 0 8px 30px rgba(0,0,0,0.35); border-color: rgba(255,255,255,0.1); }
+
+        .btn-glow { position: relative; overflow: hidden; animation: glow-pulse 2.6s ease-in-out infinite; }
+        @keyframes glow-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.45), 0 20px 40px -12px rgba(0,0,0,0.5); } 50% { box-shadow: 0 0 0 12px rgba(34,197,94,0), 0 20px 40px -12px rgba(0,0,0,0.5); } }
+        .btn-glow::after { content: ''; position: absolute; top: 0; left: -75%; width: 50%; height: 100%; background: linear-gradient(120deg, transparent, rgba(255,255,255,0.35), transparent); transform: skewX(-20deg); }
+        .btn-glow:hover::after { animation: shine-sweep 1s ease forwards; }
+        @keyframes shine-sweep { from { left: -75%; } to { left: 125%; } }
+
+        .selo-item { transition: transform .3s, color .3s; }
+        .selo-item:hover { transform: translateY(-3px); color: #34d399; }
+
+        ::selection { background: rgba(34, 197, 94, 0.35); color: #fff; }
+        @media (prefers-reduced-motion: reduce) { .blob, .btn-glow { animation: none !important; } .reveal { transition: none !important; opacity: 1 !important; transform: none !important; } }
     </style>
 </head>
 <body class="antialiased">
 
-    <nav class="w-full glass-card border-b-0 border-x-0 border-t-0 border-b border-white/5 sticky top-0 z-50">
+    <div class="bg-scene">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <nav id="nav-bar" class="w-full glass-card border-b-0 border-x-0 border-t-0 border-b border-white/5 sticky top-0 z-50">
         <div class="max-w-5xl mx-auto px-6 h-20 flex items-center justify-between">
             <a href="index.html" class="flex items-center gap-2 text-slate-400 hover:text-white transition">
                 <i data-lucide="arrow-left" class="h-4 w-4"></i> <span data-i18n-text="voltar">Voltar</span>
@@ -28,12 +66,12 @@
     </nav>
 
     <main class="max-w-3xl mx-auto px-6 py-16 md:py-24 text-center">
-        <span class="inline-block bg-brand-500/20 text-brand-400 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-6" data-i18n-text="badge">E-book Digital</span>
+        <span class="reveal inline-block bg-brand-500/20 text-brand-400 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-6" data-i18n-text="badge">E-book Digital</span>
 
-        <h1 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-6" id="produto-titulo">Fluxo de Caixa na Prática</h1>
-        <p class="text-slate-400 text-lg md:text-xl max-w-xl mx-auto mb-10" data-i18n-text="pitch">Um guia direto ao ponto pra você parar de perder dinheiro por não entender pra onde ele vai — sem economês, sem enrolação, pensado pra dono de pequeno negócio.</p>
+        <h1 class="reveal text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-6" id="produto-titulo" style="transition-delay:.05s">Fluxo de Caixa na Prática</h1>
+        <p class="reveal text-slate-400 text-lg md:text-xl max-w-xl mx-auto mb-10" data-i18n-text="pitch" style="transition-delay:.1s">Um guia direto ao ponto pra você parar de perder dinheiro por não entender pra onde ele vai — sem economês, sem enrolação, pensado pra dono de pequeno negócio.</p>
 
-        <div class="glass-card rounded-3xl p-8 md:p-12 mb-10">
+        <div class="reveal glass-card rounded-3xl p-8 md:p-12 mb-10" style="transition-delay:.15s">
             <div class="flex items-center justify-center gap-2 text-brand-400 mb-6">
                 <i data-lucide="book-open" class="h-6 w-6"></i>
                 <span class="font-semibold" data-i18n-text="leitura-navegador">Leitura direto no navegador — sem baixar PDF solto</span>
@@ -49,15 +87,30 @@
             </a>
         </div>
 
-        <div class="grid sm:grid-cols-3 gap-4 text-sm text-slate-400">
-            <div class="flex items-center justify-center gap-2"><i data-lucide="smartphone" class="h-4 w-4 text-brand-400"></i> <span data-i18n-text="selo-1">Funciona no celular</span></div>
-            <div class="flex items-center justify-center gap-2"><i data-lucide="infinity" class="h-4 w-4 text-brand-400"></i> <span data-i18n-text="selo-2">Acesso vitalício</span></div>
-            <div class="flex items-center justify-center gap-2"><i data-lucide="shield-check" class="h-4 w-4 text-brand-400"></i> <span data-i18n-text="selo-3">Pagamento seguro</span></div>
+        <div class="reveal grid sm:grid-cols-3 gap-4 text-sm text-slate-400" style="transition-delay:.2s">
+            <div class="selo-item flex items-center justify-center gap-2"><i data-lucide="smartphone" class="h-4 w-4 text-brand-400"></i> <span data-i18n-text="selo-1">Funciona no celular</span></div>
+            <div class="selo-item flex items-center justify-center gap-2"><i data-lucide="infinity" class="h-4 w-4 text-brand-400"></i> <span data-i18n-text="selo-2">Acesso vitalício</span></div>
+            <div class="selo-item flex items-center justify-center gap-2"><i data-lucide="shield-check" class="h-4 w-4 text-brand-400"></i> <span data-i18n-text="selo-3">Pagamento seguro</span></div>
         </div>
     </main>
 
     <script>
         lucide.createIcons();
+
+        const observadorRevelacao = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                    observadorRevelacao.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+        document.querySelectorAll('.reveal').forEach(el => observadorRevelacao.observe(el));
+
+        const navBarEl = document.getElementById('nav-bar');
+        window.addEventListener('scroll', () => {
+            navBarEl.classList.toggle('scrolled', window.scrollY > 12);
+        }, { passive: true });
 
         const TEXTOS = {
             voltar: { pt: 'Voltar', en: 'Back' },

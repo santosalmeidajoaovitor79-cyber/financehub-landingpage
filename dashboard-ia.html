@@ -4,13 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard IA | FinanceHub PRO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
                     colors: {
                         brand: { 400: '#34d399', 500: '#22c55e', 600: '#16a34a' },
                         surface: '#020617',
@@ -25,15 +28,50 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
     <style>
-        body { background-color: #020617; color: #f8fafc; background-image: radial-gradient(circle at top center, rgba(15, 23, 42, 1) 0%, rgba(2, 6, 23, 1) 100%); min-height: 100vh;}
+        * { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: #020617; color: #f8fafc; min-height: 100vh; overflow-x: hidden; position: relative; }
         .glass-card { background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); }
-        .zona-drop { border: 2px dashed rgba(255,255,255,0.15); transition: border-color 0.2s ease; }
+        .zona-drop { border: 2px dashed rgba(255,255,255,0.15); transition: border-color 0.25s ease, background-color 0.25s ease, transform 0.25s ease; }
+        .zona-drop:hover { transform: translateY(-2px); background-color: rgba(34, 197, 94, 0.03); }
+        .zona-drop:hover .zona-drop-icon { transform: translateY(-4px); }
+        .zona-drop-icon { transition: transform 0.3s ease; }
+
+        .bg-scene { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+        .blob { position: absolute; border-radius: 9999px; filter: blur(100px); opacity: 0.22; animation: float-blob 24s ease-in-out infinite; }
+        .blob-1 { width: 460px; height: 460px; background: radial-gradient(circle, #22c55e, transparent 70%); top: -160px; right: -140px; }
+        .blob-2 { width: 400px; height: 400px; background: radial-gradient(circle, #16a34a, transparent 70%); bottom: -150px; left: -120px; animation-delay: -10s; }
+        @keyframes float-blob { 0%, 100% { transform: translate(0,0) scale(1); } 33% { transform: translate(30px,-40px) scale(1.06); } 66% { transform: translate(-20px,30px) scale(0.95); } }
+
+        main, nav { position: relative; z-index: 1; }
+
+        .reveal { opacity: 0; transform: translateY(20px); transition: opacity .6s cubic-bezier(.22,1,.36,1), transform .6s cubic-bezier(.22,1,.36,1); }
+        .reveal.in-view { opacity: 1; transform: translateY(0); }
+
+        #nav-bar { transition: box-shadow .3s, border-color .3s; }
+        #nav-bar.scrolled { box-shadow: 0 8px 30px rgba(0,0,0,0.35); border-color: rgba(255,255,255,0.1); }
+
+        .btn-shine { position: relative; overflow: hidden; transition: transform .2s, background-color .2s; }
+        .btn-shine::after { content: ''; position: absolute; top: 0; left: -75%; width: 50%; height: 100%; background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent); transform: skewX(-20deg); }
+        .btn-shine:hover::after { animation: shine-sweep 1s ease forwards; }
+        .btn-shine:hover { transform: translateY(-1px); }
+        @keyframes shine-sweep { from { left: -75%; } to { left: 125%; } }
+
+        #grade-metricas > *, #grade-graficos > * { animation: fade-in-up .5s cubic-bezier(.22,1,.36,1) both; }
+        @keyframes fade-in-up { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+        ::selection { background: rgba(34, 197, 94, 0.35); color: #fff; }
+        @media (prefers-reduced-motion: reduce) { .blob { animation: none !important; } .reveal { transition: none !important; opacity: 1 !important; transform: none !important; } }
     </style>
 </head>
 <body class="antialiased flex flex-col">
 
+    <div class="bg-scene">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
     <!-- NAVBAR (mesma identidade da área de membros) -->
-    <nav class="w-full glass-card border-b-0 border-x-0 border-t-0 border-b border-white/5 sticky top-0 z-50">
+    <nav id="nav-bar" class="w-full glass-card border-b-0 border-x-0 border-t-0 border-b border-white/5 sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
             <a href="meus-produtos.html" class="flex items-center gap-2 text-slate-400 hover:text-white transition">
                 <i data-lucide="arrow-left" class="h-4 w-4"></i> Meus Produtos
@@ -72,7 +110,7 @@
         <!-- ESTADO: VAZIO (zona de upload) -->
         <div id="estado-vazio">
             <div id="zona-drop" class="zona-drop rounded-3xl p-12 text-center cursor-pointer hover:border-brand-500">
-                <i data-lucide="upload-cloud" class="h-12 w-12 text-brand-400 mx-auto mb-4"></i>
+                <i data-lucide="upload-cloud" class="zona-drop-icon h-12 w-12 text-brand-400 mx-auto mb-4"></i>
                 <p class="text-white font-semibold text-lg mb-1">Arraste sua planilha aqui ou clique pra escolher</p>
                 <p class="text-slate-400 text-sm">.xlsx, .xls ou .csv — até 10 MB</p>
                 <input type="file" id="input-arquivo" accept=".xlsx,.xls,.csv" class="hidden">
@@ -102,7 +140,7 @@
                     <span id="badge-tipo" class="inline-block bg-brand-500/20 text-brand-400 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-2"></span>
                     <p id="texto-resumo" class="text-slate-300"></p>
                 </div>
-                <button type="button" id="btn-nova-analise" class="bg-white/5 border border-white/10 hover:bg-white/10 text-white text-sm font-medium py-2 px-4 rounded-xl flex items-center gap-2">
+                <button type="button" id="btn-nova-analise" class="btn-shine bg-white/5 border border-white/10 hover:bg-white/10 text-white text-sm font-medium py-2 px-4 rounded-xl flex items-center gap-2">
                     <i data-lucide="rotate-ccw" class="h-4 w-4"></i> Analisar outra planilha
                 </button>
             </div>
@@ -117,7 +155,7 @@
                 <i data-lucide="file-question" class="h-10 w-10 text-amber-400 mx-auto mb-4"></i>
                 <p class="text-white font-semibold mb-2">Não conseguimos analisar esse arquivo</p>
                 <p id="texto-motivo" class="text-slate-400 text-sm mb-6"></p>
-                <button type="button" id="btn-tentar-outro" class="bg-brand-500 text-surfaceLight font-bold py-2 px-6 rounded-xl">Tentar outro arquivo</button>
+                <button type="button" id="btn-tentar-outro" class="btn-shine bg-brand-500 text-surfaceLight font-bold py-2 px-6 rounded-xl">Tentar outro arquivo</button>
             </div>
         </div>
 
@@ -127,13 +165,18 @@
                 <i data-lucide="alert-triangle" class="h-10 w-10 text-red-400 mx-auto mb-4"></i>
                 <p class="text-white font-semibold mb-2">Algo deu errado</p>
                 <p id="texto-erro" class="text-slate-400 text-sm mb-6"></p>
-                <button type="button" id="btn-tentar-novamente" class="bg-brand-500 text-surfaceLight font-bold py-2 px-6 rounded-xl">Tentar novamente</button>
+                <button type="button" id="btn-tentar-novamente" class="btn-shine bg-brand-500 text-surfaceLight font-bold py-2 px-6 rounded-xl">Tentar novamente</button>
             </div>
         </div>
     </main>
 
     <script>
         lucide.createIcons();
+
+        const navBarDash = document.getElementById('nav-bar');
+        window.addEventListener('scroll', () => {
+            navBarDash.classList.toggle('scrolled', window.scrollY > 12);
+        }, { passive: true });
     </script>
 
     <!-- ================= SCRIPT DE PROTEÇÃO (mesmo Guardião de meus-produtos.html) ================= -->

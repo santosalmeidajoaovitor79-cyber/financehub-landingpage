@@ -4,39 +4,180 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Entrar | FinanceHub PRO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { 400: '#34d399', 500: '#22c55e' }, surface: '#020617' } } } }
+        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { 400: '#34d399', 500: '#22c55e', 600: '#16a34a' }, surface: '#020617' }, fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] } } } }
     </script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <style>body { background-color: #020617; color: white; }</style>
+    <style>
+        * { font-family: 'Plus Jakarta Sans', sans-serif; }
+        html, body { background-color: #020617; color: white; overflow-x: hidden; height: 100%; }
+
+        /* ===== painel esquerdo: marca ===== */
+        .branding-panel {
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at 20% 20%, rgba(34,197,94,0.16), transparent 55%),
+                        radial-gradient(circle at 80% 80%, rgba(22,163,74,0.14), transparent 55%),
+                        #050b16;
+        }
+        .branding-grid {
+            position: absolute; inset: 0;
+            background-image: linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+            background-size: 48px 48px;
+            mask-image: radial-gradient(ellipse 75% 65% at 50% 40%, #000 30%, transparent 100%);
+        }
+        .orb { position: absolute; border-radius: 9999px; filter: blur(70px); transition: transform .3s ease-out; }
+        .orb-1 { width: 360px; height: 360px; background: radial-gradient(circle, #22c55e, transparent 70%); opacity: 0.35; top: 8%; left: 8%; }
+        .orb-2 { width: 300px; height: 300px; background: radial-gradient(circle, #34d399, transparent 70%); opacity: 0.25; bottom: 10%; right: 10%; }
+        .orb-3 { width: 220px; height: 220px; background: radial-gradient(circle, #16a34a, transparent 70%); opacity: 0.3; top: 45%; left: 55%; }
+
+        .float-icon { position: absolute; color: rgba(255,255,255,0.5); animation: icon-drift 8s ease-in-out infinite; }
+        @keyframes icon-drift { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-14px) rotate(6deg); } }
+
+        .feature-row { opacity: 0; transform: translateX(-16px); animation: slide-in .6s cubic-bezier(.22,1,.36,1) forwards; }
+        @keyframes slide-in { to { opacity: 1; transform: translateX(0); } }
+
+        .headline-word { display: inline-block; opacity: 0; transform: translateY(14px); animation: word-in .6s cubic-bezier(.22,1,.36,1) forwards; }
+        @keyframes word-in { to { opacity: 1; transform: translateY(0); } }
+
+        /* ===== painel direito: formulário ===== */
+        .bg-scene-right { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+        .blob { position: absolute; border-radius: 9999px; filter: blur(100px); opacity: 0.22; animation: float-blob 22s ease-in-out infinite; }
+        .blob-1 { width: 420px; height: 420px; background: radial-gradient(circle, #22c55e, transparent 70%); top: -160px; right: -140px; }
+        .blob-2 { width: 360px; height: 360px; background: radial-gradient(circle, #16a34a, transparent 70%); bottom: -150px; left: -120px; animation-delay: -9s; }
+        @keyframes float-blob { 0%, 100% { transform: translate(0,0) scale(1); } 33% { transform: translate(30px,-40px) scale(1.07); } 66% { transform: translate(-25px,25px) scale(0.94); } }
+
+        .login-card { animation: fade-in-up .6s cubic-bezier(.22,1,.36,1) both; transition: box-shadow .4s, border-color .4s; }
+        .login-card:hover { border-color: rgba(34, 197, 94, 0.22); box-shadow: 0 25px 60px -15px rgba(34,197,94,0.15), 0 25px 50px -12px rgba(0,0,0,0.5); }
+        @keyframes fade-in-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .icon-badge { animation: icon-pop .6s cubic-bezier(.34,1.56,.64,1) both; }
+        @keyframes icon-pop { from { opacity: 0; transform: scale(0.5) rotate(-10deg); } to { opacity: 1; transform: scale(1) rotate(0); } }
+
+        .field-group { opacity: 0; transform: translateY(12px); animation: field-in .5s cubic-bezier(.22,1,.36,1) forwards; }
+        @keyframes field-in { to { opacity: 1; transform: translateY(0); } }
+
+        .input-wrap { position: relative; }
+        .input-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #64748b; transition: color .25s ease; pointer-events: none; }
+        .input-field {
+            transition: all 0.25s ease;
+            background: rgba(2,6,23,0.55);
+        }
+        .input-field:focus { box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15); border-color: #22c55e; }
+        .input-wrap:focus-within .input-icon { color: #34d399; }
+
+        .btn-login-glow { position: relative; overflow: hidden; }
+        .btn-login-glow::after { content: ''; position: absolute; top: 0; left: -75%; width: 50%; height: 100%; background: linear-gradient(120deg, transparent, rgba(255,255,255,0.4), transparent); transform: skewX(-20deg); }
+        .btn-login-glow:hover::after { animation: shine-sweep 1s ease forwards; }
+        @keyframes shine-sweep { from { left: -75%; } to { left: 125%; } }
+
+        .spinner { animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        ::selection { background: rgba(34, 197, 94, 0.35); color: #fff; }
+        @media (prefers-reduced-motion: reduce) {
+            .blob, .orb, .login-card, .icon-badge, .float-icon { animation: none !important; }
+            .feature-row, .headline-word, .field-group { animation: none !important; opacity: 1 !important; transform: none !important; }
+        }
+    </style>
 </head>
-<body class="h-screen flex flex-col items-center justify-center relative">
-    
-    <div class="w-full max-w-md p-8 border border-white/10 rounded-3xl bg-surface/50 backdrop-blur-xl shadow-2xl relative z-10">
-        <div class="flex justify-center mb-6">
-            <i data-lucide="bar-chart-3" class="text-brand-500 h-10 w-10"></i>
-        </div>
-        <h2 class="text-2xl font-bold text-center mb-8">Acessar minha conta</h2>
-        
-        <form id="login-form" class="space-y-4">
-            <div>
-                <label class="block text-sm text-slate-400 mb-1">E-mail</label>
-                <input type="email" id="email" autocomplete="email" required class="w-full px-4 py-3 rounded-xl bg-black/50 border border-white/10 text-white focus:border-brand-500 outline-none">
+<body class="min-h-screen lg:h-screen flex flex-col lg:flex-row relative">
+
+    <!-- ================= PAINEL ESQUERDO: MARCA (some no mobile) ================= -->
+    <div id="branding-panel" class="branding-panel hidden lg:flex lg:w-1/2 flex-col justify-between p-12 xl:p-16">
+        <div class="branding-grid"></div>
+        <div id="orb-1" class="orb orb-1"></div>
+        <div id="orb-2" class="orb orb-2"></div>
+        <div id="orb-3" class="orb orb-3"></div>
+
+        <i data-lucide="trending-up" class="float-icon h-8 w-8" style="top:18%; left:70%; animation-delay:-1s;"></i>
+        <i data-lucide="pie-chart" class="float-icon h-7 w-7" style="top:65%; left:20%; animation-delay:-3.5s;"></i>
+        <i data-lucide="wallet" class="float-icon h-6 w-6" style="top:35%; left:12%; animation-delay:-5.5s;"></i>
+
+        <div class="relative z-10 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-brand-500/10 border border-brand-500/25 flex items-center justify-center">
+                <i data-lucide="bar-chart-3" class="text-brand-500 h-5 w-5"></i>
             </div>
-            <div>
-                <label class="block text-sm text-slate-400 mb-1">Senha</label>
-                <div class="relative">
-                    <input type="password" id="password" autocomplete="current-password" required class="w-full px-4 py-3 pr-12 rounded-xl bg-black/50 border border-white/10 text-white focus:border-brand-500 outline-none">
-                    <button type="button" id="toggle-password" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors" aria-label="Mostrar senha" tabindex="-1">
-                        <i data-lucide="eye" class="h-5 w-5"></i>
-                    </button>
+            <span class="font-extrabold text-xl tracking-tight text-white">FinanceHub <span class="text-brand-500">PRO</span></span>
+        </div>
+
+        <div class="relative z-10 max-w-md">
+            <h1 class="text-4xl xl:text-5xl font-extrabold tracking-tight leading-tight mb-6">
+                <span class="headline-word" style="animation-delay:.05s">Suas</span>
+                <span class="headline-word" style="animation-delay:.12s">finanças,</span>
+                <span class="headline-word bg-gradient-to-r from-brand-400 to-emerald-300 bg-clip-text text-transparent" style="animation-delay:.19s">organizadas</span>
+                <span class="headline-word" style="animation-delay:.26s">de</span>
+                <span class="headline-word" style="animation-delay:.33s">verdade.</span>
+            </h1>
+
+            <div class="space-y-4">
+                <div class="feature-row flex items-center gap-3" style="animation-delay:.45s">
+                    <div class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+                        <i data-lucide="infinity" class="h-4 w-4 text-brand-400"></i>
+                    </div>
+                    <span class="text-slate-300 text-sm">Acesso vitalício, sem mensalidade</span>
+                </div>
+                <div class="feature-row flex items-center gap-3" style="animation-delay:.55s">
+                    <div class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+                        <i data-lucide="shield-check" class="h-4 w-4 text-brand-400"></i>
+                    </div>
+                    <span class="text-slate-300 text-sm">Seus dados protegidos de ponta a ponta</span>
+                </div>
+                <div class="feature-row flex items-center gap-3" style="animation-delay:.65s">
+                    <div class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+                        <i data-lucide="life-buoy" class="h-4 w-4 text-brand-400"></i>
+                    </div>
+                    <span class="text-slate-300 text-sm">Suporte real, direto com a equipe</span>
                 </div>
             </div>
-            <button type="submit" id="btn-login" class="w-full bg-brand-500 text-black font-bold py-3 rounded-xl hover:scale-[1.02] transition-transform">
-                Entrar
-            </button>
-        </form>
+        </div>
+
+        <p class="relative z-10 text-slate-500 text-xs">&copy; <span id="ano-branding"></span> FinanceHub PRO. Todos os direitos reservados.</p>
+    </div>
+
+    <!-- ================= PAINEL DIREITO: FORMULÁRIO ================= -->
+    <div class="w-full lg:w-1/2 flex-1 flex flex-col items-center justify-center relative p-6">
+        <div class="bg-scene-right">
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
+        </div>
+
+        <div class="login-card w-full max-w-md p-8 border border-white/10 rounded-3xl bg-surface/50 backdrop-blur-xl shadow-2xl relative z-10">
+            <div class="icon-badge flex justify-center mb-6 lg:hidden">
+                <div class="w-16 h-16 rounded-2xl bg-brand-500/10 border border-brand-500/25 flex items-center justify-center">
+                    <i data-lucide="bar-chart-3" class="text-brand-500 h-8 w-8"></i>
+                </div>
+            </div>
+            <h2 class="text-2xl font-bold text-center mb-1">Acessar minha conta</h2>
+            <p class="text-slate-500 text-sm text-center mb-8">Entre com o e-mail e senha da sua compra</p>
+
+            <form id="login-form" class="space-y-4">
+                <div class="field-group" style="animation-delay:.1s">
+                    <label class="block text-sm text-slate-400 mb-1">E-mail</label>
+                    <div class="input-wrap">
+                        <i data-lucide="mail" class="input-icon h-4 w-4"></i>
+                        <input type="email" id="email" autocomplete="email" required class="input-field w-full pl-11 pr-4 py-3 rounded-xl border border-white/10 text-white focus:outline-none">
+                    </div>
+                </div>
+                <div class="field-group" style="animation-delay:.18s">
+                    <label class="block text-sm text-slate-400 mb-1">Senha</label>
+                    <div class="input-wrap">
+                        <i data-lucide="lock" class="input-icon h-4 w-4"></i>
+                        <input type="password" id="password" autocomplete="current-password" required class="input-field w-full pl-11 pr-12 py-3 rounded-xl border border-white/10 text-white focus:outline-none">
+                        <button type="button" id="toggle-password" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors" aria-label="Mostrar senha" tabindex="-1">
+                            <i data-lucide="eye" class="h-5 w-5"></i>
+                        </button>
+                    </div>
+                </div>
+                <button type="submit" id="btn-login" class="field-group btn-login-glow w-full bg-brand-500 text-black font-bold py-3 rounded-xl hover:scale-[1.02] transition-transform flex items-center justify-center gap-2" style="animation-delay:.26s">
+                    <span id="btn-login-texto">Entrar</span>
+                </button>
+            </form>
+        </div>
     </div>
 
     <script type="module">
@@ -47,6 +188,22 @@
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRiY2dndnJibW9xcmpuZ3R5cmJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY0ODEyODAsImV4cCI6MjEwMjA1NzI4MH0.y78Q8oAXAxj4afY53R9HO8tsip8KA3DZtj36TPcICCQ'
         );
         lucide.createIcons();
+        document.getElementById('ano-branding').textContent = new Date().getFullYear();
+
+        // Parallax sutil dos orbs conforme o mouse se move sobre o painel de marca.
+        const brandingPanel = document.getElementById('branding-panel');
+        const orbs = [document.getElementById('orb-1'), document.getElementById('orb-2'), document.getElementById('orb-3')];
+        if (brandingPanel && window.matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+            brandingPanel.addEventListener('mousemove', (e) => {
+                const { left, top, width, height } = brandingPanel.getBoundingClientRect();
+                const x = (e.clientX - left) / width - 0.5;
+                const y = (e.clientY - top) / height - 0.5;
+                orbs.forEach((orb, i) => {
+                    const intensidade = (i + 1) * 14;
+                    orb.style.transform = `translate(${x * intensidade}px, ${y * intensidade}px)`;
+                });
+            });
+        }
 
         const togglePassword = document.getElementById('toggle-password');
         const passwordInput = document.getElementById('password');
@@ -63,13 +220,18 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const btn = document.getElementById('btn-login');
-            
-            btn.innerHTML = "Autenticando...";
+            const btnTexto = document.getElementById('btn-login-texto');
+
+            btn.disabled = true;
+            btnTexto.innerHTML = '<i data-lucide="loader-2" class="h-5 w-5 spinner"></i>';
+            lucide.createIcons();
+
             const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-            
+
             if (error) {
                 alert("E-mail ou senha incorretos.");
-                btn.innerHTML = "Entrar";
+                btn.disabled = false;
+                btnTexto.textContent = "Entrar";
             } else {
                 window.location.href = "meus-produtos.html"; // Vai para a área logada
             }

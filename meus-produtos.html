@@ -4,16 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="titulo-pagina">Meus Produtos | FinanceHub PRO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
                     colors: {
                         brand: { 400: '#34d399', 500: '#22c55e', 600: '#16a34a' },
-                        surface: '#020617', 
+                        surface: '#020617',
                         surfaceLight: '#0f172a'
                     }
                 }
@@ -22,17 +25,41 @@
     </script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        body { background-color: #020617; color: #f8fafc; background-image: radial-gradient(circle at top center, rgba(15, 23, 42, 1) 0%, rgba(2, 6, 23, 1) 100%); min-height: 100vh;}
+        * { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: #020617; color: #f8fafc; min-height: 100vh; overflow-x: hidden; position: relative; }
         .glass-card { background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); transition: all 0.3s ease;}
+        .glass-card:hover { transform: translateY(-4px); border-color: rgba(34, 197, 94, 0.2); }
         .btn-glow { position: relative; z-index: 1; }
         .btn-glow::before { content: ''; position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px; background: linear-gradient(45deg, #22c55e, #3b82f6, #22c55e); z-index: -1; filter: blur(12px); opacity: 0; transition: opacity 0.4s ease; border-radius: inherit; }
         .btn-glow:hover::before { opacity: 0.8; }
+
+        .bg-scene { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+        .blob { position: absolute; border-radius: 9999px; filter: blur(100px); opacity: 0.2; animation: float-blob 24s ease-in-out infinite; }
+        .blob-1 { width: 480px; height: 480px; background: radial-gradient(circle, #22c55e, transparent 70%); top: -180px; right: -140px; }
+        .blob-2 { width: 420px; height: 420px; background: radial-gradient(circle, #16a34a, transparent 70%); bottom: -160px; left: -120px; animation-delay: -10s; }
+        @keyframes float-blob { 0%, 100% { transform: translate(0,0) scale(1); } 33% { transform: translate(30px,-40px) scale(1.06); } 66% { transform: translate(-20px,30px) scale(0.95); } }
+
+        main, nav { position: relative; z-index: 1; }
+
+        .reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s cubic-bezier(.22,1,.36,1), transform .6s cubic-bezier(.22,1,.36,1); }
+        .reveal.in-view { opacity: 1; transform: translateY(0); }
+
+        #nav-bar { transition: box-shadow .3s, border-color .3s; }
+        #nav-bar.scrolled { box-shadow: 0 8px 30px rgba(0,0,0,0.35); border-color: rgba(255,255,255,0.1); }
+
+        ::selection { background: rgba(34, 197, 94, 0.35); color: #fff; }
+        @media (prefers-reduced-motion: reduce) { .blob { animation: none !important; } .reveal { transition: none !important; opacity: 1 !important; transform: none !important; } }
     </style>
 </head>
 <body class="antialiased flex flex-col">
 
+    <div class="bg-scene">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
     <!-- NAVBAR DA ÁREA DE MEMBROS -->
-    <nav class="w-full glass-card border-b-0 border-x-0 border-t-0 border-b border-white/5 sticky top-0 z-50">
+    <nav id="nav-bar" class="w-full glass-card border-b-0 border-x-0 border-t-0 border-b border-white/5 sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <i data-lucide="bar-chart-3" class="text-brand-500 h-6 w-6"></i>
@@ -69,7 +96,7 @@
     <!-- CONTEÚDO PRINCIPAL (só aparece depois de confirmar sessão + pagamento) -->
     <main id="conteudo-liberado" class="hidden flex-grow max-w-6xl mx-auto px-6 py-12 md:py-16 w-full relative z-10">
 
-        <header class="mb-10 flex items-start justify-between flex-wrap gap-4">
+        <header class="reveal mb-10 flex items-start justify-between flex-wrap gap-4">
             <div>
                 <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-2" data-i18n-text="meus-produtos-titulo">Meus Produtos</h1>
                 <p class="text-slate-400 text-lg" data-i18n-text="meus-produtos-sub">Aqui estão os sistemas e atualizações disponíveis para download.</p>
@@ -78,7 +105,7 @@
         </header>
 
         <!-- ALERTA IMPORTANTE PARA O GOOGLE DRIVE -->
-        <div class="bg-brand-500/10 border border-brand-500/30 rounded-2xl p-6 mb-10 flex gap-4 items-start md:items-center">
+        <div class="reveal bg-brand-500/10 border border-brand-500/30 rounded-2xl p-6 mb-10 flex gap-4 items-start md:items-center" style="transition-delay:.05s">
             <i data-lucide="alert-circle" class="h-6 w-6 text-brand-400 flex-shrink-0 mt-1 md:mt-0"></i>
             <div>
                 <h3 class="text-white font-bold mb-1" data-i18n-text="aviso-download-titulo">Aviso Importante sobre o Download</h3>
@@ -90,7 +117,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
 
             <!-- CARD 1: SISTEMA / PLANILHA -->
-            <div class="glass-card rounded-3xl p-6 md:p-8 flex flex-col h-full">
+            <div class="reveal glass-card rounded-3xl p-6 md:p-8 flex flex-col h-full" style="transition-delay:.1s">
                 <div class="flex items-center justify-between mb-6">
                     <div class="flex items-center gap-4">
                         <div class="w-14 h-14 rounded-2xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 shrink-0">
@@ -125,7 +152,7 @@
             </div>
 
             <!-- CARD 2: MANUAL -->
-            <div class="glass-card rounded-3xl p-6 md:p-8 flex flex-col h-full">
+            <div class="reveal glass-card rounded-3xl p-6 md:p-8 flex flex-col h-full" style="transition-delay:.15s">
                 <div class="flex items-center justify-between mb-6">
                     <div class="flex items-center gap-4">
                         <div class="w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 shrink-0">
@@ -162,7 +189,7 @@
         </div>
 
         <!-- CARD: DASHBOARD IA (novo, grátis pra quem já comprou) -->
-        <a href="dashboard-ia.html" class="btn-glow glass-card rounded-3xl p-6 md:p-8 mb-8 flex flex-col md:flex-row items-center gap-6 group">
+        <a href="dashboard-ia.html" class="reveal btn-glow glass-card rounded-3xl p-6 md:p-8 mb-8 flex flex-col md:flex-row items-center gap-6 group" style="transition-delay:.2s">
             <div class="w-14 h-14 rounded-2xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 shrink-0">
                 <i data-lucide="sparkles" class="h-7 w-7"></i>
             </div>
@@ -208,7 +235,7 @@
         </a>
 
         <!-- CARD DE SUPORTE NO RODAPÉ DA ÁREA -->
-        <div class="glass-card rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="reveal glass-card rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6" style="transition-delay:.25s">
             <div class="flex items-center gap-4 text-center md:text-left">
                 <div class="w-12 h-12 rounded-full bg-surface border border-white/10 flex items-center justify-center text-slate-300 shrink-0 mx-auto md:mx-0">
                     <i data-lucide="life-buoy" class="h-6 w-6"></i>
@@ -236,6 +263,21 @@
 
     <script>
         lucide.createIcons();
+
+        const observadorRevelacaoMP = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                    observadorRevelacaoMP.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+        document.querySelectorAll('.reveal').forEach(el => observadorRevelacaoMP.observe(el));
+
+        const navBarMP = document.getElementById('nav-bar');
+        window.addEventListener('scroll', () => {
+            navBarMP.classList.toggle('scrolled', window.scrollY > 12);
+        }, { passive: true });
 
         /* Tradução PT/EN — mesma detecção de país do checkout.html/index.html. */
         const TEXTOS = {
