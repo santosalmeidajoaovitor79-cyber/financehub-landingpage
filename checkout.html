@@ -319,7 +319,7 @@
             'ebook-fluxo-caixa': {
                 nome: { pt: 'Fluxo de Caixa na Prática', en: 'The Cash Flow Playbook' },
                 subtitulo: { pt: 'E-book Digital', en: 'Digital E-book' },
-                imagem: null,
+                imagem: { pt: 'capa-ebook-pt.png', en: 'capa-ebook-en.png' },
                 precoBRL: 27.90,
                 precoUSD: 9.99,
             },
@@ -329,6 +329,12 @@
         // usado pela venda casada abaixo. Um id simples continua funcionando normalmente.
         function produtoIdValido(id) {
             return !!id && id.split('+').every(parte => PRODUTOS[parte]);
+        }
+        // imagem pode ser uma string única (mesma imagem nos dois idiomas, ex: financehub)
+        // ou um objeto { pt, en } quando o produto tem capa própria por idioma (ex: e-book).
+        function resolverImagem(imagem, idioma) {
+            if (!imagem) return null;
+            return typeof imagem === 'object' ? (imagem[idioma] || null) : imagem;
         }
         function montarProdutoInfo(id) {
             const partes = id.split('+').map(p => PRODUTOS[p]).filter(Boolean);
@@ -407,8 +413,9 @@
             aplicarTraducoes(regiao);
 
             const imagemProdutoEl = document.getElementById('produto-imagem');
-            imagemProdutoEl.classList.toggle('hidden', !produtoInfo.imagem);
-            if (produtoInfo.imagem) imagemProdutoEl.src = produtoInfo.imagem;
+            const imagemResolvida = resolverImagem(produtoInfo.imagem, idioma);
+            imagemProdutoEl.classList.toggle('hidden', !imagemResolvida);
+            if (imagemResolvida) imagemProdutoEl.src = imagemResolvida;
             document.getElementById('produto-nome').textContent = produtoInfo.nome[idioma];
             document.getElementById('produto-subtitulo').textContent = produtoInfo.subtitulo[idioma];
 

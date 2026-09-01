@@ -71,6 +71,8 @@
     </nav>
 
     <main class="max-w-3xl mx-auto px-6 py-16 md:py-24 text-center">
+        <img id="capa-ebook" src="capa-ebook-pt.png" alt="Capa do e-book" class="reveal w-full max-w-xs mx-auto rounded-2xl border border-white/10 shadow-2xl mb-8" style="transition-delay:.02s">
+
         <span class="reveal inline-block bg-brand-500/20 text-brand-400 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-6" data-i18n-text="badge">E-book Digital</span>
 
         <h1 class="reveal text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-6" id="produto-titulo" style="transition-delay:.05s">Fluxo de Caixa na Prática</h1>
@@ -168,6 +170,7 @@
 
             document.getElementById('produto-titulo').textContent = TITULOS[idioma];
             document.getElementById('preco-exibido').textContent = intl ? '$9.99' : 'R$ 27,90';
+            document.getElementById('capa-ebook').src = intl ? 'capa-ebook-en.png' : 'capa-ebook-pt.png';
 
             const linkTroca = document.getElementById('link-trocar-regiao');
             linkTroca.innerHTML = intl
