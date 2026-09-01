@@ -136,7 +136,7 @@
                         <i data-lucide="play-circle" class="h-4 w-4 text-brand-400"></i>
                         <span class="text-sm font-semibold text-slate-300" data-i18n-text="video-planilha-titulo">Passo a passo: Como baixar a Planilha</span>
                     </div>
-                    <video controls class="w-full rounded-b-lg aspect-video bg-black object-cover" poster="print-dashboard.png">
+                    <video id="video-planilha" controls class="w-full rounded-b-lg aspect-video bg-black object-cover" poster="print-dashboard.png">
                         <source src="2026-08-10 21-30-03.mp4" type="video/mp4">
                         Seu navegador não suporta a tag de vídeo.
                     </video>
@@ -334,6 +334,13 @@
             if (linkTroca) linkTroca.innerHTML = intl
                 ? '<img src="https://flagcdn.com/br.svg" alt="Ver em R$" title="Ver em R$" class="inline-block h-5 w-7 rounded-[3px] align-middle shadow-sm">'
                 : '<img src="https://flagcdn.com/us.svg" alt="View in USD" title="View in USD" class="inline-block h-5 w-7 rounded-[3px] align-middle shadow-sm">';
+
+            // O vídeo em si só existe narrado em português — só a miniatura (poster)
+            // troca de idioma, pra pelo menos não mostrar um print em PT pra quem
+            // está vendo o site em inglês.
+            const videoPlanilha = document.getElementById('video-planilha');
+            if (videoPlanilha) videoPlanilha.poster = intl ? 'print-dashboard-en.png' : 'print-dashboard.png';
+
             lucide.createIcons();
         }
 

@@ -401,8 +401,8 @@
                 
                 <!-- Print 1 -->
                 <div class="glass-card rounded-[2rem] p-6 md:p-8 reveal group">
-                    <div class="w-full aspect-[16/10] bg-surface rounded-xl border border-white/10 mb-8 overflow-hidden relative cursor-pointer group/img" onclick="openImageModal('print-dashboard.png')">
-                        <img src="print-dashboard.png" alt="Dashboard Executivo FinanceHub" class="w-full h-full object-cover object-top transition-transform duration-700 group-hover/img:scale-105" />
+                    <div id="wrap-print-dashboard" class="w-full aspect-[16/10] bg-surface rounded-xl border border-white/10 mb-8 overflow-hidden relative cursor-pointer group/img" onclick="openImageModal('print-dashboard.png')">
+                        <img id="img-print-dashboard" src="print-dashboard.png" alt="Dashboard Executivo FinanceHub" class="w-full h-full object-cover object-top transition-transform duration-700 group-hover/img:scale-105" />
                         <div class="absolute inset-0 bg-brand-500/20 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm z-30">
                             <div class="bg-surface text-white px-5 py-2.5 rounded-full font-semibold flex items-center gap-2 transform translate-y-4 group-hover/img:translate-y-0 transition-transform duration-300 shadow-xl">
                                 <i data-lucide="zoom-in" class="h-4 w-4"></i> <span data-i18n-text="ampliar">Ampliar</span>
@@ -1031,6 +1031,14 @@
 
             document.getElementById('preco-de').textContent = intl ? '$34' : 'De R$ 97,00';
             document.getElementById('preco-final').textContent = intl ? '$14.99' : 'R$ 42,35';
+
+            // Só o print do Dashboard tem versão em inglês por enquanto — os outros
+            // (vendas/caixa/DRE) continuam em português pra todo mundo.
+            const srcDashboard = intl ? 'print-dashboard-en.png' : 'print-dashboard.png';
+            const imgDashboard = document.getElementById('img-print-dashboard');
+            const wrapDashboard = document.getElementById('wrap-print-dashboard');
+            if (imgDashboard) imgDashboard.src = srcDashboard;
+            if (wrapDashboard) wrapDashboard.onclick = () => openImageModal(srcDashboard);
 
             const linkTroca = document.getElementById('link-trocar-regiao');
             if (linkTroca) linkTroca.innerHTML = intl
