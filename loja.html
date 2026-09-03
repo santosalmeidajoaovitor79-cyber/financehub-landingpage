@@ -100,6 +100,15 @@
         }
         .product-card:hover::before { opacity: 1; }
 
+        /* brilho que segue o cursor dentro do card */
+        .product-card::after {
+            content: '';
+            position: absolute; inset: 0; border-radius: inherit;
+            background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 50%), rgba(34,197,94,0.16), transparent 60%);
+            opacity: 0; transition: opacity .35s; pointer-events: none;
+        }
+        .product-card:hover::after { opacity: 1; }
+
         .card-img-wrap { position: relative; overflow: hidden; }
         .card-img-wrap::after {
             content: ''; position: absolute; inset: 0;
@@ -291,6 +300,11 @@
                     </div>
                 </div>
             `;
+            card.addEventListener('mousemove', (e) => {
+                const r = card.getBoundingClientRect();
+                card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+                card.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+            });
             grade.appendChild(card);
         });
         lucide.createIcons();

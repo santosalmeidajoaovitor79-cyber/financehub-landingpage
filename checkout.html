@@ -72,11 +72,25 @@
         .cta-glow:hover::after { animation: shine-sweep 1s ease forwards; }
         @keyframes shine-sweep { from { left: -75%; } to { left: 125%; } }
 
+        /* ===== confete no sucesso da compra ===== */
+        #confete-cena { position: fixed; inset: 0; z-index: 60; pointer-events: none; overflow: hidden; }
+        .confete-pedaco { position: absolute; top: -20px; border-radius: 2px; animation: confete-cair linear forwards; }
+        @keyframes confete-cair {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(600deg); opacity: 0; }
+        }
+
+        /* ===== anel de progresso do PIX ===== */
+        .pix-ring-svg { transform: rotate(-90deg); }
+        .pix-ring-progresso { stroke-dasharray: 264; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear; }
+
         ::selection { background: rgba(34, 197, 94, 0.35); color: #fff; }
-        @media (prefers-reduced-motion: reduce) { .blob, .cta-glow, .glass-card, .check-pop { animation: none !important; } }
+        @media (prefers-reduced-motion: reduce) { .blob, .cta-glow, .glass-card, .check-pop { animation: none !important; } .confete-pedaco { display: none; } }
     </style>
 </head>
 <body class="antialiased flex items-center justify-center p-4 md:p-8">
+
+    <div id="confete-cena"></div>
 
     <div class="bg-scene">
         <div class="blob blob-1"></div>
@@ -246,6 +260,16 @@
                 <button type="button" onclick="copiarPix()" class="absolute right-2 top-9 h-10 w-10 bg-brand-500/20 text-brand-400 hover:bg-brand-500 hover:text-black rounded-lg flex items-center justify-center transition-colors">
                     <i data-lucide="copy" class="h-5 w-5"></i>
                 </button>
+            </div>
+
+            <div class="relative w-16 h-16 mx-auto mb-3" id="pix-ring-wrap">
+                <svg class="pix-ring-svg w-16 h-16" viewBox="0 0 96 96">
+                    <circle cx="48" cy="48" r="42" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/>
+                    <circle id="pix-ring-progresso" class="pix-ring-progresso" cx="48" cy="48" r="42" fill="none" stroke="#22c55e" stroke-width="6" stroke-linecap="round"/>
+                </svg>
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <i data-lucide="qr-code" class="h-6 w-6 text-brand-400"></i>
+                </div>
             </div>
 
             <div id="pix-aguardando" class="flex items-center gap-3 text-brand-400 font-semibold animate-pulse mb-2">
@@ -543,6 +567,28 @@
         const MP_PUBLIC_KEY = 'APP_USR-d9000625-a44a-4aee-84a7-204cc1245388';
         const mp = new MercadoPago(MP_PUBLIC_KEY, { locale: 'pt-BR' });
 
+        // Chuva de confete rápida no momento em que o pagamento é aprovado — só
+        // celebração visual, não depende de nada pra funcionar e some sozinha.
+        function dispararConfete() {
+            if (!window.matchMedia('(prefers-reduced-motion: no-preference)').matches) return;
+            const cena = document.getElementById('confete-cena');
+            if (!cena) return;
+            const cores = ['#22c55e', '#34d399', '#16a34a', '#ffffff', '#facc15'];
+            for (let i = 0; i < 70; i++) {
+                const pedaco = document.createElement('div');
+                pedaco.className = 'confete-pedaco';
+                const tam = 6 + Math.random() * 6;
+                pedaco.style.width = tam + 'px';
+                pedaco.style.height = (tam * 0.4) + 'px';
+                pedaco.style.left = Math.random() * 100 + '%';
+                pedaco.style.background = cores[Math.floor(Math.random() * cores.length)];
+                pedaco.style.animationDuration = (2.2 + Math.random() * 1.6) + 's';
+                pedaco.style.animationDelay = (Math.random() * 0.4) + 's';
+                cena.appendChild(pedaco);
+                setTimeout(() => pedaco.remove(), 4500);
+            }
+        }
+
         function copiarPix() {
             const copyText = document.getElementById("pix-copia-cola");
             navigator.clipboard.writeText(copyText.value)
@@ -748,14 +794,19 @@
             document.getElementById('checkout-view').classList.add('hidden');
             document.getElementById('success-view-approved').classList.remove('hidden');
             document.getElementById('success-view-approved').classList.add('flex');
+            dispararConfete();
             setTimeout(() => { window.location.href = 'meus-produtos.html'; }, 3000);
         }
 
         function iniciarExpiracaoPix(minutos) {
-            let segundosRestantes = minutos * 60;
+            const totalSegundos = minutos * 60;
+            let segundosRestantes = totalSegundos;
             const timerEl = document.getElementById('pix-timer');
             const aguardandoEl = document.getElementById('pix-aguardando');
             const expiradoEl = document.getElementById('pix-expirado');
+            const anelEl = document.getElementById('pix-ring-progresso');
+            const anelWrap = document.getElementById('pix-ring-wrap');
+            const CIRCUNFERENCIA = 264;
 
             pixTimeoutID = setInterval(() => {
                 segundosRestantes--;
@@ -763,11 +814,19 @@
                 const seg = String(segundosRestantes % 60).padStart(2, '0');
                 timerEl.textContent = `Este código expira em ${min}:${seg}`;
 
+                // Anel esvazia conforme o tempo passa — dá pra ver o prazo de relance,
+                // sem precisar ler o número.
+                if (anelEl) {
+                    const fracaoRestante = Math.max(segundosRestantes, 0) / totalSegundos;
+                    anelEl.style.strokeDashoffset = String(CIRCUNFERENCIA * (1 - fracaoRestante));
+                }
+
                 if (segundosRestantes <= 0) {
                     clearInterval(pixTimeoutID);
                     clearInterval(intervalID);
                     aguardandoEl.classList.add('hidden');
                     timerEl.classList.add('hidden');
+                    anelWrap?.classList.add('hidden');
                     expiradoEl.classList.remove('hidden');
                     expiradoEl.classList.add('flex');
                 }
@@ -825,6 +884,7 @@
                             document.getElementById('success-view-pix').classList.add('hidden');
                             document.getElementById('success-view-approved').classList.remove('hidden');
                             document.getElementById('success-view-approved').classList.add('flex');
+                            dispararConfete();
                             setTimeout(() => { window.location.href = 'meus-produtos.html'; }, 3000);
                         }
                     } catch (checkErr) {
@@ -892,6 +952,7 @@
                 }
                 document.getElementById('success-view-stripe').classList.remove('hidden');
                 document.getElementById('success-view-stripe').classList.add('flex');
+                dispararConfete();
             } else if (retorno === 'cancelado') {
                 document.getElementById('cancel-view-stripe').classList.remove('hidden');
                 document.getElementById('cancel-view-stripe').classList.add('flex');
