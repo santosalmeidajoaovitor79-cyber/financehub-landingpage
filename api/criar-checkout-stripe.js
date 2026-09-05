@@ -29,7 +29,11 @@ export default async function handler(req, res) {
     try {
         const session = await stripe.checkout.sessions.create({
             mode: 'payment',
-            payment_method_types: ['card'],
+            // Sem payment_method_types fixo: o Stripe decide sozinho (via "Dynamic
+            // Payment Methods") quais formas mostrar, com base no que estiver
+            // habilitado no Dashboard (Settings > Payment methods) — Link, Cash App
+            // Pay, Apple Pay, Google Pay etc. aparecem automaticamente pra quem for
+            // elegível, sem precisar mexer aqui de novo a cada nova forma ativada.
             // Um line_item por produto do combo — o Stripe soma o total sozinho.
             line_items: config.produtos.map(p => ({ price: p.stripePriceId, quantity: 1 })),
             customer_email: email,
