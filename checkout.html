@@ -106,7 +106,7 @@
                     <a href="index.html" data-i18n="voltar" class="flex items-center gap-2 text-slate-400 hover:text-white transition w-fit">
                         <i data-lucide="arrow-left" class="h-4 w-4"></i> <span data-i18n-text="voltar">Voltar</span>
                     </a>
-                    <button type="button" id="link-trocar-regiao" class="text-sm font-semibold text-brand-400 hover:text-brand-300 transition underline underline-offset-2"></button>
+                    <button type="button" id="link-trocar-regiao" class="flex items-center gap-1.5 text-sm text-slate-200 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 rounded-full pl-2 pr-3 py-1.5 transition-colors font-semibold"></button>
                 </div>
                 <div class="flex items-center gap-3 mb-2">
                     <i data-lucide="bar-chart-3" class="text-brand-500 h-8 w-8"></i>
@@ -192,6 +192,21 @@
 
                     <!-- 2. FORMA DE PAGAMENTO -->
                     <div class="pt-6 border-t border-white/10">
+                        <!-- Banner "é brasileiro?": só aparece em inglês (padrão do site), convida
+                             a trocar pra Pix/cartão em reais. Some sozinho quando já está em PT. -->
+                        <div id="banner-pagamento-br" class="hidden flex mb-5 rounded-2xl p-4 bg-gradient-to-r from-brand-500/15 to-brand-500/5 border border-brand-500/30 items-center gap-3 flex-wrap justify-between">
+                            <div class="flex items-center gap-3">
+                                <img src="https://flagcdn.com/br.svg" alt="" class="h-8 w-11 rounded shadow-sm shrink-0">
+                                <div>
+                                    <p class="font-bold text-white text-sm" id="banner-br-titulo">Are you Brazilian?</p>
+                                    <p class="text-slate-300 text-xs" id="banner-br-sub">Pay with Pix or card in Reais, no international fee.</p>
+                                </div>
+                            </div>
+                            <button type="button" id="btn-banner-br" class="cta-glow bg-brand-500 text-slate-950 font-bold text-sm px-4 py-2 rounded-full flex items-center gap-1.5 shrink-0 hover:scale-[1.03] transition-transform">
+                                <span id="banner-br-cta">Switch to Real</span> <i data-lucide="arrow-right" class="h-4 w-4"></i>
+                            </button>
+                        </div>
+
                         <label class="block text-sm text-slate-400 mb-3 uppercase tracking-wider font-bold" data-i18n-text="forma-pagamento">Forma de Pagamento</label>
 
                         <!-- PAINEL BRASIL: PIX / Cartão via Mercado Pago -->
@@ -458,12 +473,21 @@
             if (!btnStripe.disabled) btnStripe.textContent = textoBotaoStripe();
 
             const linkTroca = document.getElementById('link-trocar-regiao');
-            // Bandeira como imagem (não emoji): o emoji de bandeira depende de fonte do
-            // sistema e em muitos dispositivos (Windows/Android mais antigos) cai pra
-            // mostrar só as letras "US"/"BR" em vez do desenho da bandeira.
             linkTroca.innerHTML = intl
-                ? '<img src="https://flagcdn.com/br.svg" alt="Ver em R$" title="Ver em R$" class="inline-block h-5 w-7 rounded-[3px] align-middle shadow-sm">'
-                : '<img src="https://flagcdn.com/us.svg" alt="Pay in USD" title="Pay in USD" class="inline-block h-5 w-7 rounded-[3px] align-middle shadow-sm">';
+                ? '<img src="https://flagcdn.com/br.svg" alt="" class="inline-block h-4 w-5 rounded-[2px] shadow-sm"><span class="hidden sm:inline">Ver em português</span><span class="sm:hidden">PT</span>'
+                : '<img src="https://flagcdn.com/us.svg" alt="" class="inline-block h-4 w-5 rounded-[2px] shadow-sm"><span class="hidden sm:inline">View in English</span><span class="sm:hidden">EN</span>';
+
+            // Banner "é brasileiro?" só faz sentido enquanto a página está em inglês
+            // (o padrão) — depois que troca pra português, some, já que o cliente
+            // já está no fluxo de Pix/cartão em reais.
+            const bannerBr = document.getElementById('banner-pagamento-br');
+            if (bannerBr) bannerBr.classList.toggle('hidden', !intl);
+            const bannerBrTitulo = document.getElementById('banner-br-titulo');
+            const bannerBrSub = document.getElementById('banner-br-sub');
+            const bannerBrCta = document.getElementById('banner-br-cta');
+            if (bannerBrTitulo) bannerBrTitulo.textContent = intl ? 'Are you Brazilian?' : '';
+            if (bannerBrSub) bannerBrSub.textContent = intl ? 'Pay with Pix or card in Reais, no international fee.' : '';
+            if (bannerBrCta) bannerBrCta.textContent = intl ? 'Switch to Real' : '';
 
             if (bumpPrecoEl) {
                 const precoEbook = intl ? formatarPrecoUSD(PRODUTOS['ebook-fluxo-caixa'].precoUSD) : formatarPrecoBRL(PRODUTOS['ebook-fluxo-caixa'].precoBRL);
@@ -492,17 +516,7 @@
         document.getElementById('link-trocar-regiao').addEventListener('click', () => {
             aplicarRegiao(regiaoAtual === 'intl' ? 'br' : 'intl');
         });
-
-        async function detectarRegiaoInicial() {
-            try {
-                const resp = await fetch('/api/detectar-pais');
-                const { pais } = await resp.json();
-                aplicarRegiao(pais && pais !== 'BR' ? 'intl' : 'br');
-            } catch (err) {
-                aplicarRegiao('br'); // se a detecção falhar, assume BR (mercado principal)
-            }
-        }
-        detectarRegiaoInicial();
+        document.getElementById('btn-banner-br')?.addEventListener('click', () => aplicarRegiao('br'));
 
         // Se o visitante já tem sessão ativa (ex: já comprou o FinanceHub e agora
         // está levando o e-book), pula a criação de conta e usa o id/e-mail já logados.
@@ -962,6 +976,12 @@
         document.getElementById('btn-tentar-novamente-stripe')?.addEventListener('click', () => {
             window.location.href = 'checkout.html';
         });
+
+        // Inglês/Stripe(USD) é sempre o padrão pra todo mundo — o cliente só vê
+        // Pix/cartão em reais se clicar no banner ou no botão de trocar. Fica no
+        // fim do script pra rodar só depois que todo mundo (inclusive btnSubmit/
+        // btnStripe, declarados mais acima) já existe.
+        aplicarRegiao('intl');
     </script>
 </body>
 </html>

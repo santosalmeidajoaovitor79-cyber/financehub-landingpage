@@ -66,7 +66,7 @@
             <a href="index.html" class="flex items-center gap-2 text-slate-400 hover:text-white transition">
                 <i data-lucide="arrow-left" class="h-4 w-4"></i> <span data-i18n-text="voltar">Voltar</span>
             </a>
-            <button type="button" id="link-trocar-regiao" class="text-sm font-semibold text-brand-400 hover:text-brand-300 transition underline underline-offset-2"></button>
+            <button type="button" id="link-trocar-regiao" class="flex items-center gap-1.5 text-sm text-slate-200 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 rounded-full pl-2 pr-3 py-1.5 transition-colors font-semibold"></button>
         </div>
     </nav>
 
@@ -174,23 +174,17 @@
 
             const linkTroca = document.getElementById('link-trocar-regiao');
             linkTroca.innerHTML = intl
-                ? '<img src="https://flagcdn.com/br.svg" alt="Ver em R$" title="Ver em R$" class="inline-block h-5 w-7 rounded-[3px] align-middle shadow-sm">'
-                : '<img src="https://flagcdn.com/us.svg" alt="View in USD" title="View in USD" class="inline-block h-5 w-7 rounded-[3px] align-middle shadow-sm">';
+                ? '<img src="https://flagcdn.com/br.svg" alt="" class="inline-block h-4 w-5 rounded-[2px] shadow-sm"><span class="hidden sm:inline">Ver em português</span><span class="sm:hidden">PT</span>'
+                : '<img src="https://flagcdn.com/us.svg" alt="" class="inline-block h-4 w-5 rounded-[2px] shadow-sm"><span class="hidden sm:inline">View in English</span><span class="sm:hidden">EN</span>';
         }
 
         document.getElementById('link-trocar-regiao').addEventListener('click', () => {
             aplicarRegiao(document.getElementById('html-root').lang === 'en' ? 'br' : 'intl');
         });
 
-        (async function detectarRegiaoInicial() {
-            try {
-                const resp = await fetch('/api/detectar-pais');
-                const { pais } = await resp.json();
-                aplicarRegiao(pais && pais !== 'BR' ? 'intl' : 'br');
-            } catch (err) {
-                aplicarRegiao('br');
-            }
-        })();
+        // Inglês é sempre o idioma padrão pra todo mundo — só troca se o
+        // visitante clicar no botão.
+        aplicarRegiao('intl');
     </script>
 </body>
 </html>
