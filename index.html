@@ -329,7 +329,7 @@
                     <div class="absolute inset-0 shadow-[inset_0_0_120px_#020617] z-20 pointer-events-none"></div>
                     
                     <!-- A sua foto realista da mesa -->
-                    <img src="mockup.png" alt="Dashboard FinanceHub PRO" class="w-full h-auto object-cover relative z-10" />
+                    <img id="img-mockup-hero" src="mockup.png" alt="Dashboard FinanceHub PRO" class="w-full h-auto object-cover relative z-10" />
                 </div>
             </div>
 
@@ -1039,6 +1039,10 @@
             const wrapDashboard = document.getElementById('wrap-print-dashboard');
             if (imgDashboard) imgDashboard.src = srcDashboard;
             if (wrapDashboard) wrapDashboard.onclick = () => openImageModal(srcDashboard);
+
+            // Mockup do notebook no topo da página — mesma lógica, tem versão em inglês.
+            const imgMockup = document.getElementById('img-mockup-hero');
+            if (imgMockup) imgMockup.src = intl ? 'mockup-en.png' : 'mockup.png';
 
             const linkTroca = document.getElementById('link-trocar-regiao');
             if (linkTroca) linkTroca.innerHTML = intl
